@@ -1,0 +1,8 @@
+#Notes of how the Project is Shaping Up
+
+24/04 - George:
+      So far, Netbeans has been a little annoying in how it can commit something without comitting the entire project at once.
+      I've figured out how that works, and reworked some of the stuff Ben had done on the emulator, because it wasn't being saved
+      as an openable netbeans project file because of this. We have the emulator displaying current date/time as a javascript
+      script - but I haven't had a close look at it so I'm not sure if it needs some kind of infinite loop or it's own species
+      of "pull" requests to refresh that, or if it statically updates as the time does.
