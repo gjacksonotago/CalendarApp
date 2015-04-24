@@ -74,8 +74,8 @@
                 //Writes Time as a String to the Canvas
                 ctx.fillStyle = "#000000";
                 ctx.font = "48px Sans Serif";
-                ctx.fillText(stringTime, 10, 50);
-                ctx.fillText(stringDate, 10, 300);
+                ctx.fillText(stringTime, 10, (height/10)+20);
+                ctx.fillText(stringDate, 10, (height-20));
                 
                 //creates the black rectangle in the middle
                 drawClickRect();
