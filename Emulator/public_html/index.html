@@ -25,7 +25,7 @@ is where we will host the Emulator and prototype.
         <!-- The actual canvas element - script for editing it is underneath -->
         <div id="canvasDiv">
             <canvas width="500" height="500" id="canvas_1" 
-                    style="border:1px solid #000000;" onload="initialise()">
+                    style="border:1px solid #000000;">
                 Canvas Tag not Supported.
             </canvas>
         </div>
@@ -34,21 +34,27 @@ is where we will host the Emulator and prototype.
         <!-- position onclick on the canvas area, and displays it up on the -->
         <!-- divShow division. Updates time on mouseover on the canvas! -->
         <script>
-            displayTime("canvas_1");
+            //load the canvas colour and time
+            displayTime();
             
+            //Used for the MouseDown event.
             var canvas = document.getElementById('canvas_1');
             var context = canvas.getContext('2d');
             
+            //Mouseover event for updating the time on the
+            //canvas element!
             canvas.addEventListener('mouseover', function(evt) {
-                displayTime("canvas_1");
+                displayTime();
             }, false);
 
             canvas.addEventListener('mousedown', function(evt) {
+                displayTime(); 
                 var mousePos = getMousePos(canvas, evt);
-                var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
+                var message = 'Mouse position: ' + mousePos.x + ',' + 
+                        Math.round(mousePos.y);
                 //writeMessage(canvas, message);
-                document.getElementById("divShow").innerHTML = message;
-                
+                //Print the Mouse Co-ords to divShow.
+                document.getElementById("divShow").innerHTML = message;          
             }, false);
         </script>
 
