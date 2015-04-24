@@ -67,11 +67,13 @@ is where we will host the Emulator and prototype.
                 var mousePos = getMousePos(canvas, evt);
                 var message = 'Mouse position: ' + mousePos.x + ', ' + 
                         Math.round(mousePos.y);
+                var sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' + 
+                        Math.round(mousePos.y);
                 
                 //If Mouse Clicked on the Black Square, new message!
                 if (mousePos.x <= 375 && mousePos.y <= 375 &&
                         mousePos.x >= 125 && mousePos.y >= 125) {
-                        document.getElementById("divShow").innerHTML = "SQUARE CLICKED"; 
+                        document.getElementById("divShow").innerHTML = sqMes; 
                 } else { 
                     //writeMessage(canvas, message);
                     //Print the Mouse Co-ords to divShow.
