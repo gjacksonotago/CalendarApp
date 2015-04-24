@@ -6,7 +6,33 @@
  * Authors: George Jackson, Ben Ryan
  * Date Created: 24/04/2015
  */
-
+            
+            /*
+             * These functions are used for the mouse cordinates
+             */
+            function writeMessage(canvas, message) {
+                var context = canvas.getContext('2d');
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.font = '18pt Calibri';
+                context.fillStyle = 'black';
+                context.fillText(message, 10, 100);
+                
+            }
+            
+            function getMousePos(canvas, evt) {
+                var rect = canvas.getBoundingClientRect();
+                return {
+                    x: evt.clientX - rect.left,
+                    y: evt.clientY - rect.top
+                  };
+            }
+            
+            //============================================================//
+            
+            
+           /*
+            * These functions are used for writing the time to the canvas
+            */
             function createTime() {
                 //Grab the Time and make it a String
                 var currentTime = new Date();
@@ -29,3 +55,4 @@
                 ctx.font = "48px Sans Serif";
                 ctx.fillText(stringTime, 10, 50);
             }
+            
