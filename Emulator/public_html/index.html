@@ -19,16 +19,7 @@ is where we will host the Emulator and prototype.
             <h3>Generic Smart Watch Emulator v. 1.4.1</h3>
             <p>This should display the current time:</p>
             <div id="divShow"></div>
-        </div>
-        
-        <!-- This could be a bit irrelevant maybe? -->
-        <div id="timeGetScript">
-            <script>
-                var currentTime = new Date();
-                var stringTime = currentTime.toLocaleTimeString();
-                //document.getElementById("divShow").innerHTML = stringTime;
-                //document.write(stringTime)             
-            </script>
+            
         </div>
         
         <!-- The actual canvas element - script for editing it is underneath -->
@@ -39,18 +30,25 @@ is where we will host the Emulator and prototype.
             </canvas>
         </div>
         
-        <!-- Runs the two scripts in createTime.js -->
+        <!-- This displays the time on the canvas and updates the mouse -->
+        <!-- position onclick on the canvas area, and displays it up on the -->
+        <!-- divShow division. Updates time on mouseover on the canvas! -->
         <script>
             displayTime("canvas_1");
             
             var canvas = document.getElementById('canvas_1');
             var context = canvas.getContext('2d');
+            
+            canvas.addEventListener('mouseover', function(evt) {
+                displayTime("canvas_1");
+            }, false);
 
             canvas.addEventListener('mousedown', function(evt) {
                 var mousePos = getMousePos(canvas, evt);
                 var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
                 //writeMessage(canvas, message);
                 document.getElementById("divShow").innerHTML = message;
+                
             }, false);
         </script>
 
