@@ -45,6 +45,7 @@ is where we will host the Emulator and prototype.
         <script>
             //load the canvas colour and time
             displayTime();
+            drawClickRect();
             
             //Used for the MouseDown event.
             var canvas = document.getElementById('canvas_1');
@@ -52,8 +53,8 @@ is where we will host the Emulator and prototype.
             
             //Mouseover event for updating the time on the
             //canvas element!
-            canvas.addEventListener('mouseover', function() {
-                displayTime();
+            canvas.addEventListener('mouseover', function(evt) {
+                displayTime();     
             }, false);
 
             canvas.addEventListener('mousedown', function(evt) {
@@ -61,9 +62,16 @@ is where we will host the Emulator and prototype.
                 var mousePos = getMousePos(canvas, evt);
                 var message = 'Mouse position: ' + mousePos.x + ', ' + 
                         Math.round(mousePos.y);
+                
+                //If Mouse Clicked on the Black Square, new message!
+                if (mousePos.x <= 375 && mousePos.y <= 375 &&
+                        mousePos.x >= 125 && mousePos.y >= 125) {
+                        document.getElementById("divShow").innerHTML = "SQUARE CLICKED"; 
+                } else { 
                 //writeMessage(canvas, message);
                 //Print the Mouse Co-ords to divShow.
-                document.getElementById("divShow").innerHTML = message;          
+                    document.getElementById("divShow").innerHTML = message;
+                }
             }, false);
         </script>
 
