@@ -6,3 +6,5 @@
       as an openable netbeans project file because of this. We have the emulator displaying current date/time as a javascript
       script - but I haven't had a close look at it so I'm not sure if it needs some kind of infinite loop or it's own species
       of "pull" requests to refresh that, or if it statically updates as the time does.
+
+      Discovered how to play with the Canvas Element a little, but now must figure out how to write the time from the JS script we have to that Canvas element.
