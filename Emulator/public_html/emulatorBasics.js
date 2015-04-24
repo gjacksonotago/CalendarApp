@@ -77,7 +77,46 @@
                 
                 //creates the black rectangle in the middle
                 drawClickRect();
-            
+                
+                //Used for the MouseDown event.
+                var canvas = document.getElementById('canvas_1');
+                var context = canvas.getContext('2d');
+                var width = canvas.width;
+                var height = canvas.height;
+
+                //Mouseover event for updating the time on the
+                //canvas element!
+                canvas.addEventListener('mouseover', function() {
+                    drawToCanvas();     
+                }, false);
+
+                //The mouseclick event listener.
+                canvas.addEventListener('mousedown', function(evt) {
+                    drawToCanvas(); //refreshes the date/time display
+
+                    /*
+                     * Grabs mouse position co-ords and creates a 
+                     * string out of them to use later.
+                     */
+                    var mousePos = getMousePos(canvas, evt);
+                    var message = 'Mouse position: ' + mousePos.x + ', ' + 
+                            Math.round(mousePos.y);
+                    var sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' + 
+                            Math.round(mousePos.y);
+
+                    //If Mouse Clicked on the Black Square, new message!
+                    if (mousePos.x <= width - (width/4) && mousePos.y <= 
+                            height - (height/4) &&
+                            mousePos.x >= (width/4) && mousePos.y >= (height/4)) {
+                            document.getElementById("divShow").innerHTML = sqMes;
+                            emulateVibrate();
+
+                    } else { 
+                        //writeMessage(canvas, message);
+                        //Print the Mouse Co-ords to divShow.
+                        document.getElementById("divShow").innerHTML = message;
+                    }
+                }, false);
             }
             
             //Creates a black rectangle on the canvas
@@ -123,6 +162,7 @@
                 
             }
             
+            //Redraw's what we had to begin with!
             function reDrawOriginal() {
                                 
                var oldCanvas = '<canvas width="' + 320 + '" height="' + 320 
