@@ -5,7 +5,7 @@ is where we will host the Emulator and prototype.
 -->
 <html>
     <head>
-        <title>Emulator v 1.4.3</title>
+        <title>Emulator v 1.4.4</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type='text/javascript' src="js/libs/jquery/jquery.js"></script>
@@ -16,7 +16,7 @@ is where we will host the Emulator and prototype.
         <!-- The text division -->
         <div>
             
-            <h3>Generic Smart Watch Emulator v. 1.4.3</h3>
+            <h3>Generic Smart Watch Emulator v. 1.4.4</h3>
             <p>
                 Below should display the co-ordinates of where you
                 last clicked on the big red canvas element you can see:
@@ -33,7 +33,7 @@ is where we will host the Emulator and prototype.
         
         <!-- The actual canvas element - script for editing it is underneath -->
         <div id="canvasDiv">
-            <canvas width="500" height="500" id="canvas_1" 
+            <canvas width="320" height="320" id="canvas_1" 
                     style="border:1px solid #000000;">
                 Canvas Tag not Supported by your browser version!
             </canvas>
@@ -49,6 +49,8 @@ is where we will host the Emulator and prototype.
             //Used for the MouseDown event.
             var canvas = document.getElementById('canvas_1');
             var context = canvas.getContext('2d');
+            var width = canvas.width;
+            var height = canvas.height;
             
             //Mouseover event for updating the time on the
             //canvas element!
@@ -71,8 +73,9 @@ is where we will host the Emulator and prototype.
                         Math.round(mousePos.y);
                 
                 //If Mouse Clicked on the Black Square, new message!
-                if (mousePos.x <= 375 && mousePos.y <= 375 &&
-                        mousePos.x >= 125 && mousePos.y >= 125) {
+                if (mousePos.x <= width - (width/4) && mousePos.y <= 
+                        height - (height/4) &&
+                        mousePos.x >= (width/4) && mousePos.y >= (height/4)) {
                         document.getElementById("divShow").innerHTML = sqMes; 
                 } else { 
                     //writeMessage(canvas, message);
