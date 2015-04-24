@@ -15,6 +15,7 @@ and open the template in the editor.
             <p>This should display the current time:</p>
             <div id="divShowTime"></div>
         </div>
+        <!-- This could be a bit irrelevant maybe? -->
         <div id="timeGetScript">
             <script>
                 var currentTime = new Date();
@@ -25,7 +26,8 @@ and open the template in the editor.
         </div>
         
         <div id="canvasDiv">
-            <canvas width="500" height="500" id="canvas_1">
+            <canvas width="500" height="500" id="canvas_1" 
+                    style="border:1px solid #000000;">
                 Canvas Tag not Supported.
             </canvas>
         </div>
@@ -33,10 +35,22 @@ and open the template in the editor.
         <!-- Changes the Colour of the Canvas Element so we can see it -->
         <!-- Currently set to red for no reason -->
         <script id="canvasColour">
+            //Grab the Time and make it a String
+            var currentTime = new Date();
+            var stringTime = currentTime.toLocaleTimeString();
+            
+            //Create the Canvas stuff
             var c = document.getElementById("canvas_1");
             var ctx = c.getContext("2d");
+            
+            //Changes colour of the Canvas Element
             ctx.fillStyle = "#FF0000";
             ctx.fillRect(0, 0, 500, 500);
+            
+            //Writes Time as a String to the Canvas
+            ctx.fillStyle = "#000000";
+            ctx.font = "48px Serif";
+            ctx.fillText(stringTime, 10, 50);
         </script>
     </body>
 </html>
