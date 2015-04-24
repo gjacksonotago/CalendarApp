@@ -64,10 +64,12 @@
                 //Create the Canvas stuff
                 var c = document.getElementById("canvas_1");
                 var ctx = c.getContext("2d");
+                var width = c.width;
+                var height = c.height;
 
                 //Changes colour of the Canvas Element
                 ctx.fillStyle = "#FF0000";
-                ctx.fillRect(0, 0, 320, 320);
+                ctx.fillRect(0, 0, width, height);
 
                 //Writes Time as a String to the Canvas
                 ctx.fillStyle = "#000000";
@@ -80,9 +82,6 @@
                 
                 //Used for the MouseDown event.
                 var canvas = document.getElementById('canvas_1');
-                var context = canvas.getContext('2d');
-                var width = canvas.width;
-                var height = canvas.height;
 
                 //Mouseover event for updating the time on the
                 //canvas element!
@@ -155,7 +154,7 @@
                         '</canvas>';
                 
                 document.getElementById("canvasDiv").innerHTML = canvasString;
-                drawClickRect();
+                drawToCanvas();
                 
                 //set a short time interval
                 setTimeout("reDrawOriginal()", 60);
