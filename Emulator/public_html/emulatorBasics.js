@@ -155,15 +155,13 @@
                 
                 document.getElementById("canvasDiv").innerHTML = canvasString;
                 drawToCanvas();
-                
+
                 //set a short time interval
                 setTimeout("reDrawOriginal()", 60);
-                
             }
             
             //Redraw's what we had to begin with!
-            function reDrawOriginal() {
-                                
+            function reDrawOriginal() {                   
                var oldCanvas = '<canvas width="' + 320 + '" height="' + 320 
                        + '" id="' + 'canvas_1"' + 'style="' + 
                        'border:1px solid #000000;">' +
