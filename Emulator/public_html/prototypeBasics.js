@@ -10,6 +10,11 @@
 
 var currentDate;
 
+//timed grab function
+function runPrototype() {
+    setTimeout("getDate", 100);
+}
+
 //Takes a date string to set
 // as a value?
 function getDate(dateValue) {
