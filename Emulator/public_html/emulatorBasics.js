@@ -91,3 +91,11 @@
                 ctx.fillRect(width/4, height/4, width/2, height/2);
             }
             
+            //Will soon (HOPEFULLY) convert a date/time to a string
+            // in JSON to be able to send to a prototype, because
+            // JSON doesn't support native date format.
+            function dateStringForJSON(toConvert) {
+                //At the moment, nothing needs to be converted
+                //but later things might.
+                return toConvert;
+            }
