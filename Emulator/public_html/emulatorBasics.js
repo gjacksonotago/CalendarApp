@@ -140,7 +140,7 @@
             
             //Trying to get the canvas to "shake" to pretend
             // it's a vibration
-            function emulateVibrate(x) {
+            function emulateVibrate() {
                 reDrawLarger();
             }
             
