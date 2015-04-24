@@ -51,9 +51,13 @@
                 return stringDate;
             }
             
+            //Draws to the canvas - currently a red rectangle and
+            // both the current date and time as retrieved by
+            // the functions above.
             function displayTime() {
                 var stringTime = createTime();
                 var stringDate = currentDate();
+                
                 //Create the Canvas stuff
                 var c = document.getElementById("canvas_1");
                 var ctx = c.getContext("2d");
@@ -67,5 +71,17 @@
                 ctx.font = "48px Sans Serif";
                 ctx.fillText(stringTime, 10, 50);
                 ctx.fillText(stringDate, 10, 100);
+                
+                drawClickRect();
+            
+            }
+            
+            //Creates a clickable rectangle in the canvas
+            function drawClickRect() {
+                var c = document.getElementById("canvas_1");
+                var ctx = c.getContext("2d");
+                
+                ctx.fillStyle = "#000000";
+                ctx.fillRect(125, 125, 250, 250);
             }
             
