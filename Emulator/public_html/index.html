@@ -18,9 +18,25 @@ and open the template in the editor.
         <div id="timeGetScript">
             <script>
                 var currentTime = new Date();
-                document.getElementById("divShowTime").innerHTML = currentTime.toLocaleTimeString()
-                //document.write(currentTime.toLocaleTimeString())        
+                var stringTime = currentTime.toLocaleTimeString();
+                document.getElementById("divShowTime").innerHTML = stringTime;
+                //document.write(stringTime)        
             </script>
         </div>
+        
+        <div id="canvasDiv">
+            <canvas width="500" height="500" id="canvas_1">
+                Canvas Tag not Supported.
+            </canvas>
+        </div>
+        
+        <!-- Changes the Colour of the Canvas Element so we can see it -->
+        <!-- Currently set to red for no reason -->
+        <script id="canvasColour">
+            var c = document.getElementById("canvas_1");
+            var ctx = c.getContext("2d");
+            ctx.fillStyle = "#FF0000";
+            ctx.fillRect(0, 0, 500, 500);
+        </script>
     </body>
 </html>
