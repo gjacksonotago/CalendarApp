@@ -44,7 +44,7 @@ is where we will host the Emulator and prototype.
         <!-- divShow division. Updates time on mouseover on the canvas! -->
         <script>
             //load the canvas colour and time
-            displayTime();
+            drawToCanvas();
             
             //Used for the MouseDown event.
             var canvas = document.getElementById('canvas_1');
@@ -53,12 +53,12 @@ is where we will host the Emulator and prototype.
             //Mouseover event for updating the time on the
             //canvas element!
             canvas.addEventListener('mouseover', function() {
-                displayTime();     
+                drawToCanvas();     
             }, false);
             
             //The mouseclick event listener.
             canvas.addEventListener('mousedown', function(evt) {
-                displayTime(); //refreshes the date/time display
+                drawToCanvas(); //refreshes the date/time display
                 
                 /*
                  * Grabs mouse position co-ords and creates a 

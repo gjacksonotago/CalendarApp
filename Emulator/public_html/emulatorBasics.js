@@ -54,7 +54,7 @@
             //Draws to the canvas - currently a red rectangle and
             // both the current date and time as retrieved by
             // the functions above.
-            function displayTime() {
+            function drawToCanvas() {
                 var stringTime = createTime();
                 var stringDate = currentDate();
                 
@@ -72,11 +72,12 @@
                 ctx.fillText(stringTime, 10, 50);
                 ctx.fillText(stringDate, 10, 100);
                 
+                //creates the black rectangle in the middle
                 drawClickRect();
             
             }
             
-            //Creates a clickable rectangle in the canvas
+            //Creates a black rectangle on the canvas
             function drawClickRect() {
                 var c = document.getElementById("canvas_1");
                 var ctx = c.getContext("2d");
