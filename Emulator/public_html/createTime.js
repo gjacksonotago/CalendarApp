@@ -40,10 +40,10 @@
                 return stringTime;
             }
             
-            function displayTime(canvasName) {
+            function displayTime() {
                 var stringTime = createTime();
                 //Create the Canvas stuff
-                var c = document.getElementById(canvasName);
+                var c = document.getElementById("canvas_1");
                 var ctx = c.getContext("2d");
 
                 //Changes colour of the Canvas Element
