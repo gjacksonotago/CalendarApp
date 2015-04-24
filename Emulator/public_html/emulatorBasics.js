@@ -1,4 +1,6 @@
 /* 
+ * emulatorBasics.js:
+ * 
  * These functions grab the current Time and convert it to a string
  * and from there, colour a canvas, and write the Time as a Text element
  * to the Canvas.
@@ -33,6 +35,8 @@
            /*
             * These functions are used for writing the time to the canvas
             */
+           
+           //Gets and returns the Current Time as a String
             function createTime() {
                 //Grab the Time and make it a String
                 var currentTime = new Date();
@@ -40,8 +44,16 @@
                 return stringTime;
             }
             
+            //Gets and Returns the Current Date as a String
+            function currentDate() {
+                var currentDate = new Date();
+                var stringDate = currentDate.toLocaleDateString();
+                return stringDate;
+            }
+            
             function displayTime() {
                 var stringTime = createTime();
+                var stringDate = currentDate();
                 //Create the Canvas stuff
                 var c = document.getElementById("canvas_1");
                 var ctx = c.getContext("2d");
@@ -54,5 +66,6 @@
                 ctx.fillStyle = "#000000";
                 ctx.font = "48px Sans Serif";
                 ctx.fillText(stringTime, 10, 50);
+                ctx.fillText(stringDate, 10, 100);
             }
             

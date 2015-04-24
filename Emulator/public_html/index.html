@@ -25,8 +25,8 @@ is where we will host the Emulator and prototype.
             <div id="divShow">Mouse position: No clicks yet!</div>
             <p>
                 Below is the canvas element. It currently displays the
-                current time - which updates on mouseover or on click of the
-                canvas.
+                current time and date - which updates on mouseover or on 
+                click of the canvas.
             </p>
             
         </div>
@@ -59,7 +59,7 @@ is where we will host the Emulator and prototype.
             canvas.addEventListener('mousedown', function(evt) {
                 displayTime(); 
                 var mousePos = getMousePos(canvas, evt);
-                var message = 'Mouse position: ' + mousePos.x + ',' + 
+                var message = 'Mouse position: ' + mousePos.x + ', ' + 
                         Math.round(mousePos.y);
                 //writeMessage(canvas, message);
                 //Print the Mouse Co-ords to divShow.
