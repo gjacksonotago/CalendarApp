@@ -53,10 +53,11 @@ is where we will host the Emulator and prototype.
             
             //Mouseover event for updating the time on the
             //canvas element!
-            canvas.addEventListener('mouseover', function(evt) {
+            canvas.addEventListener('mouseover', function() {
                 displayTime();     
             }, false);
-
+            
+            //The mouseclick event listener.
             canvas.addEventListener('mousedown', function(evt) {
                 displayTime(); 
                 var mousePos = getMousePos(canvas, evt);
