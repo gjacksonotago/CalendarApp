@@ -6,14 +6,17 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Time and Date Emulator v 1.2.0</title>
+        <title>Emulator v 1.2.0</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type='text/javascript' src="createTime.js"></script>
     </head>
     <body>
-        
+
         <!-- Was the first display and code testing piece -->
         <div>
+            
+            <h3>Generic Smart Watch Emulator v. 1.2.0</h3>
             <p>This should display the current time:</p>
             <div id="divShowTime"></div>
         </div>
@@ -36,26 +39,7 @@ and open the template in the editor.
             </canvas>
         </div>
         
-        <!-- Changes the colour of the Canvas Element so we can see it -->
-        <!--  and also writes the current time to the Canvas Element. -->
-        <!-- Background colour set to red for no reason -->
-        <script id="canvasColour">
-            //Grab the Time and make it a String
-            var currentTime = new Date();
-            var stringTime = currentTime.toLocaleTimeString();
-            
-            //Create the Canvas stuff
-            var c = document.getElementById("canvas_1");
-            var ctx = c.getContext("2d");
-            
-            //Changes colour of the Canvas Element
-            ctx.fillStyle = "#FF0000";
-            ctx.fillRect(0, 0, 500, 500);
-            
-            //Writes Time as a String to the Canvas
-            ctx.fillStyle = "#000000";
-            ctx.font = "48px Serif";
-            ctx.fillText(stringTime, 10, 50);
-        </script>
+        <!-- Runs the two scripts in createTime.js -->
+        <script>displayTime("canvas_1");</script>
     </body>
 </html>
