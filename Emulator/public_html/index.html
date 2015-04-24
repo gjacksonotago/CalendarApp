@@ -46,7 +46,7 @@ is where we will host the Emulator and prototype.
             var canvas = document.getElementById('canvas_1');
             var context = canvas.getContext('2d');
 
-            canvas.addEventListener('mousemove', function(evt) {
+            canvas.addEventListener('mousedown', function(evt) {
                 var mousePos = getMousePos(canvas, evt);
                 var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
                 //writeMessage(canvas, message);
