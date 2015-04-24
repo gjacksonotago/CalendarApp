@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
+Emulator for COSC345 Assignments 2 and 3 will be generated here and this page
+is where we will host the Emulator and prototype.
 -->
 <html>
     <head>
         <title>Emulator v 1.2.0</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type='text/javascript' src="js/libs/jquery/jquery.js"></script>
         <script type='text/javascript' src="createTime.js"></script>
     </head>
     <body>
@@ -16,9 +16,9 @@ and open the template in the editor.
         <!-- Was the first display and code testing piece -->
         <div>
             
-            <h3>Generic Smart Watch Emulator v. 1.2.0</h3>
+            <h3>Generic Smart Watch Emulator v. 1.3.0</h3>
             <p>This should display the current time:</p>
-            <div id="divShowTime"></div>
+            <div id="divShow"></div>
         </div>
         
         <!-- This could be a bit irrelevant maybe? -->
@@ -26,20 +26,33 @@ and open the template in the editor.
             <script>
                 var currentTime = new Date();
                 var stringTime = currentTime.toLocaleTimeString();
-                document.getElementById("divShowTime").innerHTML = stringTime;
-                //document.write(stringTime)        
+                //document.getElementById("divShow").innerHTML = stringTime;
+                //document.write(stringTime)             
             </script>
         </div>
         
         <!-- The actual canvas element - script for editing it is underneath -->
         <div id="canvasDiv">
             <canvas width="500" height="500" id="canvas_1" 
-                    style="border:1px solid #000000;">
+                    style="border:1px solid #000000;" onload="initialise()">
                 Canvas Tag not Supported.
             </canvas>
         </div>
         
         <!-- Runs the two scripts in createTime.js -->
-        <script>displayTime("canvas_1");</script>
+        <script>
+            displayTime("canvas_1");
+            
+            var canvas = document.getElementById('canvas_1');
+            var context = canvas.getContext('2d');
+
+            canvas.addEventListener('mousemove', function(evt) {
+                var mousePos = getMousePos(canvas, evt);
+                var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
+                //writeMessage(canvas, message);
+                document.getElementById("divShow").innerHTML = message;
+            }, false);
+        </script>
+
     </body>
 </html>
