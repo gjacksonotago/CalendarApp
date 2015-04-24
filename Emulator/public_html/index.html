@@ -6,11 +6,21 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Time and Date Emulator v 1.0.0</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>NIGGA YOU WHAT, I WHATTED</div>
+        <div>
+            <p>This should display the current time:</p>
+            <div id="divShowTime"></div>
+        </div>
+        <div id="timeGetScript">
+            <script>
+                var currentTime = new Date();
+                document.getElementById("divShowTime").innerHTML = currentTime.toLocaleTimeString()
+                //document.write(currentTime.toLocaleTimeString())        
+            </script>
+        </div>
     </body>
 </html>
