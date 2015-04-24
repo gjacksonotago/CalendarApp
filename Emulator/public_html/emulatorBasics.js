@@ -99,3 +99,38 @@
                 //but later things might.
                 return toConvert;
             }
+            
+            //Trying to get the canvas to "shake" to pretend
+            // it's a vibration
+            function emulateVibrate(x) {
+                reDrawLarger();
+            }
+            
+            //Should Replace the Content of CanvasDiv with a larger
+            // Canvas object.
+            function reDrawLarger() {
+                var canvasString = 
+                        '<canvas width="' + 340 + '" height="' + 340 + 
+                        '" id="' + 'canvas_1"' +
+                        'style="' + 'border:1px solid #000000;"' + '>' +
+                        '</canvas>';
+                
+                document.getElementById("canvasDiv").innerHTML = canvasString;
+                drawClickRect();
+                
+                //set a short time interval
+                setTimeout("reDrawOriginal()", 60);
+                
+            }
+            
+            function reDrawOriginal() {
+                                
+               var oldCanvas = '<canvas width="' + 320 + '" height="' + 320 
+                       + '" id="' + 'canvas_1"' + 'style="' + 
+                       'border:1px solid #000000;">' +
+                        'Canvas Tag not Supported by your browser version!' +
+                        '</canvas>';
+                
+                document.getElementById("canvasDiv").innerHTML = oldCanvas;
+                drawToCanvas();
+            }
