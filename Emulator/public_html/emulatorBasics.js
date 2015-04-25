@@ -114,7 +114,7 @@ function mouseDown() {
                 canvasHeight - (canvasHeight/4) &&
                 mousePos.x >= (canvasWidth/4) && mousePos.y >= (canvasHeight/4)) {
                 document.getElementById("divShow").innerHTML = sqMes;
-                //emulateVibrate();
+                emulateVibrate();
 
         } else { 
             //writeMessage(canvas, message);
@@ -177,4 +177,5 @@ function reDrawOriginal() {
 
     document.getElementById("canvasDiv").innerHTML = oldCanvas;
     drawToCanvas();
+    listeners();
 }
