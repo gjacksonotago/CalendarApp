@@ -6,5 +6,14 @@
       as an openable netbeans project file because of this. We have the emulator displaying current date/time as a javascript
       script - but I haven't had a close look at it so I'm not sure if it needs some kind of infinite loop or it's own species
       of "pull" requests to refresh that, or if it statically updates as the time does.
+      Discovered how to play with the Canvas Element a little, but now must figure out how to write the time from the JS script 
+      we have to that Canvas element.
 
-      Discovered how to play with the Canvas Element a little, but now must figure out how to write the time from the JS script we have to that Canvas element.
+25/04 - Ben: We now have a clock on a canvas that refreshes itself every second. The canvas also detects mouse clicks and
+      prints out the position of the mouse on the canvas, which is a start for the touch screen function of the emulator.
+      The first way of doing this ended up being recursive and so a few clicks caused the browser to freeze. We managed
+      to remove the recursion which fixed this lag problem.
+      -Now, my github client will not sync with the latest updates on the remote repository, it believes it is up to date
+      and will not pull the lastest changes. Hopefully editing this file will make it realise there was a change and it
+      will be sorted. Otherwise I must say again, I hate github. On another note it seems my role in the group is to have
+      every frustrating problem imaginable happen to me. Why? Why!
