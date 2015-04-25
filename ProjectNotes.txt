@@ -13,7 +13,9 @@
       prints out the position of the mouse on the canvas, which is a start for the touch screen function of the emulator.
       The first way of doing this ended up being recursive and so a few clicks caused the browser to freeze. We managed
       to remove the recursion which fixed this lag problem.
-      -Now, my github client will not sync with the latest updates on the remote repository, it believes it is up to date
+      -->Now, my github client will not sync with the latest updates on the remote repository, it believes it is up to date
       and will not pull the lastest changes. Hopefully editing this file will make it realise there was a change and it
       will be sorted. Otherwise I must say again, I hate github. On another note it seems my role in the group is to have
       every frustrating problem imaginable happen to me. Why? Why!
+      -->So I removed the repository and cloned it again which got me the lastest version. But will it sync this time?
+      If so I will leave this alone.
