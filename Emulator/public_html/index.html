@@ -46,18 +46,15 @@ is where we will host the Emulator and prototype.
         divShow division. Updates time on mouseover on the canvas! 
         -->
         <script>
-           /* There is currently a rather large bug that I've noticed on
-            * my Firefox: If you click it enough times in rapid succession
-            * it freezes, fails to do anything for a long while, and then
-            * sometimes just goes back to normal. I have NO IDEA what is 
-            * causing this yet.
-            */
-           var myVar;
-           drawToCanvas();
-           
+            //This is no longer a bug, it was the recusion. The recursion is
+            //gone. However emulateVibrate() causes it to stop working altogether
+            //so I commented the call out. We don't need it anyway at this point.
+            drawToCanvas();
+            //simply calls mouse event listener functions
+            listeners();                 
            //This refreshes the time/date every second
            // by repainting onto the canvas!
-           myVar = setInterval("drawToCanvas()", 1000);
+           var reload = setInterval("drawToCanvas()", 1000);
         </script>
 
     </body>
