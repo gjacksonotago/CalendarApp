@@ -25,9 +25,10 @@ is where we will host the Emulator and prototype.
             <!-- This div below shows the mouse click co-ords currently -->
             <div id="divShow">Mouse position: No clicks yet!</div>
             <p>
-                Below is the canvas element. It currently displays the
-                current time and date - which updates on mouseover or on 
-                click of the canvas.
+                Below is the canvas element. Right now it's emulating
+                a very primitive mobile OS - should show a black square
+                for an "App" icon. This is clickable and changes the 
+                text above.
             </p>
             
         </div>
@@ -49,12 +50,23 @@ is where we will host the Emulator and prototype.
             //This is no longer a bug, it was the recusion. The recursion is
             //gone. However emulateVibrate() causes it to stop working altogether
             //so I commented the call out. We don't need it anyway at this point.
-            drawToCanvas();
+            //drawToCanvas();
+            
+            emulatorIntialise();
+            
             //simply calls mouse event listener functions
-            listeners();                 
+            
+            /* Old bit:
+             * 
+             * listeners();    
+             */             
            //This refreshes the time/date every second
            // by repainting onto the canvas!
-           var reload = setInterval("drawToCanvas()", 1000);
+           
+           /* Old Code
+            * 
+            * var reload = setInterval("drawToCanvas()", 1000);
+            */
         </script>
 
     </body>

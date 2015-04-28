@@ -54,6 +54,24 @@ function currentDate() {
     return stringDate;
 }
 
+/* Function called to 'begin' the emulator:
+ * Simulates an OS starting up by showing the apps lined
+ * up to click.
+ * @returns Nothing is Returned.
+ */
+function emulatorIntialise() {
+    //Create the Canvas stuff
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    canvasWidth = c.width;
+    canvasHeight = c.height;
+
+    //creates the "app" icon in the top left corner:
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(10, 10, 50, 50);
+    mouseDown(10, 10, 50, 50);
+}
+
 //Creates some data to emulate the watch!
 //Need more functions maybe?
 
@@ -92,12 +110,14 @@ function mouseOver() {
         drawToCanvas();     
     }, false);
 }
-function mouseDown() {
+
+//Adds a mouseDown function at the given position
+function mouseDown(xPosition, yPosition, xSize, ySize) {
     var canvas = document.getElementById('canvas_1');
     
     //The mouseclick event listener.
     canvas.addEventListener('mousedown', function(evt) {
-        drawToCanvas(); //refreshes the date/time display
+        //drawToCanvas(); //refreshes the date/time display
 
         /*
          * Grabs mouse position co-ords and creates a 
@@ -108,13 +128,15 @@ function mouseDown() {
                 Math.round(mousePos.y);
         var sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' + 
                 Math.round(mousePos.y);
+        
+        var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
+        var yCalc = (canvasHeight + ySize + yPosition) - canvasHeight;
 
         //If Mouse Clicked on the Black Square, new message!
-        if (mousePos.x <= canvasWidth - (canvasWidth/4) && mousePos.y <= 
-                canvasHeight - (canvasHeight/4) &&
-                mousePos.x >= (canvasWidth/4) && mousePos.y >= (canvasHeight/4)) {
+        if (mousePos.x <= xCalc && mousePos.y <= yCalc
+                && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
                 document.getElementById("divShow").innerHTML = sqMes;
-                emulateVibrate();
+                //emulateVibrate();
 
         } else { 
             //writeMessage(canvas, message);
