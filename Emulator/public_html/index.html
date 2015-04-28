@@ -27,13 +27,14 @@ is where we will host the Emulator and prototype.
             <p>
                 Below is the canvas element. Right now it's emulating
                 a very primitive mobile OS - should show a black square
-                for an "App" icon. This is clickable and changes the 
+                for an "App" icon.<br> This is clickable and changes the 
                 text above.
             </p>
             
         </div>
         
-        <!-- The actual canvas element - script for editing it is underneath -->
+        <!-- The actual canvas element - script for editing it is in the
+        imported javascript files. Specifically the emulatorBasics.js -->
         <div id="canvasDiv">
             <canvas width="320" height="320" id="canvas_1" 
                     style="border:1px solid #000000;">
@@ -47,11 +48,7 @@ is where we will host the Emulator and prototype.
         divShow division. Updates time on mouseover on the canvas! 
         -->
         <script>
-            //This is no longer a bug, it was the recusion. The recursion is
-            //gone. However emulateVibrate() causes it to stop working altogether
-            //so I commented the call out. We don't need it anyway at this point.
             //drawToCanvas();
-            
             emulatorIntialise();
             
             //simply calls mouse event listener functions
