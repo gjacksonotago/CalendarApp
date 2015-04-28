@@ -20,3 +20,5 @@ function runPrototype() {
 function getDate(dateValue) {
     currentDate = dateValue;
 }
+
+
