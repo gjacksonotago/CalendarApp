@@ -11,7 +11,9 @@
 
 //Global variables
 var canvasWidth, canvasHeight;
+//The String Messages currently written for testing
 var message, sqMes;
+//These string are used for rewriting the canvas to a larger size
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320 
            + '" id="' + 'canvas_1"' + 'style="' + 
            'border:1px solid #000000;">' +
@@ -22,6 +24,8 @@ var canvasString =
             '" id="' + 'canvas_1"' +
             'style="' + 'border:1px solid #000000;"' + '>' +
             '</canvas>';
+//This array stores the blank app icons for intialisation
+var icons = [1, 2, 3, 4, 5];
 
 /*
  * These functions are used for the mouse cordinates
@@ -76,17 +80,55 @@ function emulatorIntialise() {
     var ctx = c.getContext("2d");
     canvasWidth = c.width;
     canvasHeight = c.height;
+    var offset = 60;
+    
+    //Populates the 'screen' with clickable 'app' icons
+    for (j = 0; j < icons.length; j++) {
+        
+        for (i = 0; i < icons.length; i++) {
+            if(i === 4 && j === 2) {
+                createPrototype(10 + (i * offset), 10 + (j * offset), 
+                            50, 50, printPosition);
+            } else {
+                drawClickRect(10 + (i * offset), 10 + (j * offset), 
+                            50, 50, printPosition);
+            }
+                            
+        }
+    }
 
-    //creates the "app" icon in the top left corner:
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(10, 10, 50, 50);
-    mouseDown(10, 10, 50, 50, printPosition);
 }
 
 //Creates some data to emulate the watch!
 //Need more functions maybe?
 
 
+/*
+ * Creates an instance of the Prototype application
+ * when called, at position (xPos, yPos) on the canvas
+ * and of size xSize * ySize, with the name written in
+ * "Calendar App".
+ * 
+ * @param {type} xPos
+ * @param {type} yPos
+ * @param {type} xSize
+ * @param {type} ySize
+ * @param {type} actionTaken
+ * @returns {undefined}
+ */
+function createPrototype(xPos, yPos, xSize, ySize, actionTaken) {
+    
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    //Create the app "icon".
+    drawClickRect(xPos, yPos, xSize, ySize, actionTaken);
+    //Write the app "name" to the icon.
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = "12px Sans Serif";
+    ctx.fillText("Calendar", xPos + 5, (yPos+15));
+    ctx.fillText("App", (xSize/3) + xPos, (ySize/3) + (yPos+15));
+
+}
 
 /*
  * Creates a mouseover listener at the specified location
