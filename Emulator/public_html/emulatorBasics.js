@@ -9,6 +9,8 @@
  * Date Created: 24/04/2015
  */
 
+
+
 //Global variables
 var canvasWidth, canvasHeight;
 //The String Messages currently written for testing
@@ -92,8 +94,7 @@ function emulatorIntialise() {
             } else {
                 drawClickRect(10 + (i * offset), 10 + (j * offset), 
                             50, 50, printPosition);
-            }
-                            
+            }                     
         }
     }
 

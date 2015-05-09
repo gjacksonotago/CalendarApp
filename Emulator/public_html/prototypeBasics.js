@@ -17,8 +17,15 @@ function runPrototype() {
 
 //Takes a date string to set
 // as a value?
-function getDate(dateValue) {
+function setDate(dateValue) {
     currentDate = dateValue;
+}
+
+function protoInitialise() {
+    
+    
+    
+    
 }
 
 
