@@ -9,6 +9,11 @@
  */
 
 var currentDate;
+var oldCanvas = '<canvas width="' + 320 + '" height="' + 320 
+           + '" id="' + 'canvas_1"' + 'style="' + 
+           'border:1px solid #000000;">' +
+            'Canvas Tag not Supported by your browser version!' +
+            '</canvas>';
 
 //timed grab function
 function runPrototype() {
@@ -17,8 +22,24 @@ function runPrototype() {
 
 //Takes a date string to set
 // as a value?
-function getDate(dateValue) {
+function setDate(dateValue) {
     currentDate = dateValue;
+}
+
+function protoInitialise() {
+    
+    /*
+     * This uses JQuery to refer to emulatorBasics
+     * and allow us to use methods from in there.
+     */
+    $.get("emulatorBasics.js", function() {
+        resetCanvas(oldCanvas);
+        var click = printPosition();
+        setDate(createTime());
+        drawClickRect(10, 10, 125, 125, click);
+    });
+    
+    
 }
 
 
