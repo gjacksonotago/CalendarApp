@@ -36,7 +36,7 @@ function protoInitialise() {
     var buttonY = 25;
     
     var pixelX = ((buttonX) + homeX)/3;
-    var pixelY = ((buttonY)/2) + homeY;
+    var pixelY = ((buttonY));
     /*
      * This uses JQuery to refer to emulatorBasics
      * and allow us to use methods from in there.
