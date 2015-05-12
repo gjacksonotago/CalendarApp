@@ -40,6 +40,10 @@ function protoInitialise() {
     /*
      * This uses JQuery to refer to emulatorBasics
      * and allow us to use methods from in there.
+     * 
+     * This creates a "Home" button - may encapuslate the
+     * call and wrap it and generalise it so I can
+     * create more clickable surfaces.
      */
     $.get("emulatorBasics.js", function() {
         resetCanvas(oldCanvas);
