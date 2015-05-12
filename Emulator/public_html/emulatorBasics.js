@@ -83,14 +83,14 @@ function emulatorIntialise() {
     canvasWidth = c.width;
     canvasHeight = c.height;
     var offset = 60;
-    
+      
     //Populates the 'screen' with clickable 'app' icons
     for (j = 0; j < icons.length; j++) {
         
         for (i = 0; i < icons.length; i++) {
             if(i === 4 && j === 2) {
                 createPrototype(10 + (i * offset), 10 + (j * offset), 
-                            50, 50, printPosition);
+                            50, 50);
             } else {
                 drawClickRect(10 + (i * offset), 10 + (j * offset), 
                             50, 50, printPosition);
@@ -117,18 +117,30 @@ function emulatorIntialise() {
  * @param {type} actionTaken
  * @returns {undefined}
  */
-function createPrototype(xPos, yPos, xSize, ySize, actionTaken) {
+function createPrototype(xPos, yPos, xSize, ySize) {
     
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
     //Create the app "icon".
-    drawClickRect(xPos, yPos, xSize, ySize, actionTaken);
+    drawClickRect(xPos, yPos, xSize, ySize, protoClick);
     //Write the app "name" to the icon.
     ctx.fillStyle = "#FFFFFF";
     ctx.font = "12px Sans Serif";
     ctx.fillText("Calendar", xPos + 5, (yPos+15));
     ctx.fillText("App", (xSize/3) + xPos, (ySize/3) + (yPos+15));
+    
+}
 
+/**
+ * Wraps a JQuetry Call to the Prototype Initialistion
+ * so that it can be passed as an argument (without immediate 
+ * evaluation) into the MouseDown function to add it as a listener.
+ * 
+ * @returns {undefined}
+ */
+function protoClick() {
+    var init = $.get("prototypeBasics.js", function() { protoInitialise(); });
+    init;
 }
 
 /*
@@ -221,12 +233,33 @@ function printMessage(message) {
     document.getElementById("divShow").innerHTML = message;
 }
 
+/**
+ * Pass a String that creates a blank canvas element
+ * here, from the prototype, to clear the canvas.
+ * 
+ * @param {type} string
+ * @returns {undefined}
+ */
+function resetCanvas(string) {
+    document.getElementById("canvasDiv").innerHTML = string;
+}
+
 //Creates a black rectangle on the canvas with a mouseDown listener
 // which listens for 'actionToTake'
 function drawClickRect(xPos, yPos, xSize, ySize, actionToTake) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
     ctx.fillStyle = "#000000";
+    //Create the rectangle
+    ctx.fillRect(xPos, yPos, xSize, ySize);
+    //Add the clickable listener
+    mouseDown(xPos, yPos, xSize, ySize, actionToTake);
+}
+
+function drawColourRect(xPos, yPos, xSize, ySize, actionToTake, colour) {
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = colour;
     //Create the rectangle
     ctx.fillRect(xPos, yPos, xSize, ySize);
     //Add the clickable listener
