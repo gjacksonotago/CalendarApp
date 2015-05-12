@@ -44,7 +44,7 @@ function protoInitialise() {
     $.get("emulatorBasics.js", function() {
         resetCanvas(oldCanvas);
         setDate(createTime());
-        drawClickRect(10, 10, buttonX, 25, returnToEmu);
+        drawClickRect(homeX, homeY, buttonX, 25, returnToEmu);
         writeSomething("Home", pixelX, pixelY, 12);
     }); 
 }
