@@ -14,6 +14,9 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
            'border:1px solid #000000;">' +
             'Canvas Tag not Supported by your browser version!' +
             '</canvas>';
+    
+var cX = 320;
+var cY = 320;
 
 //timed grab function
 function runPrototype() {
@@ -27,19 +30,37 @@ function setDate(dateValue) {
 }
 
 function protoInitialise() {
+    var homeX = 10;
+    var homeY = 10;
+    var buttonX = cX/4;
+    var buttonY = 25;
     
+    var pixelX = ((buttonX) + homeX)/3;
+    var pixelY = ((buttonY)/2) + homeY;
     /*
      * This uses JQuery to refer to emulatorBasics
      * and allow us to use methods from in there.
      */
     $.get("emulatorBasics.js", function() {
         resetCanvas(oldCanvas);
-        var click = printPosition();
         setDate(createTime());
-        drawClickRect(10, 10, 125, 125, click);
+        drawClickRect(10, 10, buttonX, 25, returnToEmu);
+        writeSomething("Home", pixelX, pixelY, 12);
+    }); 
+}
+
+
+/**
+ * Function Wrapped-JQuery Call to the emulator
+ * Initialise Function - basically to be used like
+ * an "exit" or "back" button out of the app.
+ * 
+ * @returns {undefined}
+ */
+function returnToEmu() {
+    $.get("emulatorBasics.js", function() {
+        emulatorInitialise();
     });
-    
-    
 }
 
 
