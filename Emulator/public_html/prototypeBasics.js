@@ -23,7 +23,13 @@ function setDate(dateValue) {
 
 function protoInitialise() {
     
-    
+    /*
+     * This uses JQuery to refer to emulatorBasics
+     * and allow us to use methods in there.
+     */
+    $.get("emulatorBasics.js", function() {
+        
+    });
     
     
 }

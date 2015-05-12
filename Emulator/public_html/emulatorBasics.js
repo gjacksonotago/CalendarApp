@@ -217,6 +217,10 @@ function printPosition() {
     document.getElementById("divShow").innerHTML = sqMes;
 }
 
+function printMessage(message) {
+    document.getElementById("divShow").innerHTML = message;
+}
+
 //Creates a black rectangle on the canvas with a mouseDown listener
 // which listens for 'actionToTake'
 function drawClickRect(xPos, yPos, xSize, ySize, actionToTake) {
