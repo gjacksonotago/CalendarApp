@@ -90,7 +90,7 @@ function emulatorInitialise() {
     //Populates the 'screen' with clickable 'app' icons
     for (j = 0; j < icons.length; j++) {    
         for (i = 0; i < icons.length; i++) {
-            if(i === 4 && j === 2) {
+            if(i === 2 && j === 2) {
                 createPrototype(10 + (i * offset), 10 + (j * offset), 
                             50, 50);
             } else {
