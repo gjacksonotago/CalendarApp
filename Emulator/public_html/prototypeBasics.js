@@ -8,7 +8,7 @@
  * Date Created: 24/04/2015
  */
 
-var currentDate;
+var current = "";
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320 
            + '" id="' + 'canvas_1"' + 'style="' + 
            'border:1px solid #000000;">' +
@@ -18,41 +18,32 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
 var cX = 320;
 var cY = 320;
 
-//timed grab function
-function runPrototype() {
-    setTimeout("getDate", 100);
-}
-
-//Takes a date string to set
-// as a value?
-function setDate(dateValue) {
-    currentDate = dateValue;
+function getDate() {
+    return current;
 }
 
 function protoInitialise() {
+    refreshInit();
+    
+    requestTime();
+    writeTime();
+    //pollTime();
+}
+
+function refreshInit() {
     var homeX = 10;
     var homeY = 10;
     var buttonX = cX/4;
-    var buttonY = 25;
-    
+    var buttonY = 25; 
     var pixelX = ((buttonX) + homeX)/3;
     var pixelY = ((buttonY));
-    /*
-     * This uses JQuery to refer to emulatorBasics
-     * and allow us to use methods from in there.
-     * 
-     * This creates a "Home" button - may encapuslate the
-     * call and wrap it and generalise it so I can
-     * create more clickable surfaces.
-     */
+
     $.get("emulatorBasics.js", function() {
-        resetCanvas(oldCanvas);
-        setDate(createTime());
+        resetCanvas(oldCanvas);  
         drawClickRect(homeX, homeY, buttonX, 25, returnToEmu);
         writeSomething("Home", pixelX, pixelY, 12);
     }); 
 }
-
 
 /**
  * Function Wrapped-JQuery Call to the emulator
@@ -67,4 +58,41 @@ function returnToEmu() {
     });
 }
 
+/**
+ * Function Wrapped JQuery Call to the Emulator
+ * to grab the time - and set the prototype variable
+ * string to hold the current time. 
+ * 
+ * @returns {undefined}
+ */
+function requestTime() {
+    $.get("emulatorBasics.js", function() {
+       current = createTime();
+    });
+}
+
+/**
+ * Function wrapped JQuery call to the Emulator
+ * to write the time (coloured black) to the canvas.
+ * 
+ * @returns {undefined}
+ */
+function writeTime() {
+    $.get("emulatorBasics.js", function() {
+       writeSomethingColour(current, 320-(cX/4), 25, 12, "#000000"); 
+    });
+}
+
+/**
+ * Double call to first fetch the current
+ * time and then write that time to the canvas
+ * on a 1 second interval. (Hence the name
+ * "Polling")
+ * 
+ * @returns {undefined}
+ */
+function pollTime() {
+    setInterval(requestTime, 1000);
+    setInterval(writeTime, 1000);
+}
 
