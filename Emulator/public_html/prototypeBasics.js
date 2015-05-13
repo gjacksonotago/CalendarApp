@@ -22,6 +22,15 @@ function getDate() {
     return current;
 }
 
+/**
+ * Initialises the Prototype
+ * by calling the refresh method to reset and
+ * repaint to the canvas, and then by pulling 
+ * and writing the current time to the canvas in
+ * the corner.
+ * 
+ * @returns {undefined}
+ */
 function protoInitialise() {
     refreshInit();
     
@@ -30,6 +39,12 @@ function protoInitialise() {
     //pollTime();
 }
 
+/**
+ * Function that sets up the Prototype, starting with
+ * a "home" button - but hopefully more will be added.
+ * 
+ * @returns {undefined}
+ */
 function refreshInit() {
     var homeX = 10;
     var homeY = 10;
@@ -37,9 +52,9 @@ function refreshInit() {
     var buttonY = 25; 
     var pixelX = ((buttonX) + homeX)/3;
     var pixelY = ((buttonY));
-
+    
+    resetWrap();
     $.get("emulatorBasics.js", function() {
-        resetCanvas(oldCanvas);  
         drawClickRect(homeX, homeY, buttonX, 25, returnToEmu);
         writeSomething("Home", pixelX, pixelY, 12);
     }); 
@@ -96,3 +111,15 @@ function pollTime() {
     setInterval(writeTime, 1000);
 }
 
+/**
+ * Function Wrapped JQuery call to 
+ * reset the canvas using the emulator
+ * method.
+ * 
+ * @returns {undefined}
+ */
+function resetWrap() {
+    $.get("emulatorBasics.js", function() {
+       resetCanvas(oldCanvas); 
+    });
+}

@@ -74,6 +74,7 @@ function currentDate() {
 /* Function called to 'begin' the emulator:
  * Simulates an OS starting up by showing the apps lined
  * up to click.
+ * 
  * @returns Nothing is Returned.
  */
 function emulatorInitialise() {
@@ -81,13 +82,13 @@ function emulatorInitialise() {
     resetCanvas(oldCanvas);
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
+    //ctx.clear();
     canvasWidth = c.width;
     canvasHeight = c.height;
     var offset = 60;
       
     //Populates the 'screen' with clickable 'app' icons
-    for (j = 0; j < icons.length; j++) {
-        
+    for (j = 0; j < icons.length; j++) {    
         for (i = 0; i < icons.length; i++) {
             if(i === 4 && j === 2) {
                 createPrototype(10 + (i * offset), 10 + (j * offset), 
@@ -98,12 +99,10 @@ function emulatorInitialise() {
             }                     
         }
     }
-
 }
 
 //Creates some data to emulate the watch!
 //Need more functions maybe?
-
 
 /*
  * Creates an instance of the Prototype application
@@ -118,8 +117,7 @@ function emulatorInitialise() {
  * @param {type} actionTaken
  * @returns {undefined}
  */
-function createPrototype(xPos, yPos, xSize, ySize) {
-    
+function createPrototype(xPos, yPos, xSize, ySize) {   
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
     //Create the app "icon".
@@ -128,8 +126,7 @@ function createPrototype(xPos, yPos, xSize, ySize) {
     ctx.fillStyle = "#FFFFFF";
     ctx.font = "12px Sans Serif";
     ctx.fillText("Calendar", xPos + 5, (yPos+15));
-    ctx.fillText("App", (xSize/3) + xPos, (ySize/3) + (yPos+15));
-    
+    ctx.fillText("App", (xSize/3) + xPos, (ySize/3) + (yPos+15)); 
 }
 
 /**
@@ -148,7 +145,15 @@ function writeSomething(message, x, y, fontSize) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
     ctx.fillStyle = "#FFFFFF";
-    ctx.font = fontSize+"px Sans Serif";
+    ctx.font = fontSize + "px Sans Serif";
+    ctx.fillText(message, x, y);
+}
+
+function writeSomethingColour(message, x, y, fontSize, colour) {
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = colour;
+    ctx.font = fontSize + "px Sans Serif";
     ctx.fillText(message, x, y);
 }
 
@@ -182,7 +187,6 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
         if (mousePos.x <= xCalc && mousePos.y <= yCalc
                 && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
                 actionTaken();
-
         }
     }, false);
 }
