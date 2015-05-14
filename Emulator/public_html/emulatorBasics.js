@@ -156,8 +156,6 @@ function protoClick() {
     init;
 }
 
-<<<<<<< Updated upstream
-=======
 /**
  * Takes an origin co-ordinate (xPos, yPos) and
  * clears a rectangle from that co-ordinate of
@@ -175,7 +173,6 @@ function clearRect(xPos, yPos, xSize, ySize) {
     ctx.clearRect(xPos, yPos, xSize, ySize);
 }
 
->>>>>>> Stashed changes
 function writeSomething(message, x, y, fontSize) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
