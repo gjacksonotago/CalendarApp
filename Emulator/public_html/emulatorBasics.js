@@ -26,8 +26,6 @@ var canvasString =
         '" id="' + 'canvas_1"' +
         'style="' + 'border:1px solid #000000;"' + '>' +
         '</canvas>';
-//This array stores the blank app icons for intialisation
-//this array is pointless haha, sorry. var icons = [1, 2, 3, 4, 5];
 
 /*
  * These functions are used for the mouse cordinates
@@ -161,6 +159,12 @@ function protoClick() {
     init;
 }
 
+function clearRect(xPos, yPos, xSize, ySize) {
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    ctx.clearRect(xPos, yPos, xSize, ySize);
+}
+
 function writeSomething(message, x, y, fontSize) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
@@ -283,6 +287,7 @@ function printMessage(message) {
 function resetCanvas(string) {
     document.getElementById("canvasDiv").innerHTML = string;
 }
+
 //Draws non clickable rectangle, because they don't all need clicking
 //And can take a colour, should be passed in quotes
 function drawRect(xPos, yPos, xSize, ySize, colour) {
