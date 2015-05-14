@@ -9,42 +9,116 @@
  */
 
 var current = "";
+var oldCanvas = '<canvas width="' + 320 + '" height="' + 320 
+           + '" id="' + 'canvas_1"' + 'style="' + 
+           'border:1px solid #000000;">' +
+            'Canvas Tag not Supported by your browser version!' +
+            '</canvas>';
+var cX = 320;
+var cY = 320;
+
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         + '" id="' + 'canvas_1"' + 'style="' +
         'border:1px solid #000000;">' +
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
 
-var cX = 320;
-var cY = 320;
+var cWidth = 320;
+var cHeight = 320;
+var sizeParam = 1;//keeps everything relative when size of canvas changes....I think, perhaps not necessary
 
 function getDate() {
     return current;
 }
 
+/**
+ * Initialises the Prototype
+ * by calling the refresh method to reset and
+ * repaint to the canvas, and then by pulling 
+ * and writing the current time to the canvas in
+ * the corner.
+ * 
+ * @returns {undefined}
+ */
 function protoInitialise() {
     refreshInit();
-
     requestTime();
     writeTime();
     //pollTime();
 }
 
+/**
+ * Function that sets up the Prototype, starting with
+ * a "home" button - but hopefully more will be added.
+ * 
+ * @returns {undefined}
+ */
 function refreshInit() {
-    var homeX = 115;
-    var homeY = 280;
-    var buttonX = cX / 4;
-    var buttonY = 295;
-    var pixelX = ((buttonX) + homeX / 2);
-    var pixelY = ((buttonY));
+    var homeX = 115 * sizeParam;
+    var homeY = 280 * sizeParam;
+    var buttonX = (cWidth / 4) * sizeParam;
+    var buttonY = 295 * sizeParam;
+    var pixelX = ((buttonX) + homeX / 2) * sizeParam;
+    var pixelY = (buttonY) * sizeParam;
 
     $.get("emulatorBasics.js", function () {
         resetCanvas(oldCanvas);
-        drawClickRect(homeX, homeY, buttonX, 25, returnToEmu);
-        writeSomething("Home", pixelX, pixelY, 12);
-        drawCalendar();
+        drawClickRect(homeX, homeY, buttonX, 25 * sizeParam, returnToEmu);
+        writeSomething("Home", pixelX, pixelY, 12 * sizeParam);
+        drawRect(20 * sizeParam, 10 * sizeParam, buttonX, 25 * sizeParam, "#FF0000");        
+        drawCalendar(31, 2);
+        writeSomething(currentMonth(), 25 * sizeParam, 25 * sizeParam, 12);
     });
 }
+
+/*
+ * Intended to draw the calendar dates to the canvas from inside the calendar app
+ * Takes number of days in the month and the day to start on
+ */
+function drawCalendar(daysInMonth, startDay) {
+    //Populates the 'screen' with clickable calendar date icons
+    var days = 1;
+    var beginDays = false;
+    var magic = 40;//40 is magic
+    var daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    for (j = 0; j < 6; j++) {
+        for (i = 0; i < 7; i++) {
+            drawClickRect((magic * i) + 20, (magic * j) + 40, 30, 30, addReminder);
+            if(j === 0) writeSomething(daysOfWeek[i], (magic * i) + 25, (magic * j) + 50, 8);
+            if(i === startDay && j === 1) beginDays = true;
+            if (j > 0 && days <= daysInMonth && beginDays) {
+                writeSomething(days, (magic * i) + 25, (magic * j) + 50, 8);
+                days++;
+            }
+        }
+    }
+}
+
+//Functions for to do when each day is clicked
+function addReminder() {
+    //add code to actually set dates and stuff, later
+}
+
+//Find how many days in the month, possibly need another function for Feb
+function daysInMonth(month) {   
+    //var thirtyOne = [0, 2, 4, 6, 7, 9, 11];//maybe not the best way...
+    var thirty = [3, 5, 8, 10];//...
+    
+    for(i = 0; i < 7; i++) {
+        if (thirty[i] === month) {
+            return 30;
+        } else { 
+            return 31;
+        }
+    }
+}
+
+//Find out when the month starts
+function calcStartDay(month, year) {
+    
+}
+ 
+//http://safalra.com/web-design/javascript/calendar/
 
 /**
  * Function Wrapped-JQuery Call to the emulator
@@ -78,11 +152,14 @@ function requestTime() {
  * 
  * @returns {undefined}
  */
+
 function writeTime() {
     $.get("emulatorBasics.js", function () {
-        writeSomethingColour(current, 320 - (cX / 4), 25, 12, "#000000");
+        clearThis(cWidth - (cWidth/4), 15, 125, 15);
+        writeSomethingColour(current, cWidth - (cWidth / 4), 25, 12, "#000000");
     });
 }
+
 
 /**
  * Double call to first fetch the current
@@ -93,31 +170,19 @@ function writeTime() {
  * @returns {undefined}
  */
 function pollTime() {
-    setInterval(requestTime, 1000);
+    setInterval(requestTime, 960);
     setInterval(writeTime, 1000);
 }
 
-/*
- * Intended to draw the calendar dates to the canvas from inside the calendar app
+/**
+ * Function Wrapped JQuery call to 
+ * reset the canvas using the emulator
+ * method.
+ * 
+ * @returns {undefined}
  */
-function drawCalendar() {
-    //Populates the 'screen' with clickable calendar date icons
-    var day = 1;
-    var magic = 40;//40 is magic
-    var daysOfWeek = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-    for (j = 0; j < 6; j++) {
-        for (i = 0; i < 7; i++) {
-            drawClickRect((magic * i) + 20, (magic * j) + 40, 30, 30, addReminder);
-            if(j === 0) writeSomething(daysOfWeek[i], (magic * i) + 25, (magic * j) + 50, 8);
-            if (j > 0 && day < 32) {
-                writeSomething(day, (magic * i) + 25, (magic * j) + 50, 8);
-                day++;
-            }
-        }
-    }
+function resetWrap() {
+    $.get("emulatorBasics.js", function() {
+       resetCanvas(oldCanvas); 
+    });
 }
-
-function addReminder() {
-    //add code to actually set dates and stuff, later
-}
-

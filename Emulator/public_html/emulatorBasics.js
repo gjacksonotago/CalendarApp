@@ -26,8 +26,6 @@ var canvasString =
         '" id="' + 'canvas_1"' +
         'style="' + 'border:1px solid #000000;"' + '>' +
         '</canvas>';
-//This array stores the blank app icons for intialisation
-var icons = [1, 2, 3, 4, 5];
 
 /*
  * These functions are used for the mouse cordinates
@@ -82,6 +80,13 @@ function currentMonth() {
 }
 
 
+//Returns just the month in words i.e May, June etc.
+function currentMonth() {
+    var month = new Date();
+    var monthString = month.toDateString().toString().substring(4, 7);
+    return monthString;
+}
+
 /* Function called to 'begin' the emulator:
  * Simulates an OS starting up by showing the apps lined
  * up to click.
@@ -99,8 +104,8 @@ function emulatorInitialise() {
     var offset = 60;
 
     //Populates the 'screen' with clickable 'app' icons
-    for (j = 0; j < icons.length; j++) {
-        for (i = 0; i < icons.length; i++) {
+    for (j = 0; j < 5; j++) {
+        for (i = 0; i < 5; i++) {
             if (i === 2 && j === 2) {
                 createPrototype(10 + (i * offset), 10 + (j * offset),
                         50, 50);
@@ -114,6 +119,13 @@ function emulatorInitialise() {
 
 //Creates some data to emulate the watch!
 //Need more functions maybe?
+
+
+function clearThis(xPos, yPos, xSize, ySize) {
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    ctx.clearRect(xPos, yPos, xSize, ySize);  
+}
 
 /*
  * Creates an instance of the Prototype application
@@ -245,6 +257,13 @@ function mouseDown(xPosition, yPosition, xSize, ySize, actionTaken) {
     }, false);
 }
 
+function swipe() {
+    var canvas = document.getElementById('canvas_1');
+    canvas.addEventListener('mousedown', function (evt) {
+        
+    }, false);
+}
+
 //Calls any functions that initialise event listeners
 function listeners(xPos, yPos, xSize, ySize, actionToTake) {
     mouseOver(xPos, yPos, xSize, ySize, actionToTake);
@@ -269,6 +288,17 @@ function printMessage(message) {
 function resetCanvas(string) {
     document.getElementById("canvasDiv").innerHTML = string;
 }
+
+//Draws non clickable rectangle, because they don't all need clicking
+//And can take a colour, should be passed in quotes
+function drawRect(xPos, yPos, xSize, ySize, colour) {
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = colour;
+    //Create the rectangle
+    ctx.fillRect(xPos, yPos, xSize, ySize);
+}
+
 //Draws non clickable rectangle, because they don't all need clicking
 //And can take a colour, should be passed in quotes
 function drawRect(xPos, yPos, xSize, ySize, colour) {
