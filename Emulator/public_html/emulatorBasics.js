@@ -27,7 +27,7 @@ var canvasString =
         'style="' + 'border:1px solid #000000;"' + '>' +
         '</canvas>';
 //This array stores the blank app icons for intialisation
-var icons = [1, 2, 3, 4, 5];
+//this array is pointless haha, sorry. var icons = [1, 2, 3, 4, 5];
 
 /*
  * These functions are used for the mouse cordinates
@@ -106,8 +106,8 @@ function emulatorInitialise() {
     var offset = 60;
 
     //Populates the 'screen' with clickable 'app' icons
-    for (j = 0; j < icons.length; j++) {
-        for (i = 0; i < icons.length; i++) {
+    for (j = 0; j < 5; j++) {
+        for (i = 0; i < 5; i++) {
             if (i === 2 && j === 2) {
                 createPrototype(10 + (i * offset), 10 + (j * offset),
                         50, 50);
@@ -249,6 +249,13 @@ function mouseDown(xPosition, yPosition, xSize, ySize, actionTaken) {
                 && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
             actionTaken();
         }
+    }, false);
+}
+
+function swipe() {
+    var canvas = document.getElementById('canvas_1');
+    canvas.addEventListener('mousedown', function (evt) {
+        
     }, false);
 }
 
