@@ -9,14 +9,6 @@
  */
 
 var current = "";
-var oldCanvas = '<canvas width="' + 320 + '" height="' + 320 
-           + '" id="' + 'canvas_1"' + 'style="' + 
-           'border:1px solid #000000;">' +
-            'Canvas Tag not Supported by your browser version!' +
-            '</canvas>';
-var cX = 320;
-var cY = 320;
-
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         + '" id="' + 'canvas_1"' + 'style="' +
         'border:1px solid #000000;">' +
