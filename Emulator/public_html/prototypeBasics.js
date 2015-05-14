@@ -78,11 +78,24 @@ function addReminder() {
 }
 
 //Find how many days in the month, possibly need another function for Feb
-function daysInMonth(month) {
-    var thirtyOne = [0, 2, 4, 6, 7, 9, 11];//maybe not the best way...
+function daysInMonth(month) {   
+    //var thirtyOne = [0, 2, 4, 6, 7, 9, 11];//maybe not the best way...
     var thirty = [3, 5, 8, 10];//...
+    
+    for(i = 0; i < 7; i++) {
+        if (thirty[i] === month) {
+            return 30;
+        } else { 
+            return 31;
+        }
+    }
 }
 
+//Find out when the month starts
+function calcStartDay(month, year) {
+    
+}
+ 
 //http://safalra.com/web-design/javascript/calendar/
 
 /**
@@ -117,8 +130,9 @@ function requestTime() {
  * 
  * @returns {undefined}
  */
-function writeTime() {
+function writeTime() {  
     $.get("emulatorBasics.js", function () {
+        clearRect(cWidth - (cWidth/4), 15, 125, 15);
         writeSomethingColour(current, cWidth - (cWidth / 4), 25, 12, "#000000");
     });
 }
