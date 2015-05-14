@@ -101,11 +101,16 @@ function addReminder() {
 
 //Find how many days in the month, possibly need another function for Feb
 function daysInMonth(month) {   
+     //http://www.timeanddate.com/date/leapyear.html
+    //I'll use this to call Febs days
+
     //var thirtyOne = [0, 2, 4, 6, 7, 9, 11];//maybe not the best way...
     var thirty = [3, 5, 8, 10];//...
     
     for(i = 0; i < 4; i++) {
-        if (thirty[i] === month) {
+        if(month === 1) {
+            return 28;
+        } else if (thirty[i] === month) {
             return 30;
         } else { 
             return 31;
