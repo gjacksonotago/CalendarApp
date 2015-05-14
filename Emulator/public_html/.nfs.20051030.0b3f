@@ -68,7 +68,19 @@ function currentDate() {
     var stringDate = currentDate.toLocaleDateString();
     return stringDate;
 }
+//Returns just the month in words i.e May, June etc.
+function currentMonth() {
+    var month = new Date();
+    var monthString = month.getMonth();
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    for (i < 0; i < months.length; i++) {
+        if (i === Number(monthString)) return months[i] + "THIS SHOULD WORK!";
+    }
+    return monthString;//curently just returning the number because i cannot get it to WORK!
+}
 
+<<<<<<< HEAD
+=======
 //Is this the working one?
 //Returns just the month in words i.e May, June etc.
 function currentMonth() {
@@ -76,6 +88,7 @@ function currentMonth() {
     var monthString = month.toDateString().toString().substring(4, 7);
     return monthString;
 }
+>>>>>>> GeorgesBranch
 
 /* Function called to 'begin' the emulator:
  * Simulates an OS starting up by showing the apps lined
@@ -154,23 +167,6 @@ function protoClick() {
         protoInitialise();
     });
     init;
-}
-
-/**
- * Takes an origin co-ordinate (xPos, yPos) and
- * clears a rectangle from that co-ordinate of
- * xSize x ySize.
- * 
- * @param {type} xPos
- * @param {type} yPos
- * @param {type} xSize
- * @param {type} ySize
- * @returns {undefined}
- */
-function clearRect(xPos, yPos, xSize, ySize) {
-    var c = document.getElementById("canvas_1");
-    var ctx = c.getContext("2d");
-    ctx.clearRect(xPos, yPos, xSize, ySize);
 }
 
 function writeSomething(message, x, y, fontSize) {
