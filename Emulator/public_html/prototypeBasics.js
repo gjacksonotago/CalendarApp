@@ -149,6 +149,8 @@ function requestTime() {
 /**
  * Function wrapped JQuery call to the Emulator
  * to write the time (coloured black) to the canvas.
+ * Makes use of the Canvas clearRect method called
+ * through JQuery from the emulator script.
  * 
  * @returns {undefined}
  */
