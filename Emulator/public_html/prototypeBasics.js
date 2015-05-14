@@ -14,7 +14,6 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
            'border:1px solid #000000;">' +
             'Canvas Tag not Supported by your browser version!' +
             '</canvas>';
-    
 var cX = 320;
 var cY = 320;
 
@@ -33,10 +32,9 @@ function getDate() {
  */
 function protoInitialise() {
     refreshInit();
-    
     requestTime();
     writeTime();
-    //pollTime();
+    pollTime();
 }
 
 /**
@@ -93,8 +91,15 @@ function requestTime() {
  * @returns {undefined}
  */
 function writeTime() {
+    clearWrapped((320-(cX/4))-5, 15, 125, 15);
     $.get("emulatorBasics.js", function() {
        writeSomethingColour(current, 320-(cX/4), 25, 12, "#000000"); 
+    });
+}
+
+function clearWrapped(xPos, yPos, xSize, ySize) {
+    $.get("emulatorBasics.js", function() {
+       clearThis(xPos, yPos, xSize, ySize); 
     });
 }
 
@@ -107,7 +112,7 @@ function writeTime() {
  * @returns {undefined}
  */
 function pollTime() {
-    setInterval(requestTime, 1000);
+    setInterval(requestTime, 960);
     setInterval(writeTime, 1000);
 }
 

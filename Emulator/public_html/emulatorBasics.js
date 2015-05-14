@@ -104,6 +104,18 @@ function emulatorInitialise() {
 //Creates some data to emulate the watch!
 //Need more functions maybe?
 
+function clearContext() {
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    ctx.clear();  
+}
+
+function clearThis(xPos, yPos, xSize, ySize) {
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    ctx.clearRect(xPos, yPos, xSize, ySize);  
+}
+
 /*
  * Creates an instance of the Prototype application
  * when called, at position (xPos, yPos) on the canvas
