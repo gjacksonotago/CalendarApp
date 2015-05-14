@@ -68,19 +68,7 @@ function currentDate() {
     var stringDate = currentDate.toLocaleDateString();
     return stringDate;
 }
-//Returns just the month in words i.e May, June etc.
-function currentMonth() {
-    var month = new Date();
-    var monthString = month.getMonth();
-    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    for (i < 0; i < months.length; i++) {
-        if (i === Number(monthString)) return months[i] + "THIS SHOULD WORK!";
-    }
-    return monthString;//curently just returning the number because i cannot get it to WORK!
-}
 
-<<<<<<< HEAD
-=======
 //Is this the working one?
 //Returns just the month in words i.e May, June etc.
 function currentMonth() {
@@ -88,7 +76,6 @@ function currentMonth() {
     var monthString = month.toDateString().toString().substring(4, 7);
     return monthString;
 }
->>>>>>> GeorgesBranch
 
 /* Function called to 'begin' the emulator:
  * Simulates an OS starting up by showing the apps lined
