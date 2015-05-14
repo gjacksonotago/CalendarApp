@@ -9,7 +9,6 @@
  */
 
 var current = "";
-<<<<<<< HEAD
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320 
            + '" id="' + 'canvas_1"' + 'style="' + 
            'border:1px solid #000000;">' +
@@ -17,7 +16,7 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
             '</canvas>';
 var cX = 320;
 var cY = 320;
-=======
+
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         + '" id="' + 'canvas_1"' + 'style="' +
         'border:1px solid #000000;">' +
@@ -27,7 +26,6 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
 var cWidth = 320;
 var cHeight = 320;
 var sizeParam = 1;//keeps everything relative when size of canvas changes....I think, perhaps not necessary
->>>>>>> origin/GeorgesBranch
 
 function getDate() {
     return current;
@@ -44,13 +42,9 @@ function getDate() {
  */
 function protoInitialise() {
     refreshInit();
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/GeorgesBranch
     requestTime();
     writeTime();
-    pollTime();
+    //pollTime();
 }
 
 /**
@@ -60,20 +54,6 @@ function protoInitialise() {
  * @returns {undefined}
  */
 function refreshInit() {
-<<<<<<< HEAD
-    var homeX = 10;
-    var homeY = 10;
-    var buttonX = cX/4;
-    var buttonY = 25; 
-    var pixelX = ((buttonX) + homeX)/3;
-    var pixelY = ((buttonY));
-    
-    resetWrap();
-    $.get("emulatorBasics.js", function() {
-        drawClickRect(homeX, homeY, buttonX, 25, returnToEmu);
-        writeSomething("Home", pixelX, pixelY, 12);
-    }); 
-=======
     var homeX = 115 * sizeParam;
     var homeY = 280 * sizeParam;
     var buttonX = (cWidth / 4) * sizeParam;
@@ -89,7 +69,6 @@ function refreshInit() {
         drawCalendar(31, 2);
         writeSomething(currentMonth(), 25 * sizeParam, 25 * sizeParam, 12);
     });
->>>>>>> origin/GeorgesBranch
 }
 
 /*
@@ -173,25 +152,14 @@ function requestTime() {
  * 
  * @returns {undefined}
  */
-<<<<<<< HEAD
+
 function writeTime() {
-    clearWrapped((320-(cX/4))-5, 15, 125, 15);
-    $.get("emulatorBasics.js", function() {
-       writeSomethingColour(current, 320-(cX/4), 25, 12, "#000000"); 
-=======
-function writeTime() {  
     $.get("emulatorBasics.js", function () {
-        clearRect(cWidth - (cWidth/4), 15, 125, 15);
+        clearThis(cWidth - (cWidth/4), 15, 125, 15);
         writeSomethingColour(current, cWidth - (cWidth / 4), 25, 12, "#000000");
->>>>>>> origin/GeorgesBranch
     });
 }
 
-function clearWrapped(xPos, yPos, xSize, ySize) {
-    $.get("emulatorBasics.js", function() {
-       clearThis(xPos, yPos, xSize, ySize); 
-    });
-}
 
 /**
  * Double call to first fetch the current
@@ -206,7 +174,6 @@ function pollTime() {
     setInterval(writeTime, 1000);
 }
 
-<<<<<<< HEAD
 /**
  * Function Wrapped JQuery call to 
  * reset the canvas using the emulator
@@ -219,7 +186,3 @@ function resetWrap() {
        resetCanvas(oldCanvas); 
     });
 }
-=======
-
-
->>>>>>> origin/GeorgesBranch

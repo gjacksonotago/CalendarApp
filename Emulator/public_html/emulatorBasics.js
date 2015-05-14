@@ -104,19 +104,11 @@ function emulatorInitialise() {
     var offset = 60;
 
     //Populates the 'screen' with clickable 'app' icons
-<<<<<<< HEAD
-    for (j = 0; j < icons.length; j++) {    
-        for (i = 0; i < icons.length; i++) {
-            if(i === 4 && j === 2) {
-                createPrototype(10 + (i * offset), 10 + (j * offset), 
-                            50, 50);
-=======
     for (j = 0; j < 5; j++) {
         for (i = 0; i < 5; i++) {
             if (i === 2 && j === 2) {
                 createPrototype(10 + (i * offset), 10 + (j * offset),
                         50, 50);
->>>>>>> origin/GeorgesBranch
             } else {
                 drawClickRect(10 + (i * offset), 10 + (j * offset),
                         50, 50, printPosition);
@@ -128,12 +120,6 @@ function emulatorInitialise() {
 //Creates some data to emulate the watch!
 //Need more functions maybe?
 
-<<<<<<< HEAD
-function clearContext() {
-    var c = document.getElementById("canvas_1");
-    var ctx = c.getContext("2d");
-    ctx.clear();  
-}
 
 function clearThis(xPos, yPos, xSize, ySize) {
     var c = document.getElementById("canvas_1");
@@ -141,8 +127,6 @@ function clearThis(xPos, yPos, xSize, ySize) {
     ctx.clearRect(xPos, yPos, xSize, ySize);  
 }
 
-=======
->>>>>>> origin/GeorgesBranch
 /*
  * Creates an instance of the Prototype application
  * when called, at position (xPos, yPos) on the canvas
@@ -156,11 +140,7 @@ function clearThis(xPos, yPos, xSize, ySize) {
  * @param {type} actionTaken
  * @returns {undefined}
  */
-<<<<<<< HEAD
-function createPrototype(xPos, yPos, xSize, ySize) {   
-=======
 function createPrototype(xPos, yPos, xSize, ySize) {
->>>>>>> origin/GeorgesBranch
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
     //Create the app "icon".
@@ -168,13 +148,8 @@ function createPrototype(xPos, yPos, xSize, ySize) {
     //Write the app "name" to the icon.
     ctx.fillStyle = "#FFFFFF";
     ctx.font = "12px Sans Serif";
-<<<<<<< HEAD
-    ctx.fillText("Calendar", xPos + 5, (yPos+15));
-    ctx.fillText("App", (xSize/3) + xPos, (ySize/3) + (yPos+15)); 
-=======
     ctx.fillText("Calendar", xPos + 5, (yPos + 15));
     ctx.fillText("App", (xSize / 3) + xPos, (ySize / 3) + (yPos + 15));
->>>>>>> origin/GeorgesBranch
 }
 
 /**
@@ -189,12 +164,6 @@ function protoClick() {
         protoInitialise();
     });
     init;
-}
-
-function clearRect(xPos, yPos, xSize, ySize) {
-    var c = document.getElementById("canvas_1");
-    var ctx = c.getContext("2d");
-    ctx.clearRect(xPos, yPos, xSize, ySize);
 }
 
 function writeSomething(message, x, y, fontSize) {
@@ -242,11 +211,7 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
         //If Mouse Clicked on the Black Square, new message!
         if (mousePos.x <= xCalc && mousePos.y <= yCalc
                 && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
-<<<<<<< HEAD
-                actionTaken();
-=======
             actionTaken();
->>>>>>> origin/GeorgesBranch
         }
     }, false);
 }
