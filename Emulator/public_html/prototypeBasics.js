@@ -9,6 +9,14 @@
  */
 
 var current = "";
+var oldCanvas = '<canvas width="' + 320 + '" height="' + 320 
+           + '" id="' + 'canvas_1"' + 'style="' + 
+           'border:1px solid #000000;">' +
+            'Canvas Tag not Supported by your browser version!' +
+            '</canvas>';
+var cX = 320;
+var cY = 320;
+
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         + '" id="' + 'canvas_1"' + 'style="' +
         'border:1px solid #000000;">' +
@@ -23,14 +31,28 @@ function getDate() {
     return current;
 }
 
+/**
+ * Initialises the Prototype
+ * by calling the refresh method to reset and
+ * repaint to the canvas, and then by pulling 
+ * and writing the current time to the canvas in
+ * the corner.
+ * 
+ * @returns {undefined}
+ */
 function protoInitialise() {
     refreshInit();
-
     requestTime();
     writeTime();
     //pollTime();
 }
 
+/**
+ * Function that sets up the Prototype, starting with
+ * a "home" button - but hopefully more will be added.
+ * 
+ * @returns {undefined}
+ */
 function refreshInit() {
     var homeX = 115 * sizeParam;
     var homeY = 280 * sizeParam;
@@ -130,12 +152,14 @@ function requestTime() {
  * 
  * @returns {undefined}
  */
-function writeTime() {  
+
+function writeTime() {
     $.get("emulatorBasics.js", function () {
-        clearRect(cWidth - (cWidth/4), 15, 125, 15);
+        clearThis(cWidth - (cWidth/4), 15, 125, 15);
         writeSomethingColour(current, cWidth - (cWidth / 4), 25, 12, "#000000");
     });
 }
+
 
 /**
  * Double call to first fetch the current
@@ -146,9 +170,19 @@ function writeTime() {
  * @returns {undefined}
  */
 function pollTime() {
-    setInterval(requestTime, 1000);
+    setInterval(requestTime, 960);
     setInterval(writeTime, 1000);
 }
 
-
-
+/**
+ * Function Wrapped JQuery call to 
+ * reset the canvas using the emulator
+ * method.
+ * 
+ * @returns {undefined}
+ */
+function resetWrap() {
+    $.get("emulatorBasics.js", function() {
+       resetCanvas(oldCanvas); 
+    });
+}
