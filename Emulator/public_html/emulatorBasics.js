@@ -299,16 +299,6 @@ function drawRect(xPos, yPos, xSize, ySize, colour) {
     ctx.fillRect(xPos, yPos, xSize, ySize);
 }
 
-//Draws non clickable rectangle, because they don't all need clicking
-//And can take a colour, should be passed in quotes
-function drawRect(xPos, yPos, xSize, ySize, colour) {
-    var c = document.getElementById("canvas_1");
-    var ctx = c.getContext("2d");
-    ctx.fillStyle = colour;
-    //Create the rectangle
-    ctx.fillRect(xPos, yPos, xSize, ySize);
-}
-
 //Creates a black rectangle on the canvas with a mouseDown listener
 // which listens for 'actionToTake'
 function drawClickRect(xPos, yPos, xSize, ySize, actionToTake) {
