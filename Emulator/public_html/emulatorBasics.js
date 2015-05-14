@@ -16,18 +16,16 @@ var canvasWidth, canvasHeight;
 //The String Messages currently written for testing
 var message, sqMes;
 //These string are used for rewriting the canvas to a larger size
-var oldCanvas = '<canvas width="' + 320 + '" height="' + 320 
-           + '" id="' + 'canvas_1"' + 'style="' + 
-           'border:1px solid #000000;">' +
-            'Canvas Tag not Supported by your browser version!' +
-            '</canvas>';
-var canvasString = 
-            '<canvas width="' + 340 + '" height="' + 340 + 
-            '" id="' + 'canvas_1"' +
-            'style="' + 'border:1px solid #000000;"' + '>' +
-            '</canvas>';
-//This array stores the blank app icons for intialisation
-var icons = [1, 2, 3, 4, 5];
+var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
+        + '" id="' + 'canvas_1"' + 'style="' +
+        'border:1px solid #000000;">' +
+        'Canvas Tag not Supported by your browser version!' +
+        '</canvas>';
+var canvasString =
+        '<canvas width="' + 340 + '" height="' + 340 +
+        '" id="' + 'canvas_1"' +
+        'style="' + 'border:1px solid #000000;"' + '>' +
+        '</canvas>';
 
 /*
  * These functions are used for the mouse cordinates
@@ -46,15 +44,15 @@ function getMousePos(canvas, evt) {
     return {
         x: evt.clientX - rect.left,
         y: evt.clientY - rect.top
-      };
+    };
 }
 
 //============================================================//
 
 
 /*
-* These functions are used for writing the time to the canvas
-*/
+ * These functions are used for writing the time to the canvas
+ */
 
 //Gets and returns the Current Time as a String
 function createTime() {
@@ -69,6 +67,24 @@ function currentDate() {
     var currentDate = new Date();
     var stringDate = currentDate.toLocaleDateString();
     return stringDate;
+}
+//Returns just the month in words i.e May, June etc.
+function currentMonth() {
+    var month = new Date();
+    var monthString = month.getMonth();
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    for (i < 0; i < months.length; i++) {
+        if (i === Number(monthString)) return months[i] + "THIS SHOULD WORK!";
+    }
+    return monthString;//curently just returning the number because i cannot get it to WORK!
+}
+
+
+//Returns just the month in words i.e May, June etc.
+function currentMonth() {
+    var month = new Date();
+    var monthString = month.toDateString().toString().substring(4, 7);
+    return monthString;
 }
 
 /* Function called to 'begin' the emulator:
@@ -86,17 +102,25 @@ function emulatorInitialise() {
     canvasWidth = c.width;
     canvasHeight = c.height;
     var offset = 60;
-      
+
     //Populates the 'screen' with clickable 'app' icons
+<<<<<<< HEAD
     for (j = 0; j < icons.length; j++) {    
         for (i = 0; i < icons.length; i++) {
             if(i === 4 && j === 2) {
                 createPrototype(10 + (i * offset), 10 + (j * offset), 
                             50, 50);
+=======
+    for (j = 0; j < 5; j++) {
+        for (i = 0; i < 5; i++) {
+            if (i === 2 && j === 2) {
+                createPrototype(10 + (i * offset), 10 + (j * offset),
+                        50, 50);
+>>>>>>> origin/GeorgesBranch
             } else {
-                drawClickRect(10 + (i * offset), 10 + (j * offset), 
-                            50, 50, printPosition);
-            }                     
+                drawClickRect(10 + (i * offset), 10 + (j * offset),
+                        50, 50, printPosition);
+            }
         }
     }
 }
@@ -104,6 +128,7 @@ function emulatorInitialise() {
 //Creates some data to emulate the watch!
 //Need more functions maybe?
 
+<<<<<<< HEAD
 function clearContext() {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
@@ -116,6 +141,8 @@ function clearThis(xPos, yPos, xSize, ySize) {
     ctx.clearRect(xPos, yPos, xSize, ySize);  
 }
 
+=======
+>>>>>>> origin/GeorgesBranch
 /*
  * Creates an instance of the Prototype application
  * when called, at position (xPos, yPos) on the canvas
@@ -129,7 +156,11 @@ function clearThis(xPos, yPos, xSize, ySize) {
  * @param {type} actionTaken
  * @returns {undefined}
  */
+<<<<<<< HEAD
 function createPrototype(xPos, yPos, xSize, ySize) {   
+=======
+function createPrototype(xPos, yPos, xSize, ySize) {
+>>>>>>> origin/GeorgesBranch
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
     //Create the app "icon".
@@ -137,8 +168,13 @@ function createPrototype(xPos, yPos, xSize, ySize) {
     //Write the app "name" to the icon.
     ctx.fillStyle = "#FFFFFF";
     ctx.font = "12px Sans Serif";
+<<<<<<< HEAD
     ctx.fillText("Calendar", xPos + 5, (yPos+15));
     ctx.fillText("App", (xSize/3) + xPos, (ySize/3) + (yPos+15)); 
+=======
+    ctx.fillText("Calendar", xPos + 5, (yPos + 15));
+    ctx.fillText("App", (xSize / 3) + xPos, (ySize / 3) + (yPos + 15));
+>>>>>>> origin/GeorgesBranch
 }
 
 /**
@@ -149,8 +185,16 @@ function createPrototype(xPos, yPos, xSize, ySize) {
  * @returns {undefined}
  */
 function protoClick() {
-    var init = $.get("prototypeBasics.js", function() { protoInitialise(); });
+    var init = $.get("prototypeBasics.js", function () {
+        protoInitialise();
+    });
     init;
+}
+
+function clearRect(xPos, yPos, xSize, ySize) {
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    ctx.clearRect(xPos, yPos, xSize, ySize);
 }
 
 function writeSomething(message, x, y, fontSize) {
@@ -184,12 +228,12 @@ function writeSomethingColour(message, x, y, fontSize, colour) {
 function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
     var canvas = document.getElementById('canvas_1');
 
-    canvas.addEventListener('mouseover', function(evt) {
-        
+    canvas.addEventListener('mouseover', function (evt) {
+
         var mousePos = getMousePos(canvas, evt);
-        message = 'Mouse position: ' + mousePos.x + ', ' + 
+        message = 'Mouse position: ' + mousePos.x + ', ' +
                 Math.round(mousePos.y);
-        sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' + 
+        sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' +
                 Math.round(mousePos.y);
 
         var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
@@ -198,7 +242,11 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
         //If Mouse Clicked on the Black Square, new message!
         if (mousePos.x <= xCalc && mousePos.y <= yCalc
                 && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
+<<<<<<< HEAD
                 actionTaken();
+=======
+            actionTaken();
+>>>>>>> origin/GeorgesBranch
         }
     }, false);
 }
@@ -223,24 +271,31 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
  */
 function mouseDown(xPosition, yPosition, xSize, ySize, actionTaken) {
     var canvas = document.getElementById('canvas_1');
-    
+
     //The mouseclick event listener.
-    canvas.addEventListener('mousedown', function(evt) {
-        
+    canvas.addEventListener('mousedown', function (evt) {
+
         var mousePos = getMousePos(canvas, evt);
-        message = 'Mouse position: ' + mousePos.x + ', ' + 
+        message = 'Mouse position: ' + mousePos.x + ', ' +
                 Math.round(mousePos.y);
-        sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' + 
+        sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' +
                 Math.round(mousePos.y);
-        
+
         var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
         var yCalc = (canvasHeight + ySize + yPosition) - canvasHeight;
 
         //If Mouse Clicked on the Black Square, new message!
         if (mousePos.x <= xCalc && mousePos.y <= yCalc
                 && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
-                actionTaken();
-        } 
+            actionTaken();
+        }
+    }, false);
+}
+
+function swipe() {
+    var canvas = document.getElementById('canvas_1');
+    canvas.addEventListener('mousedown', function (evt) {
+        
     }, false);
 }
 
@@ -267,6 +322,26 @@ function printMessage(message) {
  */
 function resetCanvas(string) {
     document.getElementById("canvasDiv").innerHTML = string;
+}
+
+//Draws non clickable rectangle, because they don't all need clicking
+//And can take a colour, should be passed in quotes
+function drawRect(xPos, yPos, xSize, ySize, colour) {
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = colour;
+    //Create the rectangle
+    ctx.fillRect(xPos, yPos, xSize, ySize);
+}
+
+//Draws non clickable rectangle, because they don't all need clicking
+//And can take a colour, should be passed in quotes
+function drawRect(xPos, yPos, xSize, ySize, colour) {
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = colour;
+    //Create the rectangle
+    ctx.fillRect(xPos, yPos, xSize, ySize);
 }
 
 //Creates a black rectangle on the canvas with a mouseDown listener
@@ -327,8 +402,8 @@ function drawToCanvas() {
     //Writes Time as a String to the Canvas
     ctx.fillStyle = "#000000";
     ctx.font = "48px Sans Serif";
-    ctx.fillText(stringTime, 10, (canvasHeight/10)+20);
-    ctx.fillText(stringDate, 10, (canvasHeight-20));
+    ctx.fillText(stringTime, 10, (canvasHeight / 10) + 20);
+    ctx.fillText(stringDate, 10, (canvasHeight - 20));
 
     //creates the black rectangle in the middle
     drawClickRect();
