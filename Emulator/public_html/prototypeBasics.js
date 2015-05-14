@@ -104,7 +104,7 @@ function daysInMonth(month) {
     //var thirtyOne = [0, 2, 4, 6, 7, 9, 11];//maybe not the best way...
     var thirty = [3, 5, 8, 10];//...
     
-    for(i = 0; i < 7; i++) {
+    for(i = 0; i < 4; i++) {
         if (thirty[i] === month) {
             return 30;
         } else { 
