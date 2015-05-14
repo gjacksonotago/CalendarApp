@@ -106,10 +106,15 @@ function addReminder() {
 }
 
 //Find how many days in the month, possibly need another function for Feb
+<<<<<<< Updated upstream
 function daysInMonth(month, year) {   
      //http://www.timeanddate.com/date/leapyear.html
     //I'll use this to calc Febs days
     //var thirtyOne = [0, 2, 4, 6, 7, 9, 11];//maybe not the best way...
+=======
+function daysInMonth(month) {   
+    //var thirtyOne = [0, 2, 4, 6, 7, 9, 11];
+>>>>>>> Stashed changes
     var thirty = [3, 5, 8, 10];//...
     
     for(i = 0; i < 4; i++) {
@@ -169,7 +174,13 @@ function requestTime() {
 
 function writeTime() {
     $.get("emulatorBasics.js", function () {
+<<<<<<< Updated upstream
         clearThis(cWidth - (cWidth/4), 15, 125, 15);
+=======
+        //Refreshes the section with the time so when we poll time
+        //it doesn't write over itself.
+        clearRect(cWidth - (cWidth/4), 15, 125, 15);
+>>>>>>> Stashed changes
         writeSomethingColour(current, cWidth - (cWidth / 4), 25, 12, "#000000");
     });
 }
