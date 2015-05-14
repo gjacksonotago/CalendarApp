@@ -71,6 +71,13 @@ function currentDate() {
     return stringDate;
 }
 
+//Returns just the month in words i.e May, June etc.
+function currentMonth() {
+    var month = new Date();
+    var monthString = month.toDateString().toString().substring(4, 7);
+    return monthString;
+}
+
 /* Function called to 'begin' the emulator:
  * Simulates an OS starting up by showing the apps lined
  * up to click.
@@ -255,6 +262,16 @@ function printMessage(message) {
  */
 function resetCanvas(string) {
     document.getElementById("canvasDiv").innerHTML = string;
+}
+
+//Draws non clickable rectangle, because they don't all need clicking
+//And can take a colour, should be passed in quotes
+function drawRect(xPos, yPos, xSize, ySize, colour) {
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = colour;
+    //Create the rectangle
+    ctx.fillRect(xPos, yPos, xSize, ySize);
 }
 
 //Creates a black rectangle on the canvas with a mouseDown listener

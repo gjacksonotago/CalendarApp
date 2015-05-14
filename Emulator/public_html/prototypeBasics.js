@@ -15,8 +15,9 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
 
-var cX = 320;
-var cY = 320;
+var cWidth = 320;
+var cHeight = 320;
+var SizeParam = 1;//keeps everything relative when size of canvas changes
 
 function getDate() {
     return current;
@@ -33,7 +34,7 @@ function protoInitialise() {
 function refreshInit() {
     var homeX = 115;
     var homeY = 280;
-    var buttonX = cX / 4;
+    var buttonX = (cWidth / 4) * SizeParam;
     var buttonY = 295;
     var pixelX = ((buttonX) + homeX / 2);
     var pixelY = ((buttonY));
@@ -42,7 +43,9 @@ function refreshInit() {
         resetCanvas(oldCanvas);
         drawClickRect(homeX, homeY, buttonX, 25, returnToEmu);
         writeSomething("Home", pixelX, pixelY, 12);
+        drawRect(20, 10, buttonX, 25, "#FF0000");        
         drawCalendar();
+        writeSomething(currentMonth(), 25, 25, 12);
     });
 }
 
@@ -80,7 +83,7 @@ function requestTime() {
  */
 function writeTime() {
     $.get("emulatorBasics.js", function () {
-        writeSomethingColour(current, 320 - (cX / 4), 25, 12, "#000000");
+        writeSomethingColour(current, 320 - (cWidth / 4), 25, 12, "#000000");
     });
 }
 
