@@ -79,7 +79,7 @@ function currentMonth() {
     return monthString;//curently just returning the number because i cannot get it to WORK!
 }
 
-
+//Is this the working one?
 //Returns just the month in words i.e May, June etc.
 function currentMonth() {
     var month = new Date();
