@@ -19,6 +19,8 @@ var cWidth = 320;
 var cHeight = 320;
 var month = 5;
 var stringMonth = "May";
+var startDay = 5;
+var endDay = 0;
 var months = 12;
 var year = 2015;
 var sizeParam = 1;//keeps everything relative when size of canvas changes....I think, perhaps not necessary
@@ -37,9 +39,7 @@ function getDate() {
  * @returns {undefined}
  */
 function protoInitialise() {
-    refreshInit();
-    requestTime();
-    writeTime();
+    refreshInit(daysInMonth(month), startDay);
     //pollTime();
 }
 
@@ -49,7 +49,7 @@ function protoInitialise() {
  * 
  * @returns {undefined}
  */
-function refreshInit() {
+function refreshInit(daysformonth, startDay) {
     var homeX = 115 * sizeParam;
     var homeY = 294 * sizeParam;
     var buttonX = (cWidth / 4) * sizeParam;
@@ -62,12 +62,15 @@ function refreshInit() {
         drawClickRect(homeX, homeY, buttonX, 25 * sizeParam, returnToEmu);
         writeSomething("Home", pixelX, pixelY, 12 * sizeParam);
         drawRect(20 * sizeParam, 10 * sizeParam, buttonX, 25 * sizeParam, "#FF0000");        
-        drawCalendar(31, 5);
-        writeSomething(currentMonth(), 25 * sizeParam, 25 * sizeParam, 12);
+        drawCalendar(daysformonth, startDay);
+        writeSomething(stringMonth, 25 * sizeParam, 25 * sizeParam, 12);
         drawColourRect(25 + buttonX * sizeParam, 10 * sizeParam, 
-                        15, 25 * sizeParam, printPosition, "#FF0000");
+                        15, 25 * sizeParam, advanceMonth, "#FF0000");
         writeSomething(">", 30+buttonX, 25, 12);
     });
+    
+    requestTime();
+    writeTime();
 }
 
 /*
@@ -130,18 +133,25 @@ function advanceMonth() {
     if(month < 12) {
         month++;
         changeMonth(month);
+        //startDay = (endDay + 1);
     } else {
         month = 0;
         changeMonth(month);
         year++;
+        //startDay = (endDay + 1);
     }
+    
+    var newDays = daysInMonth(month, year);
+    refreshInit(newDays, endDay+1);
+    endDay = (startDay + newDays); 
 }
 
 function initMonth() { 
     $.get("emulatorBasics.js", function() {
        stringMonth = currentMonth();
        month = monthToInt(currentMonth);
-    });
+    });   
+    endDay = startDay + daysInMonth(month, year);
 }
 
 function changeMonth(month) {
