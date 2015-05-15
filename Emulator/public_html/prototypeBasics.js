@@ -68,15 +68,15 @@ function refreshInit(daysformonth, startDay) {
         resetCanvas(oldCanvas);
         drawClickRect(homeX, homeY, buttonX, 25 * sizeParam, returnToEmu);
         writeSomething("Home", pixelX, pixelY, 12 * sizeParam);
-        drawRect(20 * sizeParam, 10 * sizeParam, buttonX, 25 * sizeParam, "#FF0000");
+        drawRect(20 * sizeParam, 10 * sizeParam, buttonX + 10, 25 * sizeParam, "#FF0000");
         drawCalendar(daysformonth, startDay);
-        writeSomething(stringMonth, 25 * sizeParam, 25 * sizeParam, 12);
-        drawColourRect(25 + buttonX * sizeParam, 10 * sizeParam,
+        writeSomething(stringMonth + " " + year, 25 * sizeParam, 25 * sizeParam, 12);
+        drawColourRect(25 + (buttonX+10) * sizeParam, 10 * sizeParam,
                 15, 25 * sizeParam, reverseMonth, "#FF0000");
-        writeSomething("<", 30 + buttonX, 25, 12);
-        drawColourRect(45 + buttonX * sizeParam, 10 * sizeParam,
+        writeSomething("<", 30 + (buttonX+10), 25, 12);
+        drawColourRect(45 + (buttonX+10) * sizeParam, 10 * sizeParam,
                 15, 25 * sizeParam, advanceMonth, "#FF0000");
-        writeSomething(">", 50 + buttonX, 25, 12);
+        writeSomething(">", 50 + (buttonX+10), 25, 12);
     });
     requestTime();
     writeTime();
