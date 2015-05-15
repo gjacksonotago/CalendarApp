@@ -72,8 +72,11 @@ function refreshInit(daysformonth, startDay) {
         drawCalendar(daysformonth, startDay);
         writeSomething(stringMonth, 25 * sizeParam, 25 * sizeParam, 12);
         drawColourRect(25 + buttonX * sizeParam, 10 * sizeParam, 
+                        15, 25 * sizeParam, reverseMonth, "#FF0000");
+        writeSomething("<", 30+buttonX, 25, 12);
+        drawColourRect(45 + buttonX * sizeParam, 10 * sizeParam, 
                         15, 25 * sizeParam, advanceMonth, "#FF0000");
-        writeSomething(">", 30+buttonX, 25, 12);
+        writeSomething(">", 50+buttonX, 25, 12);
     });
     
     requestTime();
@@ -161,6 +164,31 @@ function advanceMonth() {
     //Bug checking coooode!
     $.get("emulatorBasics.js", function() {
        printMessage("End Day of " + month + " is " + endDay); 
+    });
+}
+
+function reverseMonth() {
+    var oldmonth = month;
+    endDay = (Math.abs(startDay)-1) % 7;
+     if(month > 0) {
+         month--;
+         changeMonth(month);
+         startDay = (Math.abs(endDay - daysInMonth(month, year))) % 7;
+         console.log(startDay);
+     } else {
+         month = 11;
+         changeMonth(month);
+         year--;
+         startDay = (Math.abs(endDay - daysInMonth(month, year))) % 7;
+     }
+     var newDays = daysInMonth(month, year);
+     refreshInit(newDays, startDay - 1);
+     
+     console.log("End Day: " + endDay);
+     
+    //Bug checking coooode!
+    $.get("emulatorBasics.js", function() {
+       printMessage("Start Day of " + month + " is " + startDay); 
     });
 }
 
