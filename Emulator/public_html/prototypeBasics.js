@@ -18,8 +18,18 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
 var cWidth = 320;
 var cHeight = 320;
 var month = 5;
+var stringMonth = "May";
+var startDay = 5;
+var endDay = 0;
 var months = 12;
 var year = 2015;
+
+//This'll be used to calculate the offset of the months and such for years
+//before and after this year.
+var startYear = 2015;
+var startDaySet = 5;
+var startMonth = 5;
+
 var sizeParam = 1;//keeps everything relative when size of canvas changes....I think, perhaps not necessary
 
 function getDate() {
@@ -36,9 +46,7 @@ function getDate() {
  * @returns {undefined}
  */
 function protoInitialise() {
-    refreshInit();
-    requestTime();
-    writeTime();
+    refreshInit(daysInMonth(month), startDay);
     //pollTime();
 }
 
@@ -48,7 +56,7 @@ function protoInitialise() {
  * 
  * @returns {undefined}
  */
-function refreshInit() {
+function refreshInit(daysformonth, startDay) {
     var homeX = 115 * sizeParam;
     var homeY = 294 * sizeParam;
     var buttonX = (cWidth / 4) * sizeParam;
@@ -61,12 +69,15 @@ function refreshInit() {
         drawClickRect(homeX, homeY, buttonX, 25 * sizeParam, returnToEmu);
         writeSomething("Home", pixelX, pixelY, 12 * sizeParam);
         drawRect(20 * sizeParam, 10 * sizeParam, buttonX, 25 * sizeParam, "#FF0000");        
-        drawCalendar(31, 5);
-        writeSomething(currentMonth(), 25 * sizeParam, 25 * sizeParam, 12);
+        drawCalendar(daysformonth, startDay);
+        writeSomething(stringMonth, 25 * sizeParam, 25 * sizeParam, 12);
         drawColourRect(25 + buttonX * sizeParam, 10 * sizeParam, 
-                        15, 25 * sizeParam, printPosition, "#FF0000");
+                        15, 25 * sizeParam, advanceMonth, "#FF0000");
         writeSomething(">", 30+buttonX, 25, 12);
     });
+    
+    requestTime();
+    writeTime();
 }
 
 /*
@@ -107,7 +118,7 @@ function addReminder() {
 
 //Find how many days in the month, possibly need another function for Feb
 function daysInMonth(month, year) {   
-     //http://www.timeanddate.com/date/leapyear.html
+    //http://www.timeanddate.com/date/leapyear.html
     //I'll use this to calc Febs days
     //var thirtyOne = [0, 2, 4, 6, 7, 9, 11];//maybe not the best way...
     var thirty = [3, 5, 8, 10];//...
@@ -121,6 +132,86 @@ function daysInMonth(month, year) {
             return 30;
         } else { 
             return 31;
+        }
+    }
+}
+
+/**
+ * This is the function used by clicking the
+ * Next Month button to advance the Calendar by
+ * a Month.
+ * 
+ * @returns {undefined}
+ */
+function advanceMonth() {
+    if(month < 12) {
+        month++;
+        changeMonth(month);
+        startDay = ((endDay + 1) % 7);
+    } else {
+        month = 0;
+        changeMonth(month);
+        year++;
+        startDay = ((endDay + 1) % 7);
+    } 
+    var newDays = daysInMonth(month, year);
+    refreshInit(newDays, startDay);
+    endDay = (startDay + newDays) % 7; 
+    
+    //Bug checking coooode!
+    $.get("emulatorBasics.js", function() {
+       printMessage("End Day of " + month + " is " + endDay); 
+    });
+}
+
+/**
+ * Sets up all the Month related variables,
+ * but may not be needed.
+ * 
+ * @returns {undefined}
+ */
+function initMonth() { 
+    $.get("emulatorBasics.js", function() {
+       stringMonth = currentMonth();
+       month = monthToInt(currentMonth);
+    });   
+    endDay = startDay + daysInMonth(month, year);
+}
+
+/**
+ * Just a small function to change the
+ * string held representation of the 
+ * month that the calendar is displaying.
+ * 
+ * @param {type} month
+ * @returns {undefined}
+ */
+function changeMonth(month) {
+    stringMonth = monthToString(month);
+}
+
+function monthToString(month) {
+    var stringMonths = ["January", "February", "March", "April", "May",
+                        "June", "July", "August", "September", "October", "November",
+                        "December"];
+                    
+    for(i = 0; i < 12; i++) {
+        if(month === 0) {
+            return stringMonths[month];
+        } else {
+            return stringMonths[month-1];
+        }
+    }
+}
+
+function monthToInt(monthString) {
+    var stringMonths = ["January", "February", "March", "April", "May",
+                        "June", "July", "August", "September", "October", "November",
+                        "December"];
+                    
+    for(i = 0; i < 12; i++) {
+        if(stringMonths[i] === monthString) {
+            return i;
         }
     }
 }
