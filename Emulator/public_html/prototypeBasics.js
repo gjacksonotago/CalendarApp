@@ -17,7 +17,7 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
 
 var cWidth = 320;
 var cHeight = 320;
-var month = 5;
+var month = 4;
 var stringMonth = "May";
 var startDay = 5;
 var endDay = 0;
@@ -28,7 +28,7 @@ var year = 2015;
 //before and after this year.
 var startYear = 2015;
 var startDaySet = 5;
-var startMonth = 5;
+var startMonth = 4;
 
 var sizeParam = 1;//keeps everything relative when size of canvas changes....I think, perhaps not necessary
 
@@ -144,7 +144,7 @@ function daysInMonth(month, year) {
  * @returns {undefined}
  */
 function advanceMonth() {
-    if(month < 12) {
+    if(month < 11) {
         month++;
         changeMonth(month);
         startDay = ((endDay + 1) % 7);
@@ -196,11 +196,8 @@ function monthToString(month) {
                         "December"];
                     
     for(i = 0; i < 12; i++) {
-        if(month === 0) {
-            return stringMonths[month];
-        } else {
-            return stringMonths[month-1];
-        }
+        console.log(stringMonths + " " + month);
+        return stringMonths[month]; 
     }
 }
 
