@@ -26,9 +26,9 @@ var year = 2015;
 
 //This'll be used to calculate the offset of the months and such for years
 //before and after this year.
-var startYear = 2015;
-var startDaySet = 5;
-var startMonth = 4;
+var baseYear = 2015;
+var baseDay = 5;
+var baseMonth = 4;
 
 var sizeParam = 1;//keeps everything relative when size of canvas changes....I think, perhaps not necessary
 
@@ -220,6 +220,11 @@ function monthToInt(monthString) {
 
 //Find out when the month starts
 function calcStartDay(month, year) {
+    var diff = year - baseYear;
+    var monthDiff;
+    if(diff > 0) {
+        monthDiff = month + (diff*12);
+    }
     
 }
  
