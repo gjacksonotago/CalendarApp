@@ -18,6 +18,7 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
 var cWidth = 320;
 var cHeight = 320;
 var month = 5;
+var stringMonth = "May";
 var months = 12;
 var year = 2015;
 var sizeParam = 1;//keeps everything relative when size of canvas changes....I think, perhaps not necessary
@@ -107,7 +108,7 @@ function addReminder() {
 
 //Find how many days in the month, possibly need another function for Feb
 function daysInMonth(month, year) {   
-     //http://www.timeanddate.com/date/leapyear.html
+    //http://www.timeanddate.com/date/leapyear.html
     //I'll use this to calc Febs days
     //var thirtyOne = [0, 2, 4, 6, 7, 9, 11];//maybe not the best way...
     var thirty = [3, 5, 8, 10];//...
@@ -121,6 +122,52 @@ function daysInMonth(month, year) {
             return 30;
         } else { 
             return 31;
+        }
+    }
+}
+
+function advanceMonth() {
+    if(month < 12) {
+        month++;
+    } else {
+        month = 0;
+        year++;
+    }
+}
+
+function initMonth() { 
+    $.get("emulatorBasics.js", function() {
+       stringMonth = currentMonth();
+       month = monthToInt(currentMonth);
+    });
+}
+
+function changeMonth() {
+    
+}
+
+function monthToString(month) {
+    var stringMonths = ["January", "February", "March", "April", "May",
+                        "June", "July", "August", "September", "October", "November",
+                        "December"];
+                    
+    for(i = 0; i < 12; i++) {
+        if(month === 0) {
+            return stringMonths[month];
+        } else {
+            return stringMonths[month-1];
+        }
+    }
+}
+
+function monthToInt(monthString) {
+    var stringMonths = ["January", "February", "March", "April", "May",
+                        "June", "July", "August", "September", "October", "November",
+                        "December"];
+                    
+    for(i = 0; i < 12; i++) {
+        if(stringMonths[i] === monthString) {
+            return i;
         }
     }
 }
