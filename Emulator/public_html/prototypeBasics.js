@@ -23,6 +23,13 @@ var startDay = 5;
 var endDay = 0;
 var months = 12;
 var year = 2015;
+
+//This'll be used to calculate the offset of the months and such for years
+//before and after this year.
+var startYear = 2015;
+var startDaySet = 5;
+var startMonth = 5;
+
 var sizeParam = 1;//keeps everything relative when size of canvas changes....I think, perhaps not necessary
 
 function getDate() {
