@@ -31,18 +31,18 @@ is where we will host the Emulator and prototype.
                 for an "App" icon.<br> This is clickable and changes the 
                 text above.
             </p>
-            
+
         </div>
-        
+
         <!-- The actual canvas element - script for editing it is in the
         imported javascript files. Specifically the emulatorBasics.js -->
         <div id="canvasDiv">
             <canvas width="320" height="320" id="canvas_1" 
-                    style="border:1px solid #000000;">
+                    style="border:5px solid #000000;">
                 Canvas Tag not supported by your browser version!
             </canvas>
         </div>
-        
+
         <!-- 
         This displays the time on the canvas and updates the mouse 
         position onclick on the canvas area, and displays it up on the 
@@ -50,18 +50,18 @@ is where we will host the Emulator and prototype.
         -->
         <script>
             //drawToCanvas();
-            emulatorInitialise(); 
+            emulatorInitialise();
             //simply calls mouse event listener functions
             /* Old bit:
              * 
              * listeners();    
-             */             
-           //This refreshes the time/date every second
-           // by repainting onto the canvas!
-           /* Old Code
-            * 
-            * var reload = setInterval("drawToCanvas()", 1000);
-            */
+             */
+            //This refreshes the time/date every second
+            // by repainting onto the canvas!
+            /* Old Code
+             * 
+             * var reload = setInterval("drawToCanvas()", 1000);
+             */
         </script>
     </body>
 </html>
