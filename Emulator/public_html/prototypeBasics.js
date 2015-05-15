@@ -174,14 +174,9 @@ function advanceMonth() {
     $.get("emulatorBasics.js", function () {
         printMessage("End Day of " + month + " is " + endDay);
     });
-    //console.log("Start Day: " + startDay + " End Day: " + endDay);
 }
 
 function reverseMonth() {
-<<<<<<< HEAD
-=======
-    var oldmonth = month;
->>>>>>> origin/GeorgesBranch
     var d = new Date();
     
     if(startDay > 1) {
@@ -192,22 +187,18 @@ function reverseMonth() {
     
     if (month > 0) {
         d.setFullYear(year, month-1);
-        console.log(d.getDay());
         month--;
         changeMonth(month);
         startDay = d.getDay();
-        console.log(startDay);
     } else {
         d.setFullYear(year-1, 11);
         month = 11;
         changeMonth(month);
         year--;
         startDay = d.getDay();
-        console.log(startDay + " Year: " + year);
     }
     var newDays = daysInMonth(month, year);
     refreshInit(newDays, startDay);
-    console.log("End Day: " + endDay);
 
     //Bug checking coooode!
     $.get("emulatorBasics.js", function () {
