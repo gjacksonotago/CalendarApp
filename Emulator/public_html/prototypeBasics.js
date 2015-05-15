@@ -71,12 +71,12 @@ function refreshInit(daysformonth, startDay) {
         drawRect(20, 10, buttonX + 10, 25, "#FF0000");
         drawCalendar(daysformonth, startDay);
         writeSomething(stringMonth + " " + year, 25, 25, 12);
-        drawColourRect(25 + (buttonX+10), 10,
+        drawColourRect(25 + (buttonX + 10), 10,
                 15, 25, reverseMonth, "#FF0000");
-        writeSomething("<", 30 + (buttonX+10), 25, 12);
-        drawColourRect(45 + (buttonX+10), 10,
+        writeSomething("<", 30 + (buttonX + 10), 25, 12);
+        drawColourRect(45 + (buttonX + 10), 10,
                 15, 25, advanceMonth, "#FF0000");
-        writeSomething(">", 50 + (buttonX+10), 25, 12);
+        writeSomething(">", 50 + (buttonX + 10), 25, 12);
     });
     requestTime();
     writeTime();
@@ -124,7 +124,7 @@ function addReminder() {
 function daysInMonth(month, year) {
     //http://www.timeanddate.com/date/leapyear.html
     //I'll use this to calc Febs days
-    
+
     //Using the array didn't work, no idea why, but anyway no point in looping through an array for one thing
     //having a long if statement is much more efficient and sensible in this case, now it works
     //var thirty = [3, 5, 8, 10];//...
@@ -176,20 +176,20 @@ function advanceMonth() {
 
 function reverseMonth() {
     var d = new Date();
-    
-    if(startDay > 1) {
+
+    if (startDay > 1) {
         endDay = (startDay - 1);
     } else {
         endDay = 6;
     }
-    
+
     if (month > 0) {
-        d.setFullYear(year, month-1);
+        d.setFullYear(year, month - 1);
         month--;
         changeMonth(month);
         startDay = d.getDay();
     } else {
-        d.setFullYear(year-1, 11);
+        d.setFullYear(year - 1, 11);
         month = 11;
         changeMonth(month);
         year--;
