@@ -178,6 +178,10 @@ function advanceMonth() {
 }
 
 function reverseMonth() {
+<<<<<<< HEAD
+=======
+    var oldmonth = month;
+>>>>>>> origin/GeorgesBranch
     var d = new Date();
     
     if(startDay > 1) {
