@@ -19,8 +19,8 @@ var cWidth = 320;
 var cHeight = 320;
 var month = 4;
 var stringMonth = "May";
-var startDay = 5;
-var endDay = 0;
+var startDay = 4;//same question as below
+var endDay = 0;//end day for what? the year, the week or the month?
 var months = 12;
 var year = 2015;
 
@@ -30,7 +30,7 @@ var startYear = 2015;
 var startDaySet = 5;
 var startMonth = 4;
 
-var sizeParam = 1;//keeps everything relative when size of canvas changes....I think, perhaps not necessary
+//var sizeParam = 1;//probably not going to be used. For changing size of icons relative to canvas size
 
 function getDate() {
     return current;
@@ -57,28 +57,25 @@ function protoInitialise() {
  * @returns {undefined}
  */
 function refreshInit(daysformonth, startDay) {
-    var homeX = 115 * sizeParam;
-    var homeY = 294 * sizeParam;
-    var buttonX = (cWidth / 4) * sizeParam;
-    var buttonY = 310 * sizeParam;
-    var pixelX = ((buttonX) + homeX / 2) * sizeParam;
-    var pixelY = (buttonY) * sizeParam;
+    var homeX = 115;
+    var homeY = 294;
+    var buttonX = (cWidth / 4);
+    var buttonY = 310;
+    var pixelX = ((buttonX) + homeX / 2);
+    var pixelY = (buttonY);
 
     $.get("emulatorBasics.js", function () {
         resetCanvas(oldCanvas);
-        drawClickRect(homeX, homeY, buttonX, 25 * sizeParam, returnToEmu);
-        writeSomething("Home", pixelX, pixelY, 12 * sizeParam);
-        drawRect(20 * sizeParam, 10 * sizeParam, buttonX, 25 * sizeParam, "#FF0000");        
+        drawClickRect(homeX, homeY, buttonX, 25, returnToEmu);
+        writeSomething("Home", pixelX, pixelY, 12);
         drawCalendar(daysformonth, startDay);
-        writeSomething(stringMonth, 25 * sizeParam, 25 * sizeParam, 12);
-        drawColourRect(25 + buttonX * sizeParam, 10 * sizeParam, 
-                        15, 25 * sizeParam, reverseMonth, "#FF0000");
-        writeSomething("<", 30+buttonX, 25, 12);
-        drawColourRect(45 + buttonX * sizeParam, 10 * sizeParam, 
-                        15, 25 * sizeParam, advanceMonth, "#FF0000");
-        writeSomething(">", 50+buttonX, 25, 12);
+        drawRect(20, 10, buttonX + 5, 25, "#FF0000");
+        writeSomething(stringMonth + " " + year, 23, 25, 12);
+        drawColourRect(30 + buttonX, 10, 15, 25, reverseMonth, "#FF0000");
+        writeSomething("<", 33 + buttonX, 25, 12);
+        drawColourRect(50 + buttonX, 10, 15, 25, advanceMonth, "#FF0000");
+        writeSomething(">", 55 + buttonX, 25, 12);
     });
-    
     requestTime();
     writeTime();
 }
@@ -91,23 +88,25 @@ function drawCalendar(daysInMonth, startDay) {
     //Populates the 'screen' with clickable calendar date icons
     var days = 1;
     var beginDays = false;
-    var magic = 40;//40 is magic
+    var gapSize = 40;//distance between individual date squares
     var daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     for (j = 0; j < 7; j++) {
         for (i = 0; i < 7; i++) {
-            if(j === 0) {
+            if (j === 0) {
                 //Smaller squares for the days of the week at the beginning
-                drawClickRect((magic * i) + 20, (magic * j) + 40, 30, 15, addReminder);
+                drawRect((gapSize * i) + 20, (gapSize * j) + 40, 30, 15, "#000000");
             } else {
                 //Larger boxes for the actual days - becuase otherwise a full month
                 //doesn't fit on the "screen"
-                drawClickRect((magic * i) + 20, (magic * j) + 20, 30, 30, addReminder);
+                drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, addReminder);
             }
             //Writes the days of the week text.
-            if(j === 0) writeSomething(daysOfWeek[i], (magic * i) + 25, (magic * j) + 50, 8);
-            if(i === startDay && j === 1) beginDays = true;
+            if (j === 0)
+                writeSomething(daysOfWeek[i], (gapSize * i) + 25, (gapSize * j) + 50, 8);
+            if (i === startDay && j === 1)
+                beginDays = true;
             if (j > 0 && days <= daysInMonth && beginDays) {
-                writeSomething(days, (magic * i) + 25, (magic * j) + 30, 8);
+                writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
                 days++;
             }
         }
@@ -120,23 +119,26 @@ function addReminder() {
 }
 
 //Find how many days in the month, possibly need another function for Feb
-function daysInMonth(month, year) {   
+function daysInMonth(month, year) {
     //http://www.timeanddate.com/date/leapyear.html
     //I'll use this to calc Febs days
-    //var thirtyOne = [0, 2, 4, 6, 7, 9, 11];//maybe not the best way...
-    var thirty = [3, 5, 8, 10];//...
     
-    for(i = 0; i < 4; i++) {
-        if(month === 1 && (year%4===0) && ((year%100 !== 0) | (year%400 ===0))) {
-            return 29;
-        } else if(month === 1) {
-            return 28;
-        } else if (thirty[i] === month) {
-            return 30;
-        } else { 
-            return 31;
-        }
+    //Using the array didn't work, no idea why, but anyway no point in looping through an array for one thing
+    //having a long if statement is much more efficient and sensible in this case, now it works
+    //var thirty = [3, 5, 8, 10];//...
+
+    if (month === 1 && (year % 4 === 0) && ((year % 100 !== 0) | (year % 400 === 0))) {
+        return 29;
+    } else if (month === 1) {
+        return 28;
+    } else if (month === 3 || month === 5 || month === 8 || month === 10) {
+        console.log("30 days this month" + month);
+        return 30;
+    } else {
+        console.log("31 days this month" + month);
+        return 31;
     }
+
 }
 
 /**
@@ -147,7 +149,7 @@ function daysInMonth(month, year) {
  * @returns {undefined}
  */
 function advanceMonth() {
-    if(month < 11) {
+    if (month < 11) {
         month++;
         changeMonth(month);
         startDay = ((endDay + 1) % 7);
@@ -156,39 +158,39 @@ function advanceMonth() {
         changeMonth(month);
         year++;
         startDay = ((endDay + 1) % 7);
-    } 
+    }
     var newDays = daysInMonth(month, year);
     refreshInit(newDays, startDay);
-    endDay = (startDay + newDays) % 7; 
-    
+    endDay = (startDay + newDays) % 7;
+
     //Bug checking coooode!
-    $.get("emulatorBasics.js", function() {
-       printMessage("End Day of " + month + " is " + endDay); 
+    $.get("emulatorBasics.js", function () {
+        printMessage("End Day of " + month + " is " + endDay);
     });
 }
 
 function reverseMonth() {
     var oldmonth = month;
-    endDay = (Math.abs(startDay)-1) % 7;
-     if(month > 0) {
-         month--;
-         changeMonth(month);
-         startDay = (Math.abs(endDay - daysInMonth(month, year))) % 7;
-         console.log(startDay);
-     } else {
-         month = 11;
-         changeMonth(month);
-         year--;
-         startDay = (Math.abs(endDay - daysInMonth(month, year))) % 7;
-     }
-     var newDays = daysInMonth(month, year);
-     refreshInit(newDays, startDay - 1);
-     
-     console.log("End Day: " + endDay);
-     
+    endDay = (Math.abs(startDay) - 1) % 7;
+    if (month > 0) {
+        month--;
+        changeMonth(month);
+        startDay = (Math.abs(endDay - daysInMonth(month, year))) % 7;
+        console.log(startDay);
+    } else {
+        month = 11;
+        changeMonth(month);
+        year--;
+        startDay = (Math.abs(endDay - daysInMonth(month, year))) % 7;
+    }
+    var newDays = daysInMonth(month, year);
+    refreshInit(newDays, startDay - 1);
+
+    console.log("End Day: " + endDay);
+
     //Bug checking coooode!
-    $.get("emulatorBasics.js", function() {
-       printMessage("Start Day of " + month + " is " + startDay); 
+    $.get("emulatorBasics.js", function () {
+        printMessage("Start Day of " + month + " is " + startDay);
     });
 }
 
@@ -198,11 +200,11 @@ function reverseMonth() {
  * 
  * @returns {undefined}
  */
-function initMonth() { 
-    $.get("emulatorBasics.js", function() {
-       stringMonth = currentMonth();
-       month = monthToInt(currentMonth);
-    });   
+function initMonth() {
+    $.get("emulatorBasics.js", function () {
+        stringMonth = currentMonth();
+        month = monthToInt(currentMonth);
+    });
     endDay = startDay + daysInMonth(month, year);
 }
 
@@ -220,22 +222,22 @@ function changeMonth(month) {
 
 function monthToString(month) {
     var stringMonths = ["January", "February", "March", "April", "May",
-                        "June", "July", "August", "September", "October", "November",
-                        "December"];
-                    
-    for(i = 0; i < 12; i++) {
+        "June", "July", "August", "September", "October", "November",
+        "December"];
+
+    for (i = 0; i < 12; i++) {
         console.log(stringMonths + " " + month);
-        return stringMonths[month]; 
+        return stringMonths[month];
     }
 }
 
 function monthToInt(monthString) {
     var stringMonths = ["January", "February", "March", "April", "May",
-                        "June", "July", "August", "September", "October", "November",
-                        "December"];
-                    
-    for(i = 0; i < 12; i++) {
-        if(stringMonths[i] === monthString) {
+        "June", "July", "August", "September", "October", "November",
+        "December"];
+
+    for (i = 0; i < 12; i++) {
+        if (stringMonths[i] === monthString) {
             return i;
         }
     }
@@ -243,9 +245,9 @@ function monthToInt(monthString) {
 
 //Find out when the month starts
 function calcStartDay(month, year) {
-    
+
 }
- 
+
 //http://safalra.com/web-design/javascript/calendar/
 
 /**
@@ -285,7 +287,7 @@ function requestTime() {
 
 function writeTime() {
     $.get("emulatorBasics.js", function () {
-        clearThis(cWidth - (cWidth/4), 15, 125, 15);
+        clearThis(cWidth - (cWidth / 4), 15, 125, 15);
         writeSomethingColour(current.substring(0, 10), cWidth - (cWidth / 4), 25, 12, "#000000");
     });
 }
@@ -312,7 +314,7 @@ function pollTime() {
  * @returns {undefined}
  */
 function resetWrap() {
-    $.get("emulatorBasics.js", function() {
-       resetCanvas(oldCanvas); 
+    $.get("emulatorBasics.js", function () {
+        resetCanvas(oldCanvas);
     });
 }

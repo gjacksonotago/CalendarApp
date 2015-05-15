@@ -68,23 +68,19 @@ function currentDate() {
     var stringDate = currentDate.toLocaleDateString();
     return stringDate;
 }
-//Returns just the month in words i.e May, June etc. IS A LITTLE OBSOLETE NOW
-//function currentMonth() {   
-//    var month = new Date();
-//    var monthString = month.getMonth();
-//    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-//    for (i < 0; i < months.length; i++) {
-//        if (i === Number(monthString)) return months[i] + "THIS SHOULD WORK!";
-//    }
-//    return monthString;//curently just returning the number because i cannot get it to WORK!
-//}
 
-//Is this the working one?
-//Returns just the month in words i.e May, June etc.
+//Returns just the month in three letters i.e May, Jun etc. from the internet, may not be needed.
 function currentMonth() {
     var month = new Date();
-    var monthString = month.toDateString().toString().substring(4, 7);
+    var monthString = month.toDateString().substring(4, 7);
     return monthString;
+}
+
+//Returns the current year, from the internet, may not be needed.
+function currentYear() {
+    var year = new Date();
+    var yearString = year.toDateString().subString(10, 15);
+    return yearString;
 }
 
 /* Function called to 'begin' the emulator:
@@ -102,7 +98,7 @@ function emulatorInitialise() {
     canvasWidth = c.width;
     canvasHeight = c.height;
     var offset = 60;
-    //Emulator screen event listener
+    //Emulator full screen event listener(s)
     swipe();
 
     //Populates the 'screen' with clickable 'app' icons
@@ -111,10 +107,10 @@ function emulatorInitialise() {
             if (i === 2 && j === 2) {
                 createPrototype(10 + (i * offset), 10 + (j * offset),
                         50, 50);
-            } //else {
-            //  drawClickRect(10 + (i * offset), 10 + (j * offset),
-            //          50, 50, printPosition);
-            //}
+            } else {
+                drawClickRect(10 + (i * offset), 10 + (j * offset),
+                        50, 50, printPosition);
+            }
         }
     }
 }
@@ -290,11 +286,26 @@ function swipe() {
         var mousePos2 = getMousePos(canvas, evt);
         x2 = mousePos2.x;
         y2 = mousePos2.y;
+        swipeDirection(x1, y1, x2, y2);
     });
-   //work out direction of drag based on where it went down and came up.
 }
-
-//NOT NEEDED, I THINK - BEN
+//Finds the direction of a swipe based on two coordinates
+//returns string  up/down left/right     
+function swipeDirection(x1, y1, x2, y2) {
+    var dir = "Swipe Diretion: Should be a direction!";
+    var error = 50;
+    if (x1 < x2 && Math.abs(y2 - y1) < error)
+        dir = "right";
+    else if (x1 > x2 && Math.abs(y2 - y1) < error)
+        dir = "left";
+    else if (y1 < y2 && Math.abs(x2 - x1) < error)
+        dir = "down";
+    else if (y1 > y2 && Math.abs(x2 - x1) < error)
+        dir = "up";
+    console.log(dir);
+    return dir;
+}
+//NOT NEEDED
 ////Calls any functions that initialise event listeners
 //function listeners(xPos, yPos, xSize, ySize, actionToTake) {
 //    mouseOver(xPos, yPos, xSize, ySize, actionToTake);
