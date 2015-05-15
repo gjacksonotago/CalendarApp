@@ -28,7 +28,7 @@ var year = 2015;
 //before and after this year.
 var startYear = 2015;
 var startDaySet = 5;
-var startMonth = 5;
+var startMonth = 4;
 
 var sizeParam = 1;//keeps everything relative when size of canvas changes....I think, perhaps not necessary
 
