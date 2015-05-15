@@ -19,11 +19,8 @@ var cWidth = 320;
 var cHeight = 320;
 var month = 5;
 var stringMonth = "May";
-<<<<<<< HEAD
 var startDay = 5;
 var endDay = 0;
-=======
->>>>>>> origin/GeorgesBranch
 var months = 12;
 var year = 2015;
 var sizeParam = 1;//keeps everything relative when size of canvas changes....I think, perhaps not necessary
@@ -132,7 +129,6 @@ function daysInMonth(month, year) {
     }
 }
 
-<<<<<<< HEAD
 /**
  * This is the function used by clicking the
  * Next Month button to advance the Calendar by
@@ -162,29 +158,15 @@ function advanceMonth() {
 }
 
 /**
- * This function sets up the first few
- * month related variables so that the
- * intial call to the calendar drawing thing
- * is generalised.
+ * Sets up all the Month related variables,
+ * but may not be needed.
  * 
  * @returns {undefined}
  */
-=======
-function advanceMonth() {
-    if(month < 12) {
-        month++;
-    } else {
-        month = 0;
-        year++;
-    }
-}
-
->>>>>>> origin/GeorgesBranch
 function initMonth() { 
     $.get("emulatorBasics.js", function() {
        stringMonth = currentMonth();
        month = monthToInt(currentMonth);
-<<<<<<< HEAD
     });   
     endDay = startDay + daysInMonth(month, year);
 }
@@ -199,13 +181,6 @@ function initMonth() {
  */
 function changeMonth(month) {
     stringMonth = monthToString(month);
-=======
-    });
-}
-
-function changeMonth() {
-    
->>>>>>> origin/GeorgesBranch
 }
 
 function monthToString(month) {
