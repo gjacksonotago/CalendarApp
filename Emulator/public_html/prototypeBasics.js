@@ -129,23 +129,42 @@ function daysInMonth(month, year) {
     }
 }
 
+/**
+ * This is the function used by clicking the
+ * Next Month button to advance the Calendar by
+ * a Month.
+ * 
+ * @returns {undefined}
+ */
 function advanceMonth() {
     if(month < 12) {
         month++;
         changeMonth(month);
-        //startDay = (endDay + 1);
+        startDay = (endDay + 1);
     } else {
         month = 0;
         changeMonth(month);
         year++;
-        //startDay = (endDay + 1);
-    }
-    
+        startDay = (endDay + 1);
+    } 
     var newDays = daysInMonth(month, year);
-    refreshInit(newDays, endDay+1);
-    endDay = (startDay + newDays); 
+    refreshInit(newDays, endDay + 1);
+    endDay = (startDay + newDays) % 7; 
+    
+    //Bug checking coooode!
+    $.get("emulatorBasics.js", function() {
+       printMessage(endDay); 
+    });
 }
 
+/**
+ * This function sets up the first few
+ * month related variables so that the
+ * intial call to the calendar drawing thing
+ * is generalised.
+ * 
+ * @returns {undefined}
+ */
 function initMonth() { 
     $.get("emulatorBasics.js", function() {
        stringMonth = currentMonth();
@@ -154,6 +173,14 @@ function initMonth() {
     endDay = startDay + daysInMonth(month, year);
 }
 
+/**
+ * Just a small function to change the
+ * string held representation of the 
+ * month that the calendar is displaying.
+ * 
+ * @param {type} month
+ * @returns {undefined}
+ */
 function changeMonth(month) {
     stringMonth = monthToString(month);
 }
