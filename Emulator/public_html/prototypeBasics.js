@@ -140,12 +140,12 @@ function advanceMonth() {
     if(month < 12) {
         month++;
         changeMonth(month);
-        startDay = (endDay + 1);
+        startDay = (endDay + 1)%7;
     } else {
         month = 0;
         changeMonth(month);
         year++;
-        startDay = (endDay + 1);
+        startDay = (endDay + 1)%7;
     } 
     var newDays = daysInMonth(month, year);
     refreshInit(newDays, endDay + 1);
