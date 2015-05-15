@@ -75,7 +75,6 @@ function refreshInit(daysformonth, startDay) {
                         15, 25 * sizeParam, advanceMonth, "#FF0000");
         writeSomething(">", 30+buttonX, 25, 12);
     });
-    
     requestTime();
     writeTime();
 }
@@ -120,18 +119,23 @@ function addReminder() {
 function daysInMonth(month, year) {   
     //http://www.timeanddate.com/date/leapyear.html
     //I'll use this to calc Febs days
-    //var thirtyOne = [0, 2, 4, 6, 7, 9, 11];//maybe not the best way...
+    var thirtyOne = [0, 2, 4, 6, 7, 9, 11];//maybe not the best way...
     var thirty = [3, 5, 8, 10];//...
     
-    for(i = 0; i < 4; i++) {
-        if(month === 1 && (year%4===0) && ((year%100 !== 0) | (year%400 ===0))) {
-            return 29;
-        } else if(month === 1) {
-            return 28;
-        } else if (thirty[i] === month) {
-            return 30;
-        } else { 
-            return 31;
+    if (month === 1 && (year % 4 === 0) && ((year % 100 !== 0) | (year % 400 === 0))) {
+        return 29;
+    } else if (month === 1) {
+        return 28;
+    } else {
+        for (i = 0; i < 4; i++) {
+            if (thirty[i] === month) {
+                return 30;
+            } 
+        }
+        for(i = 0; i < 7; i++) {
+            if (thirtyOne[i] === month) {
+                return 31;
+            }
         }
     }
 }
@@ -156,12 +160,13 @@ function advanceMonth() {
     } 
     var newDays = daysInMonth(month, year);
     refreshInit(newDays, startDay);
-    endDay = (startDay + newDays) % 7; 
+    endDay = (((startDay + newDays)-1) % 7); 
     
     //Bug checking coooode!
     $.get("emulatorBasics.js", function() {
        printMessage("End Day of " + month + " is " + endDay); 
     });
+    //console.log("Start Day: " + startDay + " End Day: " + endDay);
 }
 
 /**
@@ -196,7 +201,7 @@ function monthToString(month) {
                         "December"];
                     
     for(i = 0; i < 12; i++) {
-        console.log(stringMonths + " " + month);
+        //console.log(stringMonths + " " + month);
         return stringMonths[month]; 
     }
 }
