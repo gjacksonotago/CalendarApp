@@ -156,7 +156,7 @@ function requestTime() {
 function writeTime() {
     $.get("emulatorBasics.js", function () {
         clearThis(cWidth - (cWidth/4), 15, 125, 15);
-        writeSomethingColour(current, cWidth - (cWidth / 4), 25, 12, "#000000");
+        writeSomethingColour(current.substring(0, 10), cWidth - (cWidth / 4), 25, 12, "#000000");
     });
 }
 
