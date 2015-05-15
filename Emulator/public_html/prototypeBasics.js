@@ -140,20 +140,20 @@ function advanceMonth() {
     if(month < 12) {
         month++;
         changeMonth(month);
-        startDay = (endDay + 1)%7;
+        startDay = ((endDay + 1) % 7);
     } else {
         month = 0;
         changeMonth(month);
         year++;
-        startDay = (endDay + 1)%7;
+        startDay = ((endDay + 1) % 7);
     } 
     var newDays = daysInMonth(month, year);
-    refreshInit(newDays, endDay + 1);
+    refreshInit(newDays, startDay);
     endDay = (startDay + newDays) % 7; 
     
     //Bug checking coooode!
     $.get("emulatorBasics.js", function() {
-       printMessage(endDay); 
+       printMessage("End Day of " + month + " is " + endDay); 
     });
 }
 
