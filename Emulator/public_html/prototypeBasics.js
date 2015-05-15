@@ -153,15 +153,18 @@ function daysInMonth(month, year) {
  * @returns {undefined}
  */
 function advanceMonth() {
+    var d = new Date();
     if (month < 11) {
         month++;
         changeMonth(month);
-        startDay = ((endDay + 1) % 7);
+        d.setFullYear(year, month);
+        startDay = d.getDay();
     } else {
         month = 0;
         changeMonth(month);
         year++;
-        startDay = ((endDay + 1) % 7);
+        d.setFullYear(year, month);
+        startDay = d.getDay();
     }
     var newDays = daysInMonth(month, year);
     refreshInit(newDays, startDay);
@@ -175,32 +178,31 @@ function advanceMonth() {
 }
 
 function reverseMonth() {
-    var oldmonth = month;
+    var d = new Date();
+    
     if(startDay > 1) {
         endDay = (startDay - 1);
     } else {
         endDay = 6;
     }
+    
     if (month > 0) {
+        d.setFullYear(year, month-1);
+        console.log(d.getDay());
         month--;
         changeMonth(month);
-        var calc = ((Math.abs(endDay - daysInMonth(month, year))) % 7);
-        if (calc > 1) {
-            startDay = calc - 2;
-            console.log("minus 2!");
-        } else {
-            startDay = calc - 1;
-        }
+        startDay = d.getDay();
         console.log(startDay);
     } else {
+        d.setFullYear(year-1, 11);
         month = 11;
         changeMonth(month);
         year--;
-        startDay = (Math.abs(endDay - daysInMonth(month, year))) % 7;
+        startDay = d.getDay();
+        console.log(startDay + " Year: " + year);
     }
     var newDays = daysInMonth(month, year);
     refreshInit(newDays, startDay);
-
     console.log("End Day: " + endDay);
 
     //Bug checking coooode!
@@ -260,12 +262,8 @@ function monthToInt(monthString) {
 
 //Find out when the month starts
 function calcStartDay(month, year) {
-    var diff = year - baseYear;
-    var monthDiff;
-    if (diff > 0) {
-        monthDiff = month + (diff * 12);
-    }
-
+    d.setFullYear(year, month);
+    return d.getDay();
 }
 
 //http://safalra.com/web-design/javascript/calendar/
