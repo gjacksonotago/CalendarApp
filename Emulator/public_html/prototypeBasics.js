@@ -26,9 +26,9 @@ var year = 2015;
 
 //This'll be used to calculate the offset of the months and such for years
 //before and after this year.
-var startYear = 2015;
-var startDaySet = 5;
-var startMonth = 4;
+var baseYear = 2015;
+var baseDay = 5;
+var baseMonth = 4;
 
 //var sizeParam = 1;//probably not going to be used. For changing size of icons relative to canvas size
 
@@ -68,13 +68,15 @@ function refreshInit(daysformonth, startDay) {
         resetCanvas(oldCanvas);
         drawClickRect(homeX, homeY, buttonX, 25, returnToEmu);
         writeSomething("Home", pixelX, pixelY, 12);
+        drawRect(20, 10, buttonX + 10, 25, "#FF0000");
         drawCalendar(daysformonth, startDay);
-        drawRect(20, 10, buttonX + 5, 25, "#FF0000");
-        writeSomething(stringMonth + " " + year, 23, 25, 12);
-        drawColourRect(30 + buttonX, 10, 15, 25, reverseMonth, "#FF0000");
-        writeSomething("<", 33 + buttonX, 25, 12);
-        drawColourRect(50 + buttonX, 10, 15, 25, advanceMonth, "#FF0000");
-        writeSomething(">", 55 + buttonX, 25, 12);
+        writeSomething(stringMonth + " " + year, 25, 25, 12);
+        drawColourRect(25 + (buttonX+10), 10,
+                15, 25, reverseMonth, "#FF0000");
+        writeSomething("<", 30 + (buttonX+10), 25, 12);
+        drawColourRect(45 + (buttonX+10), 10,
+                15, 25, advanceMonth, "#FF0000");
+        writeSomething(">", 50 + (buttonX+10), 25, 12);
     });
     requestTime();
     writeTime();
@@ -149,19 +151,22 @@ function daysInMonth(month, year) {
  * @returns {undefined}
  */
 function advanceMonth() {
+    var d = new Date();
     if (month < 11) {
         month++;
         changeMonth(month);
-        startDay = ((endDay + 1) % 7);
+        d.setFullYear(year, month);
+        startDay = d.getDay();
     } else {
         month = 0;
         changeMonth(month);
         year++;
-        startDay = ((endDay + 1) % 7);
+        d.setFullYear(year, month);
+        startDay = d.getDay();
     }
     var newDays = daysInMonth(month, year);
     refreshInit(newDays, startDay);
-    endDay = (startDay + newDays) % 7;
+    endDay = (((startDay + newDays) - 1) % 7);
 
     //Bug checking coooode!
     $.get("emulatorBasics.js", function () {
@@ -170,23 +175,28 @@ function advanceMonth() {
 }
 
 function reverseMonth() {
-    var oldmonth = month;
-    endDay = (Math.abs(startDay) - 1) % 7;
+    var d = new Date();
+    
+    if(startDay > 1) {
+        endDay = (startDay - 1);
+    } else {
+        endDay = 6;
+    }
+    
     if (month > 0) {
+        d.setFullYear(year, month-1);
         month--;
         changeMonth(month);
-        startDay = (Math.abs(endDay - daysInMonth(month, year))) % 7;
-        console.log(startDay);
+        startDay = d.getDay();
     } else {
+        d.setFullYear(year-1, 11);
         month = 11;
         changeMonth(month);
         year--;
-        startDay = (Math.abs(endDay - daysInMonth(month, year))) % 7;
+        startDay = d.getDay();
     }
     var newDays = daysInMonth(month, year);
-    refreshInit(newDays, startDay - 1);
-
-    console.log("End Day: " + endDay);
+    refreshInit(newDays, startDay);
 
     //Bug checking coooode!
     $.get("emulatorBasics.js", function () {
@@ -226,7 +236,7 @@ function monthToString(month) {
         "December"];
 
     for (i = 0; i < 12; i++) {
-        console.log(stringMonths + " " + month);
+        //console.log(stringMonths + " " + month);
         return stringMonths[month];
     }
 }
@@ -245,7 +255,8 @@ function monthToInt(monthString) {
 
 //Find out when the month starts
 function calcStartDay(month, year) {
-
+    d.setFullYear(year, month);
+    return d.getDay();
 }
 
 //http://safalra.com/web-design/javascript/calendar/

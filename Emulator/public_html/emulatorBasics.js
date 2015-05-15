@@ -14,7 +14,7 @@
 //Global variables
 var canvasHeight, canvasHeight;
 //The String Messages currently written for testing
-var message, sqMes, swipeDir;
+var message, sqMes;
 //These string are used for rewriting the canvas to a larger size
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         + '" id="' + 'canvas_1"' + 'style="' +
