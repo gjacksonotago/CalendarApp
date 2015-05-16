@@ -185,19 +185,21 @@ function reverseMonth() {
         //d.setFullYear(year, month - 1);
         month--;
         changeMonth(month);
-        //startDay = (startDay - 
+      
     } else {
         //d.setFullYear(year - 1, 11);
         month = 11;
         changeMonth(month);
         year--;
-        //startDay = d.getDay();
     }
-    refreshInit(daysInMonth(month, year), startDay);
+    newDays = daysInMonth(month, year);
+    tmp = startDay - newDays;
+    startDay = ((tmp%7)+7)%7;//Sneaky negative modulo trick!
+    refreshInit(newDays, startDay);
 
     //Bug checking coooode!
     $.get("emulatorBasics.js", function () {
-        printMessage("End Day of " + month + " is " + endDay);
+        printMessage("Start Day of " + month + " is " + startDay);
     });
 }
 
