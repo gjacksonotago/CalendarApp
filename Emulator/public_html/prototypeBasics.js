@@ -19,8 +19,8 @@ var cWidth = 320;
 var cHeight = 320;
 var month = 4;
 var stringMonth = "May";
-var startDay = 5;//same question as below
-var endDay = 0;//end day for what? the year, the week or the month?
+var startDay = 5;//That's just obvious, the month.
+//var endDay = 0;//The month, it was a result of something that didn't pan out.
 var months = 12;
 var year = 2015;
 
@@ -174,18 +174,11 @@ function advanceMonth() {
 function reverseMonth() {
     //var d = new Date();
     //3+31 % 7 = 6; 34-3 % 7 = 31 % 7 = 3
-    //? I fail to see the point in end day
-    if (startDay > 1) {
-        endDay = (startDay - 1);
-    } else {
-        endDay = 6;
-    }
 
     if (month > 0) {
         //d.setFullYear(year, month - 1);
         month--;
         changeMonth(month);
-      
     } else {
         //d.setFullYear(year - 1, 11);
         month = 11;
@@ -194,7 +187,7 @@ function reverseMonth() {
     }
     newDays = daysInMonth(month, year);
     tmp = startDay - newDays;
-    startDay = ((tmp%7)+7)%7;//Sneaky negative modulo trick!
+    startDay = ((tmp%7)+7)%7; //Sneaky negative modulo trick!
     refreshInit(newDays, startDay);
 
     //Bug checking coooode!
