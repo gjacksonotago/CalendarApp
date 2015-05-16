@@ -1,7 +1,9 @@
 /* 
- * Unit tests for functions in prototypeBasics.js
+ * Unit tests for functions in prototypeBasics.js and emulatorBasics.js
  */
 
+//-----> PrototypeBasics
+//
 //I feel like this doesn't need to be tested, especially for all cases, but i'm doing it.
 test('monthToInt', function () {
     equal(monthToInt('January'), 0, 'January is the 0th month');
@@ -16,8 +18,8 @@ test('monthToInt', function () {
     equal(monthToInt('October'), 9, 'October is the 9th (starting from 0) month');
     equal(monthToInt('November'), 10, 'November is the 10th (starting from 0) month');
     equal(monthToInt('December'), 11, 'December is the 11th (starting from 0) month');
-    equal(monthToInt('Decebeard'), undefined, "Decembeard is not a month, why does it think it's a month?");
-});//this is definitely not necessary, not doing this much for other such basic methods
+    equal(monthToInt('Decembeard'), undefined, "Decembeard is not a month, why does it think it's a month?");
+});//Yes not necessary, not doing this much for other such basic methods
 
 test('daysInMonth', function () {
     equal(daysInMonth(0, 2015), 31, 'There is always 31 days in January');
@@ -36,10 +38,16 @@ test('daysInMonth', function () {
 
 test('calcStartDay', function () {
     equal(calcStartDay(2015, 0), 4, 'Should be 4, Thursday.');
-    
+    equal(calcStartDay(2016, 0), 5, 'Should be 5, Friday.');
+    equal(calcStartDay(2015, 6), 3, 'Should be 3, Wednesday.');
+    equal(calcStartDay(2015, 2), 0, 'Should be 0, Sunday.');
+    equal(calcStartDay(2015, 6), 6, 'Should be 6, Saturday.');
 });
 
-
-
+//-----> EmulatorBasics
+//
+test('swipeDirection', function () {
+    equal(swipeDirection(160, 160, 0, 200), "left", 'Should be left'); 
+});
 
 

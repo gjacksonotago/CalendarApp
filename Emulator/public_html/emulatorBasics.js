@@ -72,8 +72,7 @@ function currentDate() {
 //Returns just the month in three letters i.e May, Jun etc. from the internet, may not be needed.
 function currentMonth() {
     var month = new Date();
-    var monthString = month.toDateString().substring(4, 7);
-    return monthString;
+    return month.getMonth();
 }
 
 //Returns the current year, from the internet, may not be needed.
