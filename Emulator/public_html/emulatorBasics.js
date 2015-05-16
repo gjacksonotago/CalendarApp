@@ -156,23 +156,6 @@ function protoClick() {
     init;
 }
 
-/**
- * Takes an origin co-ordinate (xPos, yPos) and
- * clears a rectangle from that co-ordinate of
- * xSize x ySize.
- * 
- * @param {type} xPos
- * @param {type} yPos
- * @param {type} xSize
- * @param {type} ySize
- * @returns {undefined}
- */
-function clearRect(xPos, yPos, xSize, ySize) {
-    var c = document.getElementById("canvas_1");
-    var ctx = c.getContext("2d");
-    ctx.clearRect(xPos, yPos, xSize, ySize);
-}
-
 function writeSomething(message, x, y, fontSize) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
@@ -269,12 +252,6 @@ function swipe() {
     canvas.addEventListener('mousedown', function (evt) {
         
     }, false);
-}
-
-//Calls any functions that initialise event listeners
-function listeners(xPos, yPos, xSize, ySize, actionToTake) {
-    mouseOver(xPos, yPos, xSize, ySize, actionToTake);
-    mouseDown(xPos, yPos, xSize, ySize, actionToTake);
 }
 
 function printPosition() {
