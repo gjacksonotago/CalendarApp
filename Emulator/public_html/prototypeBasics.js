@@ -254,7 +254,8 @@ function monthToInt(monthString) {
 }
 
 //Find out when the month starts
-function calcStartDay(month, year) {
+function calcStartDay(year, month) {
+    var d = new Date();
     d.setFullYear(year, month);
     return d.getDay();
 }
