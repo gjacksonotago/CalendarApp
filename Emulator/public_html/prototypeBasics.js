@@ -118,6 +118,9 @@ function drawCalendar(daysInMonth, startDay) {
 //Functions for to do when each day is clicked
 function addReminder() {
     //add code to actually set dates and stuff, later
+    var offset = 15;
+    drawRect(offset, offset, cWidth-(offset*2), cHeight-(offset*2), "#FFFFFF");
+    
 }
 
 //Find how many days in the month, possibly need another function for Feb
