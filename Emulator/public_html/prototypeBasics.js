@@ -19,8 +19,8 @@ var cWidth = 320;
 var cHeight = 320;
 var month = 4;
 var stringMonth = "May";
-var startDay = 5;
-var endDay = 0;
+var startDay = 5;//That's just obvious, the month.
+//var endDay = 0;//The month, it was a result of something that didn't pan out.
 var months = 12;
 var year = 2015;
 
@@ -30,7 +30,7 @@ var baseYear = 2015;
 var baseDay = 5;
 var baseMonth = 4;
 
-var sizeParam = 1;//keeps everything relative when size of canvas changes....I think, perhaps not necessary
+//var sizeParam = 1;//probably not going to be used. For changing size of icons relative to canvas size
 
 function getDate() {
     return current;
@@ -57,26 +57,26 @@ function protoInitialise() {
  * @returns {undefined}
  */
 function refreshInit(daysformonth, startDay) {
-    var homeX = 115 * sizeParam;
-    var homeY = 294 * sizeParam;
-    var buttonX = (cWidth / 4) * sizeParam;
-    var buttonY = 310 * sizeParam;
-    var pixelX = ((buttonX) + homeX / 2) * sizeParam;
-    var pixelY = (buttonY) * sizeParam;
+    var homeX = 115;
+    var homeY = 294;
+    var buttonX = (cWidth / 4);
+    var buttonY = 310;
+    var pixelX = ((buttonX) + homeX / 2);
+    var pixelY = (buttonY);
 
     $.get("emulatorBasics.js", function () {
         resetCanvas(oldCanvas);
-        drawClickRect(homeX, homeY, buttonX, 25 * sizeParam, returnToEmu);
-        writeSomething("Home", pixelX, pixelY, 12 * sizeParam);
-        drawRect(20 * sizeParam, 10 * sizeParam, buttonX + 10, 25 * sizeParam, "#FF0000");
+        drawClickRect(homeX, homeY, buttonX, 25, returnToEmu);
+        writeSomething("Home", pixelX, pixelY, 12);
+        drawRect(20, 10, buttonX + 10, 25, "#FF0000");
         drawCalendar(daysformonth, startDay);
-        writeSomething(stringMonth + " " + year, 25 * sizeParam, 25 * sizeParam, 12);
-        drawColourRect(25 + (buttonX+10) * sizeParam, 10 * sizeParam,
-                15, 25 * sizeParam, reverseMonth, "#FF0000");
-        writeSomething("<", 30 + (buttonX+10), 25, 12);
-        drawColourRect(45 + (buttonX+10) * sizeParam, 10 * sizeParam,
-                15, 25 * sizeParam, advanceMonth, "#FF0000");
-        writeSomething(">", 50 + (buttonX+10), 25, 12);
+        writeSomething(stringMonth + " " + year, 25, 25, 12);
+        drawColourRect(25 + (buttonX + 10), 10,
+                15, 25, reverseMonth, "#FF0000");
+        writeSomething("<", 30 + (buttonX + 10), 25, 12);
+        drawColourRect(45 + (buttonX + 10), 10,
+                15, 25, advanceMonth, "#FF0000");
+        writeSomething(">", 50 + (buttonX + 10), 25, 12);
     });
     requestTime();
     writeTime();
@@ -90,25 +90,25 @@ function drawCalendar(daysInMonth, startDay) {
     //Populates the 'screen' with clickable calendar date icons
     var days = 1;
     var beginDays = false;
-    var magic = 40;//40 is magic
+    var gapSize = 40;//distance between individual date squares
     var daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     for (j = 0; j < 7; j++) {
         for (i = 0; i < 7; i++) {
             if (j === 0) {
                 //Smaller squares for the days of the week at the beginning
-                drawClickRect((magic * i) + 20, (magic * j) + 40, 30, 15, addReminder);
+                drawRect((gapSize * i) + 20, (gapSize * j) + 40, 30, 15, "#000000");
             } else {
                 //Larger boxes for the actual days - becuase otherwise a full month
                 //doesn't fit on the "screen"
-                drawClickRect((magic * i) + 20, (magic * j) + 20, 30, 30, addReminder);
+                drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, addReminder);
             }
             //Writes the days of the week text.
             if (j === 0)
-                writeSomething(daysOfWeek[i], (magic * i) + 25, (magic * j) + 50, 8);
+                writeSomething(daysOfWeek[i], (gapSize * i) + 25, (gapSize * j) + 50, 8);
             if (i === startDay && j === 1)
                 beginDays = true;
             if (j > 0 && days <= daysInMonth && beginDays) {
-                writeSomething(days, (magic * i) + 25, (magic * j) + 30, 8);
+                writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
                 days++;
             }
         }
@@ -127,24 +127,21 @@ function addReminder() {
 function daysInMonth(month, year) {
     //http://www.timeanddate.com/date/leapyear.html
     //I'll use this to calc Febs days
-    var thirtyOne = [0, 2, 4, 6, 7, 9, 11];//maybe not the best way...
-    var thirty = [3, 5, 8, 10];//...
+
+    //Using the array didn't work, no idea why, but anyway no point in looping through an array for one thing
+    //having a long if statement is much more efficient and sensible in this case, now it works
+    //var thirty = [3, 5, 8, 10];//...
 
     if (month === 1 && (year % 4 === 0) && ((year % 100 !== 0) | (year % 400 === 0))) {
         return 29;
     } else if (month === 1) {
         return 28;
+    } else if (month === 3 || month === 5 || month === 8 || month === 10) {
+        console.log("30 days this month" + month);
+        return 30;
     } else {
-        for (i = 0; i < 4; i++) {
-            if (thirty[i] === month) {
-                return 30;
-            }
-        }
-        for (i = 0; i < 7; i++) {
-            if (thirtyOne[i] === month) {
-                return 31;
-            }
-        }
+        console.log("31 days this month" + month);
+        return 31;
     }
 }
 
@@ -156,23 +153,21 @@ function daysInMonth(month, year) {
  * @returns {undefined}
  */
 function advanceMonth() {
-    var d = new Date();
+    startDay = (startDay + daysInMonth(month, year)) % 7;
     if (month < 11) {
         month++;
         changeMonth(month);
-        d.setFullYear(year, month);
-        startDay = d.getDay();
     } else {
         month = 0;
         changeMonth(month);
         year++;
-        d.setFullYear(year, month);
-        startDay = d.getDay();
     }
     var newDays = daysInMonth(month, year);
     refreshInit(newDays, startDay);
+    
+    //Do we need end day?
     endDay = (((startDay + newDays) - 1) % 7);
-
+    
     //Bug checking coooode!
     $.get("emulatorBasics.js", function () {
         printMessage("End Day of " + month + " is " + endDay);
@@ -180,27 +175,22 @@ function advanceMonth() {
 }
 
 function reverseMonth() {
-    var d = new Date();
-    
-    if(startDay > 1) {
-        endDay = (startDay - 1);
-    } else {
-        endDay = 6;
-    }
-    
+    //var d = new Date();
+    //3+31 % 7 = 6; 34-3 % 7 = 31 % 7 = 3
+
     if (month > 0) {
-        d.setFullYear(year, month-1);
+        //d.setFullYear(year, month - 1);
         month--;
         changeMonth(month);
-        startDay = d.getDay();
     } else {
-        d.setFullYear(year-1, 11);
+        //d.setFullYear(year - 1, 11);
         month = 11;
         changeMonth(month);
         year--;
-        startDay = d.getDay();
     }
-    var newDays = daysInMonth(month, year);
+    newDays = daysInMonth(month, year);
+    tmp = startDay - newDays;
+    startDay = ((tmp%7)+7)%7; //Sneaky negative modulo trick!
     refreshInit(newDays, startDay);
 
     //Bug checking coooode!
@@ -225,32 +215,44 @@ function initMonth() {
 
 /**
  * Just a small function to change the
- * string held representation of the 
  * month that the calendar is displaying.
  * 
- * @param {type} month
+ * @param {int} month
  * @returns {undefined}
  */
 function changeMonth(month) {
     stringMonth = monthToString(month);
 }
 
+/** 
+ * Changes an integer month value into the name/string version
+ * 
+ * @param {int} month
+ * @returns {String}
+ */
 function monthToString(month) {
     var stringMonths = ["January", "February", "March", "April", "May",
         "June", "July", "August", "September", "October", "November",
         "December"];
-
-    for (i = 0; i < 12; i++) {
-        //console.log(stringMonths + " " + month);
+    if (month < 12 && month >= 0)
         return stringMonths[month];
-    }
+// Sometimes, you don't actually need a loop...
+//    for (i = 0; i < 12; i++) { 
+//        //console.log(stringMonths + " " + month);
+//        return stringMonths[month];
+//    }
 }
 
+/** 
+ * Changes string into integer value for any month
+ * 
+ * @param {String} monthString
+ * @returns {Number|i}
+ */
 function monthToInt(monthString) {
     var stringMonths = ["January", "February", "March", "April", "May",
         "June", "July", "August", "September", "October", "November",
         "December"];
-
     for (i = 0; i < 12; i++) {
         if (stringMonths[i] === monthString) {
             return i;
@@ -259,12 +261,12 @@ function monthToInt(monthString) {
 }
 
 //Find out when the month starts
+//THIS METHOD: It makes no sense at all, and does not work, i guess it is old and forgotten?
 function calcStartDay(month, year) {
+    var d = new Date();
     d.setFullYear(year, month);
     return d.getDay();
 }
-
-//http://safalra.com/web-design/javascript/calendar/
 
 /**
  * Function Wrapped-JQuery Call to the emulator
@@ -304,7 +306,7 @@ function requestTime() {
 function writeTime() {
     $.get("emulatorBasics.js", function () {
         clearThis(cWidth - (cWidth / 4), 15, 125, 15);
-        writeSomethingColour(current, cWidth - (cWidth / 4), 25, 12, "#000000");
+        writeSomethingColour(current.substring(0, 11), cWidth - (cWidth / 4), 25, 12, "#000000");
     });
 }
 

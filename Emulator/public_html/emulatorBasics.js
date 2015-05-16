@@ -12,19 +12,19 @@
 
 
 //Global variables
-var canvasWidth, canvasHeight;
+var canvasHeight, canvasHeight;
 //The String Messages currently written for testing
 var message, sqMes;
 //These string are used for rewriting the canvas to a larger size
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         + '" id="' + 'canvas_1"' + 'style="' +
-        'border:1px solid #000000;">' +
+        'border:5px solid #000000;">' +
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
 var canvasString =
-        '<canvas width="' + 340 + '" height="' + 340 +
+        '<canvas width="' + (canvasHeight + 20) + '" height="' + (canvasHeight + 20) +
         '" id="' + 'canvas_1"' +
-        'style="' + 'border:1px solid #000000;"' + '>' +
+        'style="' + 'border:5px solid #000000;"' + '>' +
         '</canvas>';
 
 /*
@@ -69,12 +69,17 @@ function currentDate() {
     return stringDate;
 }
 
-//Is this the working one?
-//Returns just the month in words i.e May, June etc.
+//Returns just the month in three letters i.e May, Jun etc. from the internet, may not be needed.
 function currentMonth() {
     var month = new Date();
-    var monthString = month.toDateString().toString().substring(4, 7);
-    return monthString;
+    return month.getMonth();
+}
+
+//Returns the current year, from the internet, may not be needed.
+function currentYear() {
+    var year = new Date();
+    var yearString = year.toDateString().subString(10, 15);
+    return yearString;
 }
 
 /* Function called to 'begin' the emulator:
@@ -92,6 +97,8 @@ function emulatorInitialise() {
     canvasWidth = c.width;
     canvasHeight = c.height;
     var offset = 60;
+    //Emulator full screen event listener(s)
+    swipe();
 
     //Populates the 'screen' with clickable 'app' icons
     for (j = 0; j < 5; j++) {
@@ -114,7 +121,7 @@ function emulatorInitialise() {
 function clearThis(xPos, yPos, xSize, ySize) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
-    ctx.clearRect(xPos, yPos, xSize, ySize);  
+    ctx.clearRect(xPos, yPos, xSize, ySize);
 }
 
 /*
@@ -224,11 +231,11 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
  * @param {function} actionTaken
  * @returns {undefined}
  */
-function mouseDown(xPosition, yPosition, xSize, ySize, actionTaken) {
+function mouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     var canvas = document.getElementById('canvas_1');
 
     //The mouseclick event listener.
-    canvas.addEventListener('mousedown', function (evt) {
+    canvas.addEventListener('click', function (evt) {
 
         var mousePos = getMousePos(canvas, evt);
         message = 'Mouse position: ' + mousePos.x + ', ' +
@@ -247,11 +254,40 @@ function mouseDown(xPosition, yPosition, xSize, ySize, actionTaken) {
     }, false);
 }
 
+//Suppposed to detect a swipe with mouse
 function swipe() {
+    var x1, x2, y1, y2;
     var canvas = document.getElementById('canvas_1');
+    //The mousedown event listener.
     canvas.addEventListener('mousedown', function (evt) {
-        
-    }, false);
+        var mousePos1 = getMousePos(canvas, evt);
+        x1 = mousePos1.x;
+        y1 = mousePos1.y;
+    });
+    //The mouseup event listener.
+    canvas.addEventListener('mouseup', function (evt) {
+        var mousePos2 = getMousePos(canvas, evt);
+        x2 = mousePos2.x;
+        y2 = mousePos2.y;
+        swipeDirection(x1, y1, x2, y2);
+    });
+}
+
+//Finds the direction of a swipe based on two coordinates
+//returns string  up/down left/right     
+function swipeDirection(x1, y1, x2, y2) {
+    var dir = "Swipe Diretion: Should be a direction!";
+    var error = 50;
+    if (x1 < x2 && Math.abs(y2 - y1) < error)
+        dir = "right";
+    else if (x1 > x2 && Math.abs(y2 - y1) < error)
+        dir = "left";
+    else if (y1 < y2 && Math.abs(x2 - x1) < error)
+        dir = "down";
+    else if (y1 > y2 && Math.abs(x2 - x1) < error)
+        dir = "up";
+    console.log(dir);
+    return dir;
 }
 
 function printPosition() {
@@ -283,7 +319,7 @@ function drawRect(xPos, yPos, xSize, ySize, colour) {
     ctx.fillRect(xPos, yPos, xSize, ySize);
 }
 
-//Creates a black rectangle on the canvas with a mouseDown listener
+//Creates a black rectangle on the canvas with a mouseClick listener
 // which listens for 'actionToTake'
 function drawClickRect(xPos, yPos, xSize, ySize, actionToTake) {
     var c = document.getElementById("canvas_1");
@@ -292,7 +328,7 @@ function drawClickRect(xPos, yPos, xSize, ySize, actionToTake) {
     //Create the rectangle
     ctx.fillRect(xPos, yPos, xSize, ySize);
     //Add the clickable listener
-    mouseDown(xPos, yPos, xSize, ySize, actionToTake);
+    mouseClick(xPos, yPos, xSize, ySize, actionToTake);
 }
 
 function drawColourRect(xPos, yPos, xSize, ySize, actionToTake, colour) {
@@ -302,7 +338,7 @@ function drawColourRect(xPos, yPos, xSize, ySize, actionToTake, colour) {
     //Create the rectangle
     ctx.fillRect(xPos, yPos, xSize, ySize);
     //Add the clickable listener
-    mouseDown(xPos, yPos, xSize, ySize, actionToTake);
+    mouseClick(xPos, yPos, xSize, ySize, actionToTake);
 }
 
 //Will soon (HOPEFULLY) convert a date/time to a string
