@@ -19,7 +19,7 @@ var cWidth = 320;
 var cHeight = 320;
 var month = 4;
 var stringMonth = "May";
-var startDay = 4;//same question as below
+var startDay = 5;//same question as below
 var endDay = 0;//end day for what? the year, the week or the month?
 var months = 12;
 var year = 2015;
@@ -140,7 +140,6 @@ function daysInMonth(month, year) {
         console.log("31 days this month" + month);
         return 31;
     }
-
 }
 
 /**
@@ -151,23 +150,21 @@ function daysInMonth(month, year) {
  * @returns {undefined}
  */
 function advanceMonth() {
-    var d = new Date();
+    startDay = (startDay + daysInMonth(month, year)) % 7;
     if (month < 11) {
         month++;
         changeMonth(month);
-        d.setFullYear(year, month);
-        startDay = d.getDay();
     } else {
         month = 0;
         changeMonth(month);
         year++;
-        d.setFullYear(year, month);
-        startDay = d.getDay();
     }
     var newDays = daysInMonth(month, year);
     refreshInit(newDays, startDay);
+    
+    //Do we need end day?
     endDay = (((startDay + newDays) - 1) % 7);
-
+    
     //Bug checking coooode!
     $.get("emulatorBasics.js", function () {
         printMessage("End Day of " + month + " is " + endDay);
@@ -175,8 +172,9 @@ function advanceMonth() {
 }
 
 function reverseMonth() {
-    var d = new Date();
-
+    //var d = new Date();
+    //3+31 % 7 = 6; 34-3 % 7 = 31 % 7 = 3
+    //? I fail to see the point in end day
     if (startDay > 1) {
         endDay = (startDay - 1);
     } else {
@@ -184,18 +182,19 @@ function reverseMonth() {
     }
 
     if (month > 0) {
-        d.setFullYear(year, month - 1);
+        //d.setFullYear(year, month - 1);
         month--;
         changeMonth(month);
-        startDay = d.getDay();
+      
     } else {
-        d.setFullYear(year - 1, 11);
+        //d.setFullYear(year - 1, 11);
         month = 11;
         changeMonth(month);
         year--;
-        startDay = d.getDay();
     }
-    var newDays = daysInMonth(month, year);
+    newDays = daysInMonth(month, year);
+    tmp = startDay - newDays;
+    startDay = ((tmp%7)+7)%7;//Sneaky negative modulo trick!
     refreshInit(newDays, startDay);
 
     //Bug checking coooode!
@@ -220,32 +219,44 @@ function initMonth() {
 
 /**
  * Just a small function to change the
- * string held representation of the 
  * month that the calendar is displaying.
  * 
- * @param {type} month
+ * @param {int} month
  * @returns {undefined}
  */
 function changeMonth(month) {
     stringMonth = monthToString(month);
 }
 
+/** 
+ * Changes an integer month value into the name/string version
+ * 
+ * @param {int} month
+ * @returns {String}
+ */
 function monthToString(month) {
     var stringMonths = ["January", "February", "March", "April", "May",
         "June", "July", "August", "September", "October", "November",
         "December"];
-
-    for (i = 0; i < 12; i++) {
-        //console.log(stringMonths + " " + month);
+    if (month < 12 && month >= 0)
         return stringMonths[month];
-    }
+// Sometimes, you don't actually need a loop...
+//    for (i = 0; i < 12; i++) { 
+//        //console.log(stringMonths + " " + month);
+//        return stringMonths[month];
+//    }
 }
 
+/** 
+ * Changes string into integer value for any month
+ * 
+ * @param {String} monthString
+ * @returns {Number|i}
+ */
 function monthToInt(monthString) {
     var stringMonths = ["January", "February", "March", "April", "May",
         "June", "July", "August", "September", "October", "November",
         "December"];
-
     for (i = 0; i < 12; i++) {
         if (stringMonths[i] === monthString) {
             return i;
@@ -254,12 +265,12 @@ function monthToInt(monthString) {
 }
 
 //Find out when the month starts
+//THIS METHOD: It makes no sense at all, and does not work, i guess it is old and forgotten?
 function calcStartDay(month, year) {
+    var d = new Date();
     d.setFullYear(year, month);
     return d.getDay();
 }
-
-//http://safalra.com/web-design/javascript/calendar/
 
 /**
  * Function Wrapped-JQuery Call to the emulator
@@ -299,7 +310,7 @@ function requestTime() {
 function writeTime() {
     $.get("emulatorBasics.js", function () {
         clearThis(cWidth - (cWidth / 4), 15, 125, 15);
-        writeSomethingColour(current.substring(0, 10), cWidth - (cWidth / 4), 25, 12, "#000000");
+        writeSomethingColour(current.substring(0, 11), cWidth - (cWidth / 4), 25, 12, "#000000");
     });
 }
 
