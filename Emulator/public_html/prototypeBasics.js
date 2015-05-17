@@ -24,11 +24,8 @@ var startDay = 5;//That's just obvious, the month.
 var months = 12;
 var year = 2015;
 
-//This'll be used to calculate the offset of the months and such for years
-//before and after this year.
-var baseYear = 2015;
-var baseDay = 5;
-var baseMonth = 4;
+var jcoords = [];
+var icoords = [];
 
 //var sizeParam = 1;//probably not going to be used. For changing size of icons relative to canvas size
 
@@ -92,15 +89,25 @@ function drawCalendar(daysInMonth, startDay) {
     var beginDays = false;
     var gapSize = 40;//distance between individual date squares
     var daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
     for (j = 0; j < 7; j++) {
         for (i = 0; i < 7; i++) {
             if (j === 0) {
                 //Smaller squares for the days of the week at the beginning
                 drawRect((gapSize * i) + 20, (gapSize * j) + 40, 30, 15, "#000000");
+                jcoords[j] = 0;
             } else {
                 //Larger boxes for the actual days - because otherwise a full month
                 //doesn't fit on the "screen"
-                drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, addReminder);
+                var jcoord = (gapSize * j) + 20;
+                var icoord = (gapSize * i) + 20;
+                jcoords[j] = jcoord;
+                icoords[i] = icoord;
+                
+                var func = function() {
+                    addReminder(jcoord, icoord);
+                };
+                drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, func);
             }
             //Writes the days of the week text.
             if (j === 0)
@@ -111,31 +118,50 @@ function drawCalendar(daysInMonth, startDay) {
                 writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
                 days++;
             }
-
         }
     }
 }
 
 //Functions for to do when each day is clicked
-function addReminder() {
+function addReminder(x, y) {
     //add code to actually set dates and stuff, later
     var offset = 15;
-    var c;
-    var init = function () { refreshInit(daysInMonth(month), startDay); }
+    var init = function () { refreshInit(daysInMonth(month), startDay); };
+
+    for (j = 0; j < 7; j++) {
+        for (i = 0; i < 7; i++) {
+            console.log("Listing saved coords j: " + j + " " + jcoords[j] 
+                    + " i: " + i + " " + icoords[i]);
+            if ((icoords[i] === x) && (jcoords[j] === y)) {
+                printMessage("Y is " + i + " and X is " + j);
+            }
+        }
+    }
     
-    $.get("emulatorBasics.js", function() {
-        c = returnCanvas();
+    var c = returnCanvas();
+    var input;
+    var str = "Helllloo";
+    
+    $.get("CanvasInput-master/CanvasInput.js", function() {
+        input = new CanvasInput({
+            canvas: c,
+            x: (320/3) + 15,
+            y: 50,
+            onsubmit: function() {
+                writeSomethingColour(str, offset + 10, offset + 25, 20, "#000000")
+            }
+        });
     });
     
-    //var clicked = getMousePos(c, evt);
- 
+    
+    //Creates a placeholder image for reminders.
     drawRect(offset, offset, cWidth-(offset*2), cHeight-(offset*2), "#FFFFFF");
-    writeSomethingColour("Reminders will be done here", offset + 10, offset + 25, 20, "#000000");
+    //writeSomethingColour("Reminders will be done here", offset + 10, offset + 25, 20, "#000000");
+    //Listeners to remove the large white square and text.
     mouseClick(0, 0, offset, cHeight, init);
     mouseClick(0, 0, cWidth, 15, init);
     mouseClick(cWidth - (offset), 0, offset, cHeight, init);
     mouseClick(0, cHeight-(offset), cWidth, offset, init);
-    
 }
 
 //Find how many days in the month, possibly need another function for Feb
