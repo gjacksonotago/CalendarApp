@@ -111,6 +111,7 @@ function drawCalendar(daysInMonth, startDay) {
                 writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
                 days++;
             }
+
         }
     }
 }
@@ -119,8 +120,17 @@ function drawCalendar(daysInMonth, startDay) {
 function addReminder() {
     //add code to actually set dates and stuff, later
     var offset = 15;
+    var c;
     var init = function () { refreshInit(daysInMonth(month), startDay); }
+    
+    $.get("emulatorBasics.js", function() {
+        c = returnCanvas();
+    });
+    
+    //var clicked = getMousePos(c, evt);
+ 
     drawRect(offset, offset, cWidth-(offset*2), cHeight-(offset*2), "#FFFFFF");
+    writeSomethingColour("Reminders will be done here", offset + 10, offset + 25, 20, "#000000");
     mouseClick(0, 0, offset, cHeight, init);
     mouseClick(0, 0, cWidth, 15, init);
     mouseClick(cWidth - (offset), 0, offset, cHeight, init);

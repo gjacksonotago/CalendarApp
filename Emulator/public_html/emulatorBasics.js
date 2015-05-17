@@ -93,7 +93,6 @@ function emulatorInitialise() {
     resetCanvas(oldCanvas);
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
-    //ctx.clear();
     canvasWidth = c.width;
     canvasHeight = c.height;
     var offset = 60;
@@ -211,6 +210,11 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
             actionTaken();
         }
     }, false);
+}
+
+function returnCanvas() {
+    var canvas = document.getElementById('canvas_1');
+    return canvas;
 }
 
 /*
