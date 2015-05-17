@@ -18,18 +18,13 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
 var cWidth = 320;
 var cHeight = 320;
 var month = 4;
-var stringMonth = "May";//Should make this so it gets the current month throgh Date() functions,
-var startDay = 5;//at some point.
-//
-//var endDay = 0;//The month, it was a result of something that didn't pan out.
+var stringMonth = "May";//That's what the method initMonth() does
+var startDay = 5;
 var months = 12;
 var year = 2015;
 
-//This'll be used to calculate the offset of the months and such for years
-//before and after this year.
-var baseYear = 2015;
-var baseDay = 5;
-var baseMonth = 4;
+var jcoords = [];
+var icoords = [];
 
 //var sizeParam = 1;//probably not going to be used. For changing size of icons relative to canvas size
 
@@ -95,15 +90,25 @@ function drawCalendar(daysInMonth, startDay) {
     var beginDays = false;
     var gapSize = 40;//distance between individual date squares
     var daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
     for (j = 0; j < 7; j++) {
         for (i = 0; i < 7; i++) {
             if (j === 0) {
                 //Smaller squares for the days of the week at the beginning
                 drawRect((gapSize * i) + 20, (gapSize * j) + 40, 30, 15, "#000000");
+                jcoords[j] = 0;
             } else {
                 //Larger boxes for the actual days - because otherwise a full month
                 //doesn't fit on the "screen"
-                drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, addReminder, false);
+                var jcoord = (gapSize * j) + 20;
+                var icoord = (gapSize * i) + 20;
+                jcoords[j] = jcoord;
+                icoords[i] = icoord;
+                
+                var func = function() {
+                    addReminder(jcoord, icoord);
+                };
+                drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, func, false);
             }
             //Writes the days of the week text.
             if (j === 0)
@@ -119,9 +124,36 @@ function drawCalendar(daysInMonth, startDay) {
 }
 
 //Functions for to do when each day is clicked
-function addReminder() {
+function addReminder(x, y) {
     //add code to actually set dates and stuff, later
     var offset = 15;
+    var init = function () { refreshInit(daysInMonth(month), startDay); };
+
+    for (j = 0; j < 7; j++) {
+        for (i = 0; i < 7; i++) {
+            console.log("Listing saved coords j: " + j + " " + jcoords[j] 
+                    + " i: " + i + " " + icoords[i]);
+            if ((icoords[i] === x) && (jcoords[j] === y)) {
+                printMessage("Y is " + i + " and X is " + j);
+            }
+        }
+    }
+    
+    var c = returnCanvas();
+    var input;
+    var str = "Helllloo";
+    
+    $.get("CanvasInput-master/CanvasInput.js", function() {
+        input = new CanvasInput({
+            canvas: c,
+            x: (320/3) + 15,
+            y: 50,
+            onsubmit: function() {
+                writeSomethingColour(str, offset + 10, offset + 25, 20, "#000000")
+            }
+        });
+    });
+    
     var init = function () {
         refreshInit(daysInMonth(month), startDay);
     }
@@ -220,7 +252,6 @@ function initMonth() {
         stringMonth = currentMonth();
         month = monthToInt(currentMonth);
     });
-    //endDay = startDay + daysInMonth(month, year);
 }
 
 /**

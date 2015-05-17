@@ -36,7 +36,6 @@ function writeMessage(canvas, message) {
     context.font = '18pt Calibri';
     context.fillStyle = 'black';
     context.fillText(message, 10, 100);
-
 }
 
 function getMousePos(canvas, evt) {
@@ -48,11 +47,6 @@ function getMousePos(canvas, evt) {
 }
 
 //============================================================//
-
-
-/*
- * These functions are used for writing the time to the canvas
- */
 
 //Gets and returns the Current Time as a String
 function createTime() {
@@ -93,7 +87,6 @@ function emulatorInitialise() {
     resetCanvas(oldCanvas);
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
-    //ctx.clear();
     canvasWidth = c.width;
     canvasHeight = c.height;
     var offset = 60;
@@ -228,6 +221,11 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
             actionTaken();
         }
     }, false);
+}
+
+function returnCanvas() {
+    var canvas = document.getElementById('canvas_1');
+    return canvas;
 }
 
 /*
