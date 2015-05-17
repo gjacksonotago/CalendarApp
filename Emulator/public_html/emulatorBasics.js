@@ -103,13 +103,13 @@ function emulatorInitialise() {
     //Populates the 'screen' with clickable 'app' icons
     for (j = 0; j < 5; j++) {
         for (i = 0; i < 5; i++) {
-            if (i === 2 && j === 2) {
+            if (i === 2 && j === 0) {
                 createPrototype(10 + (i * offset), 10 + (j * offset),
                         50, 50);
-            } else {
-                drawClickRect(10 + (i * offset), 10 + (j * offset),
-                        50, 50, printPosition);
-            }
+            } //else {
+              //  drawClickRect(10 + (i * offset), 10 + (j * offset),
+              //          50, 50, printPosition, true);
+            //}
         }
     }
 }
@@ -141,7 +141,7 @@ function createPrototype(xPos, yPos, xSize, ySize) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
     //Create the app "icon".
-    drawClickRect(xPos, yPos, xSize, ySize, protoClick);
+    drawClickRect(xPos, yPos, xSize, ySize, protoClick, true);
     //Write the app "name" to the icon.
     ctx.fillStyle = "#FFFFFF";
     ctx.font = "12px Sans Serif";
@@ -214,7 +214,7 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
 }
 
 /*
- * Adds a Mousedown event listener across the given
+ * Adds a MouseClick event listener across the given
  * co-ordinates - which it works out like the fillRectangle 
  * method does, from a given (x, y) origin point and the size
  * of the area to make interactive.
@@ -222,7 +222,7 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
  * Utilises the canvas size properties to work the area out.
  * 
  * The event listener executes the function 'actionTaken'
- * upon mousedown.
+ * upon a mouseclick.
  * 
  * @param {int} xPosition
  * @param {int} yPosition
@@ -231,7 +231,7 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
  * @param {function} actionTaken
  * @returns {undefined}
  */
-function mouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
+function singleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     var canvas = document.getElementById('canvas_1');
 
     //The mouseclick event listener.
@@ -254,7 +254,48 @@ function mouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     }, false);
 }
 
-//Suppposed to detect a swipe with mouse
+/*
+ * Adds a MouseClick event listener across the given
+ * co-ordinates - which it works out like the fillRectangle 
+ * method does, from a given (x, y) origin point and the size
+ * of the area to make interactive.
+ * 
+ * Utilises the canvas size properties to work the area out.
+ * 
+ * The event listener executes the function 'actionTaken'
+ * upon a double mouseclick.
+ * 
+ * @param {int} xPosition
+ * @param {int} yPosition
+ * @param {int} xSize
+ * @param {int} ySize
+ * @param {function} actionTaken
+ * @returns {undefined}
+ */
+function doubleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
+    var canvas = document.getElementById('canvas_1');
+
+    //The mouseclick event listener.
+    canvas.addEventListener('dblclick', function (evt) {
+
+        var mousePos = getMousePos(canvas, evt);
+        message = 'Mouse position: ' + mousePos.x + ', ' +
+                Math.round(mousePos.y);
+        sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' +
+                Math.round(mousePos.y);
+
+        var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
+        var yCalc = (canvasHeight + ySize + yPosition) - canvasHeight;
+
+        //If Mouse Clicked on the Black Square, new message!
+        if (mousePos.x <= xCalc && mousePos.y <= yCalc
+                && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
+            actionTaken();
+        }
+    }, false);
+}
+
+//Suppposed to detect a swipe with mouse held down, then released
 function swipe() {
     var x1, x2, y1, y2;
     var canvas = document.getElementById('canvas_1');
@@ -269,15 +310,15 @@ function swipe() {
         var mousePos2 = getMousePos(canvas, evt);
         x2 = mousePos2.x;
         y2 = mousePos2.y;
-        swipeDirection(x1, y1, x2, y2);
+        return swipeDirection(x1, y1, x2, y2);
     });
 }
 
 //Finds the direction of a swipe based on two coordinates
 //returns string  up/down left/right     
 function swipeDirection(x1, y1, x2, y2) {
-    var dir = "Swipe Diretion: Should be a direction!";
-    var error = 50;
+    var dir = "Swipe Direction: Too diagonal, must be fairly straight in one direction";
+    var error = 50;//how far the mouse can sway in the other axis to main direction
     if (x1 < x2 && Math.abs(y2 - y1) < error)
         dir = "right";
     else if (x1 > x2 && Math.abs(y2 - y1) < error)
@@ -319,26 +360,34 @@ function drawRect(xPos, yPos, xSize, ySize, colour) {
     ctx.fillRect(xPos, yPos, xSize, ySize);
 }
 
-//Creates a black rectangle on the canvas with a mouseClick listener
+//Creates a black rectangle on the canvas with a singleMouseClick listener
 // which listens for 'actionToTake'
-function drawClickRect(xPos, yPos, xSize, ySize, actionToTake) {
+function drawClickRect(xPos, yPos, xSize, ySize, actionToTake, sglclick) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
     ctx.fillStyle = "#000000";
     //Create the rectangle
     ctx.fillRect(xPos, yPos, xSize, ySize);
     //Add the clickable listener
-    mouseClick(xPos, yPos, xSize, ySize, actionToTake);
+    if(sglclick) {
+        singleMouseClick(xPos, yPos, xSize, ySize, actionToTake);
+    }else{
+        doubleMouseClick(xPos, yPos, xSize, ySize, actionToTake);
+    }
 }
 
-function drawColourRect(xPos, yPos, xSize, ySize, actionToTake, colour) {
+function drawColourRect(xPos, yPos, xSize, ySize, actionToTake, sglclick, colour) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
     ctx.fillStyle = colour;
     //Create the rectangle
     ctx.fillRect(xPos, yPos, xSize, ySize);
     //Add the clickable listener
-    mouseClick(xPos, yPos, xSize, ySize, actionToTake);
+    if(sglclick) {
+        singleMouseClick(xPos, yPos, xSize, ySize, actionToTake);
+    }else{
+        doubleMouseClick(xPos, yPos, xSize, ySize, actionToTake);
+    }
 }
 
 //Will soon (HOPEFULLY) convert a date/time to a string
@@ -360,49 +409,49 @@ function dateStringForJSON(toConvert) {
 //Draws to the canvas - currently a red rectangle and
 // both the current date and time as retrieved by
 // the functions above.
-function drawToCanvas() {
-    var stringTime = createTime();
-    var stringDate = currentDate();
-
-    //Create the Canvas stuff
-    var c = document.getElementById("canvas_1");
-    var ctx = c.getContext("2d");
-    canvasWidth = c.width;
-    canvasHeight = c.height;
-
-    //Changes colour of the Canvas Element
-    ctx.fillStyle = "#FF0000";
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
-    //Writes Time as a String to the Canvas
-    ctx.fillStyle = "#000000";
-    ctx.font = "48px Sans Serif";
-    ctx.fillText(stringTime, 10, (canvasHeight / 10) + 20);
-    ctx.fillText(stringDate, 10, (canvasHeight - 20));
-
-    //creates the black rectangle in the middle
-    drawClickRect();
-}
-
-/*
- * This function enlarges the current canvas and 
- * then shrinks it after a preset interval.
- * 
- * This emulates a "vibration" function.
- */
-function emulateVibrate() {
-    document.getElementById("canvasDiv").innerHTML = canvasString;
-    drawToCanvas();
-    //set a short time interval
-    setTimeout("reDrawOriginal()", 60);
-
-}
-
-/*
- * Redraws the canvas at it's original size.
- */
-function reDrawOriginal() {
-    document.getElementById("canvasDiv").innerHTML = oldCanvas;
-    drawToCanvas();
-    listeners();
-}
+//function drawToCanvas() {
+//    var stringTime = createTime();
+//    var stringDate = currentDate();
+//
+//    //Create the Canvas stuff
+//    var c = document.getElementById("canvas_1");
+//    var ctx = c.getContext("2d");
+//    canvasWidth = c.width;
+//    canvasHeight = c.height;
+//
+//    //Changes colour of the Canvas Element
+//    ctx.fillStyle = "#FF0000";
+//    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+//
+//    //Writes Time as a String to the Canvas
+//    ctx.fillStyle = "#000000";
+//    ctx.font = "48px Sans Serif";
+//    ctx.fillText(stringTime, 10, (canvasHeight / 10) + 20);
+//    ctx.fillText(stringDate, 10, (canvasHeight - 20));
+//
+//    //creates the black rectangle in the middle
+//    drawClickRect();
+//}
+//
+///*
+// * This function enlarges the current canvas and 
+// * then shrinks it after a preset interval.
+// * 
+// * This emulates a "vibration" function.
+// */
+//function emulateVibrate() {
+//    document.getElementById("canvasDiv").innerHTML = canvasString;
+//    drawToCanvas();
+//    //set a short time interval
+//    setTimeout("reDrawOriginal()", 60);
+//
+//}
+//
+///*
+// * Redraws the canvas at it's original size.
+// */
+//function reDrawOriginal() {
+//    document.getElementById("canvasDiv").innerHTML = oldCanvas;
+//    drawToCanvas();
+//    //listeners();
+//}

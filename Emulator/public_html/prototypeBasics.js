@@ -18,8 +18,9 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
 var cWidth = 320;
 var cHeight = 320;
 var month = 4;
-var stringMonth = "May";
-var startDay = 5;//That's just obvious, the month.
+var stringMonth = "May";//Should make this so it gets the current month throgh Date() functions,
+var startDay = 5;//at some point.
+//
 //var endDay = 0;//The month, it was a result of something that didn't pan out.
 var months = 12;
 var year = 2015;
@@ -66,20 +67,22 @@ function refreshInit(daysformonth, startDay) {
 
     $.get("emulatorBasics.js", function () {
         resetCanvas(oldCanvas);
-        drawClickRect(homeX, homeY, buttonX, 25, returnToEmu);
+        drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
         writeSomething("Home", pixelX, pixelY, 12);
         drawRect(20, 10, buttonX + 10, 25, "#FF0000");
         drawCalendar(daysformonth, startDay);
         writeSomething(stringMonth + " " + year, 25, 25, 12);
         drawColourRect(25 + (buttonX + 10), 10,
-                15, 25, reverseMonth, "#FF0000");
+                15, 25, reverseMonth, true, "#FF0000");
         writeSomething("<", 30 + (buttonX + 10), 25, 12);
         drawColourRect(45 + (buttonX + 10), 10,
-                15, 25, advanceMonth, "#FF0000");
+                15, 25, advanceMonth, true, "#FF0000");
         writeSomething(">", 50 + (buttonX + 10), 25, 12);
     });
     requestTime();
     writeTime();
+    //Allow swipes to change month
+    swipeMonth();
 }
 
 /*
@@ -100,7 +103,7 @@ function drawCalendar(daysInMonth, startDay) {
             } else {
                 //Larger boxes for the actual days - because otherwise a full month
                 //doesn't fit on the "screen"
-                drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, addReminder);
+                drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, addReminder, false);
             }
             //Writes the days of the week text.
             if (j === 0)
@@ -119,18 +122,20 @@ function drawCalendar(daysInMonth, startDay) {
 function addReminder() {
     //add code to actually set dates and stuff, later
     var offset = 15;
-    var init = function () { refreshInit(daysInMonth(month), startDay); }
-    drawRect(offset, offset, cWidth-(offset*2), cHeight-(offset*2), "#FFFFFF");
-    mouseClick(0, 0, offset, cHeight, init);
-    mouseClick(0, 0, cWidth, 15, init);
-    mouseClick(cWidth - (offset), 0, offset, cHeight, init);
-    mouseClick(0, cHeight-(offset), cWidth, offset, init);
-    
+    var init = function () {
+        refreshInit(daysInMonth(month), startDay);
+    }
+    drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");
+    singleMouseClick(0, 0, offset, cHeight, init);
+    singleMouseClick(0, 0, cWidth, 15, init);
+    singleMouseClick(cWidth - (offset), 0, offset, cHeight, init);
+    singleMouseClick(0, cHeight - (offset), cWidth, offset, init);
+
 }
 
 //Find how many days in the month, possibly need another function for Feb
 function daysInMonth(month, year) {
-    if (month === 1 && (year % 4 === 0) && ((year % 100 !== 0) | (year % 400 === 0))) {
+    if (month === 1 && (year % 4 === 0) && ((year % 100 !== 0) || (year % 400 === 0))) {
         return 29;
     } else if (month === 1) {
         return 28;
@@ -162,35 +167,45 @@ function advanceMonth() {
     }
     var newDays = daysInMonth(month, year);
     refreshInit(newDays, startDay);
-    
+
     //Bug checking coooode!
     $.get("emulatorBasics.js", function () {
-        printMessage("End Day of " + month + " is " + endDay);
+        printMessage("Start Day of " + month + " is " + startDay);
     });
 }
 
 function reverseMonth() {
-    //var d = new Date();
-    //3+31 % 7 = 6; 34-3 % 7 = 31 % 7 = 3
-
     if (month > 0) {
-        //d.setFullYear(year, month - 1);
         month--;
         changeMonth(month);
     } else {
-        //d.setFullYear(year - 1, 11);
         month = 11;
         changeMonth(month);
         year--;
     }
     newDays = daysInMonth(month, year);
     tmp = startDay - newDays;
-    startDay = ((tmp%7)+7)%7; //Sneaky negative modulo trick!
+    startDay = ((tmp % 7) + 7) % 7; //Sneaky negative modulo trick!
     refreshInit(newDays, startDay);
 
     //Bug checking coooode!
     $.get("emulatorBasics.js", function () {
         printMessage("Start Day of " + month + " is " + startDay);
+    });
+}
+
+//Enables swiping screen to change the month, Does not work yet though, WHY! 
+function swipeMonth() {
+    $.get("emulatorBasics.js", function () {
+        var dir = swipe();
+        if (dir === "left") {
+            console.log('left swipe detected');
+            reverseMonth();
+        }
+        else if (dir === "right") {
+            console.log('right swipe detected');
+            advanceMonth();
+        }
     });
 }
 
@@ -205,7 +220,7 @@ function initMonth() {
         stringMonth = currentMonth();
         month = monthToInt(currentMonth);
     });
-    endDay = startDay + daysInMonth(month, year);
+    //endDay = startDay + daysInMonth(month, year);
 }
 
 /**
@@ -229,13 +244,11 @@ function monthToString(month) {
     var stringMonths = ["January", "February", "March", "April", "May",
         "June", "July", "August", "September", "October", "November",
         "December"];
-    if (month < 12 && month >= 0)
+    if (month < 12 && month >= 0) {
         return stringMonths[month];
-// Sometimes, you don't actually need a loop...
-//    for (i = 0; i < 12; i++) { 
-//        //console.log(stringMonths + " " + month);
-//        return stringMonths[month];
-//    }
+    } else {
+        console.log("Error: Month number out of range (0-11)");
+    }
 }
 
 /** 
@@ -257,11 +270,11 @@ function monthToInt(monthString) {
 
 //Find out when the month starts
 //THIS METHOD: It makes no sense at all, and does not work, i guess it is old and forgotten?
-function calcStartDay(month, year) {
-    var d = new Date();
-    d.setFullYear(year, month);
-    return d.getDay();
-}
+//function calcStartDay(month, year) {
+//    var d = new Date();
+//    d.setFullYear(year, month);
+//    return d.getDay();
+//}
 
 /**
  * Function Wrapped-JQuery Call to the emulator
