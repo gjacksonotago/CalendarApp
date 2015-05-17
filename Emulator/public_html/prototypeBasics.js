@@ -238,17 +238,19 @@ function reverseMonth() {
 function swipeMonth() {
     var dir = "";
     $.get("emulatorBasics.js", function () {
+        //Returns undefined because there's no swipe on initialisation.
         dir = swipe();
+        console.log("In prototype: " + dir);
+        if (dir === "left") {
+            console.log('left swipe detected');
+            reverseMonth();
+        }
+        else if (dir === "right") {
+            console.log('right swipe detected');
+            advanceMonth();
+        }
     });
-    console.log("In prototype: " + dir);
-    if (dir === "left") {
-        console.log('left swipe detected');
-        reverseMonth();
-    }
-    else if (dir === "right") {
-        console.log('right swipe detected');
-        advanceMonth();
-    }
+
 }
 
 /**
