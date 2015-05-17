@@ -8,4 +8,5 @@ The stylesheet that we shall make it look pretty with!
 
 canvas {
    background-color: #00ccff;
+   background-image: url('Frog-and-butterfly.jpg');
 }
