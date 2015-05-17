@@ -163,23 +163,6 @@ function protoClick() {
     init;
 }
 
-/**
- * Takes an origin co-ordinate (xPos, yPos) and
- * clears a rectangle from that co-ordinate of
- * xSize x ySize.
- * 
- * @param {type} xPos
- * @param {type} yPos
- * @param {type} xSize
- * @param {type} ySize
- * @returns {undefined}
- */
-function clearRect(xPos, yPos, xSize, ySize) {
-    var c = document.getElementById("canvas_1");
-    var ctx = c.getContext("2d");
-    ctx.clearRect(xPos, yPos, xSize, ySize);
-}
-
 function writeSomething(message, x, y, fontSize) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
@@ -270,6 +253,7 @@ function mouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
         }
     }, false);
 }
+
 //Suppposed to detect a swipe with mouse
 function swipe() {
     var x1, x2, y1, y2;
@@ -288,6 +272,7 @@ function swipe() {
         swipeDirection(x1, y1, x2, y2);
     });
 }
+
 //Finds the direction of a swipe based on two coordinates
 //returns string  up/down left/right     
 function swipeDirection(x1, y1, x2, y2) {
@@ -304,12 +289,6 @@ function swipeDirection(x1, y1, x2, y2) {
     console.log(dir);
     return dir;
 }
-//NOT NEEDED
-////Calls any functions that initialise event listeners
-//function listeners(xPos, yPos, xSize, ySize, actionToTake) {
-//    mouseOver(xPos, yPos, xSize, ySize, actionToTake);
-//    mouseClick(xPos, yPos, xSize, ySize, actionToTake);
-//}
 
 function printPosition() {
     document.getElementById("divShow").innerHTML = sqMes;

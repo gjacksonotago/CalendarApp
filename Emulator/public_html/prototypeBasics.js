@@ -19,8 +19,8 @@ var cWidth = 320;
 var cHeight = 320;
 var month = 4;
 var stringMonth = "May";
-var startDay = 5;//same question as below
-var endDay = 0;//end day for what? the year, the week or the month?
+var startDay = 5;//That's just obvious, the month.
+//var endDay = 0;//The month, it was a result of something that didn't pan out.
 var months = 12;
 var year = 2015;
 
@@ -98,7 +98,7 @@ function drawCalendar(daysInMonth, startDay) {
                 //Smaller squares for the days of the week at the beginning
                 drawRect((gapSize * i) + 20, (gapSize * j) + 40, 30, 15, "#000000");
             } else {
-                //Larger boxes for the actual days - becuase otherwise a full month
+                //Larger boxes for the actual days - because otherwise a full month
                 //doesn't fit on the "screen"
                 drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, addReminder);
             }
@@ -118,17 +118,18 @@ function drawCalendar(daysInMonth, startDay) {
 //Functions for to do when each day is clicked
 function addReminder() {
     //add code to actually set dates and stuff, later
+    var offset = 15;
+    var init = function () { refreshInit(daysInMonth(month), startDay); }
+    drawRect(offset, offset, cWidth-(offset*2), cHeight-(offset*2), "#FFFFFF");
+    mouseClick(0, 0, offset, cHeight, init);
+    mouseClick(0, 0, cWidth, 15, init);
+    mouseClick(cWidth - (offset), 0, offset, cHeight, init);
+    mouseClick(0, cHeight-(offset), cWidth, offset, init);
+    
 }
 
 //Find how many days in the month, possibly need another function for Feb
 function daysInMonth(month, year) {
-    //http://www.timeanddate.com/date/leapyear.html
-    //I'll use this to calc Febs days
-
-    //Using the array didn't work, no idea why, but anyway no point in looping through an array for one thing
-    //having a long if statement is much more efficient and sensible in this case, now it works
-    //var thirty = [3, 5, 8, 10];//...
-
     if (month === 1 && (year % 4 === 0) && ((year % 100 !== 0) | (year % 400 === 0))) {
         return 29;
     } else if (month === 1) {
@@ -162,9 +163,6 @@ function advanceMonth() {
     var newDays = daysInMonth(month, year);
     refreshInit(newDays, startDay);
     
-    //Do we need end day?
-    endDay = (((startDay + newDays) - 1) % 7);
-    
     //Bug checking coooode!
     $.get("emulatorBasics.js", function () {
         printMessage("End Day of " + month + " is " + endDay);
@@ -174,18 +172,11 @@ function advanceMonth() {
 function reverseMonth() {
     //var d = new Date();
     //3+31 % 7 = 6; 34-3 % 7 = 31 % 7 = 3
-    //? I fail to see the point in end day
-    if (startDay > 1) {
-        endDay = (startDay - 1);
-    } else {
-        endDay = 6;
-    }
 
     if (month > 0) {
         //d.setFullYear(year, month - 1);
         month--;
         changeMonth(month);
-      
     } else {
         //d.setFullYear(year - 1, 11);
         month = 11;
@@ -194,7 +185,7 @@ function reverseMonth() {
     }
     newDays = daysInMonth(month, year);
     tmp = startDay - newDays;
-    startDay = ((tmp%7)+7)%7;//Sneaky negative modulo trick!
+    startDay = ((tmp%7)+7)%7; //Sneaky negative modulo trick!
     refreshInit(newDays, startDay);
 
     //Bug checking coooode!
