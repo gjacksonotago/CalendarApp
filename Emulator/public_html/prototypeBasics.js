@@ -59,7 +59,8 @@ function refreshInit(daysformonth, startDay) {
     var buttonY = 310;
     var pixelX = ((buttonX) + homeX / 2);
     var pixelY = (buttonY);
-
+    initMonth();
+    
     $.get("emulatorBasics.js", function () {
         resetCanvas(oldCanvas);
         drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
