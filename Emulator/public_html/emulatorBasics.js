@@ -36,7 +36,6 @@ function writeMessage(canvas, message) {
     context.font = '18pt Calibri';
     context.fillStyle = 'black';
     context.fillText(message, 10, 100);
-
 }
 
 function getMousePos(canvas, evt) {
@@ -48,11 +47,6 @@ function getMousePos(canvas, evt) {
 }
 
 //============================================================//
-
-
-/*
- * These functions are used for writing the time to the canvas
- */
 
 //Gets and returns the Current Time as a String
 function createTime() {
