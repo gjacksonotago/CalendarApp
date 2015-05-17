@@ -160,7 +160,7 @@ function createPrototype(xPos, yPos, xSize, ySize) {
 }
 
 /**
- * Wraps a JQuetry Call to the Prototype Initialistion
+ * Wraps a JQuery Call to the Prototype Initialistion
  * so that it can be passed as an argument (without immediate 
  * evaluation) into the MouseDown function to add it as a listener.
  * 

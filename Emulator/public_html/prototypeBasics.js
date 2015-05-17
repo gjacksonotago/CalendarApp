@@ -226,7 +226,7 @@ function reverseMonth() {
     });
 }
 
-//Enables swiping screen to change the month, Does not work yet though, WHY! 
+//Enables swiping screen to change the month, Does not work yet though, WHY! Not sure. 
 function swipeMonth() {
     $.get("emulatorBasics.js", function () {
         var dir = swipe();
