@@ -25,6 +25,7 @@ var year = 2015;
 
 var jcoords = [];
 var icoords = [];
+var dayNo = [];
 
 //var sizeParam = 1;//probably not going to be used. For changing size of icons relative to canvas size
 
@@ -90,6 +91,7 @@ function drawCalendar(daysInMonth, startDay) {
     var beginDays = false;
     var gapSize = 40;//distance between individual date squares
     var daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    dayNo[0] = 0;
 
     for (j = 0; j < 7; j++) {
         for (i = 0; i < 7; i++) {
@@ -102,7 +104,6 @@ function drawCalendar(daysInMonth, startDay) {
                 //Larger boxes for the actual days - because otherwise a full month
                 //doesn't fit on the "screen"
                 drawRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, "#FFFFFF");
- 
             }
             //Writes the days of the week text.
             if (j === 0)
@@ -115,6 +116,7 @@ function drawCalendar(daysInMonth, startDay) {
                 jcoords[j] = jcoord;
                 icoords[i] = icoord;
                 days++;
+                dayNo[days] = days;
                 var func = function() {
                     addReminder(jcoord, icoord, days);
                 };
@@ -144,7 +146,10 @@ function addReminder(x, y, day) {
     
     var c = returnCanvas();
     var input;
-    var str = day;
+    var str = dayNo[day];
+    var i = day;
+
+    console.log(dayNo);
     
     $.get("CanvasInput-master/CanvasInput.js", function() {
         input = new CanvasInput({
@@ -159,7 +164,7 @@ function addReminder(x, y, day) {
     
     var init = function () {
         refreshInit(daysInMonth(month), startDay);
-    }
+    };
     drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");
     singleMouseClick(0, 0, offset, cHeight, init);
     singleMouseClick(0, 0, cWidth, 15, init);
