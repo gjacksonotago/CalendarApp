@@ -301,11 +301,11 @@ function monthToInt(monthString) {
 
 //Find out when the month starts
 //THIS METHOD: It makes no sense at all, and does not work, i guess it is old and forgotten?
-//function calcStartDay(month, year) {
-//    var d = new Date();
-//    d.setFullYear(year, month);
-//    return d.getDay();
-//}
+function calcStartDay(month, year) {
+    var d = new Date();
+    d.setFullYear(year, month);
+    return d.getDay();
+}
 
 /**
  * Function Wrapped-JQuery Call to the emulator
