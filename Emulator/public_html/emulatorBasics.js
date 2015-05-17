@@ -93,11 +93,11 @@ function emulatorInitialise() {
 
     //updateTime();Will use this method instead of below once we get it working
     var minutes = createTime().substring(0, 5);
-    var ampm = createTime().substring(9, 11)
+    var ampm = createTime().substring(9, 11);
     writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
     
     //Emulator full screen event listener(s)
-    swipe();//this does not actually do anything yet except print the direction to the console
+    swipe(false, false, false, false);//this does not actually do anything yet except print the direction to the console
 
     //Populates the 'screen' with clickable 'app' icons
     for (j = 0; j < 5; j++) {
@@ -117,8 +117,8 @@ function emulatorInitialise() {
 //Will find a way to not do that, until then, nevermind.
 function updateTime() {
     //clearThis(50, 240, 320, 50);
-    var minutes = createTime().substring(0, 4);
-    var ampm = createTime().substring(8, 10)
+    var minutes = createTime().substring(0, 5);
+    var ampm = createTime().substring(9, 11);
     writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
     setTimeout("emulatorInitialise()", 30000);//every 30 seconds
     //setTimeout("updateTime()", 1000);
@@ -311,7 +311,7 @@ function doubleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
 }
 
 //Suppposed to detect a swipe with mouse held down, then released
-function swipe() {
+function swipe(actionLeft, actionRight, actionUp, actionDown) {
     var x1, x2, y1, y2;
     var canvas = document.getElementById('canvas_1');
     //The mousedown event listener.
@@ -325,7 +325,20 @@ function swipe() {
         var mousePos2 = getMousePos(canvas, evt);
         x2 = mousePos2.x;
         y2 = mousePos2.y;
-        return swipeDirection(x1, y1, x2, y2);
+        var dir = swipeDirection(x1, y1, x2, y2);
+        if(actionLeft !== false && dir === "left") {
+            actionLeft();
+        }
+        if (actionRight !== false && dir === "right") {
+            actionRight();
+        } 
+        if(actionUp !== false && dir === "up") {
+            actionUp();
+        }
+        if (actionDown !== false && dir === "down") {
+            actionDown();
+        }
+        return dir;
     });
 }
 
