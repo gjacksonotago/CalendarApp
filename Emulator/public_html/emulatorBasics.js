@@ -5,7 +5,7 @@
  * and from there, colour a canvas, and write the Time as a Text element
  * to the Canvas.
  * 
- * Authors: George Jackson, Ben Ryan
+ * Authors: George Jackson, Ben Ryan, Mohammed Tarabishi
  * Date Created: 24/04/2015
  */
 
