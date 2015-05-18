@@ -7,7 +7,7 @@
  * They also now provide some basic smart watch like functions such as a basic swipe
  * function and starting the calendar app.
  * 
- * Authors: George Jackson, Ben Ryan
+ * Authors: George Jackson, Ben Ryan, Mohammed Tarabishi
  * Date Created: 24/04/2015
  */
 
@@ -92,10 +92,16 @@ function emulatorInitialise() {
     var offset = 60;
 
     //updateTime();//Will use this method instead of below once we get it working
-    var minutes = createTime().substring(0, 5);
-    var ampm = createTime().substring(9, 11);
+    if (createTime().substring(1, 2) === ':') {
+        var minutes = createTime().substring(0, 4);
+        var ampm = createTime().substring(8, 10);
+    } else {
+        var minutes = createTime().substring(0, 5);
+        var ampm = createTime().substring(9, 11);
+    }
+
     writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
-    
+
     //Emulator full screen event listener(s)
     swipe(false, false, false, false);//this does not actually do anything yet except print the direction to the console
 
@@ -324,13 +330,13 @@ function swipe(actionLeft, actionRight, actionUp, actionDown) {
         x2 = mousePos2.x;
         y2 = mousePos2.y;
         var dir = swipeDirection(x1, y1, x2, y2);
-        if(actionLeft !== false && dir === "left") {
+        if (actionLeft !== false && dir === "left") {
             actionLeft();
         }
         if (actionRight !== false && dir === "right") {
             actionRight();
-        } 
-        if(actionUp !== false && dir === "up") {
+        }
+        if (actionUp !== false && dir === "up") {
             actionUp();
         }
         if (actionDown !== false && dir === "down") {
