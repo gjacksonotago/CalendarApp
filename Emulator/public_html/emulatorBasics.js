@@ -92,9 +92,9 @@ function emulatorInitialise() {
     var offset = 60;
 
     //updateTime();Will use this method instead of below once we get it working
-    var minutes = createTime().substring(0, 5);
-    var ampm = createTime().substring(9, 11);
-    writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
+    var minutes = createTime().substring(0, 4);
+    var ampm = createTime().substring(8, 11);
+    writeSomethingColour(minutes + " " +ampm, 80, 240, 48, '#FFFFFF');
     
     //Emulator full screen event listener(s)
     swipe(false, false, false, false);//this does not actually do anything yet except print the direction to the console
