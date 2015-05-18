@@ -25,6 +25,7 @@ var year = 2015;
 
 var jcoords = [];
 var icoords = [];
+var dayNo = [];
 
 //var sizeParam = 1;//probably not going to be used. For changing size of icons relative to canvas size
 
@@ -59,7 +60,7 @@ function refreshInit(daysformonth, startDay) {
     var buttonY = 310;
     var pixelX = ((buttonX) + homeX / 2);
     var pixelY = (buttonY);
-
+    
     $.get("emulatorBasics.js", function () {
         resetCanvas(oldCanvas);
         drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
@@ -86,10 +87,11 @@ function refreshInit(daysformonth, startDay) {
  */
 function drawCalendar(daysInMonth, startDay) {
     //Populates the 'screen' with clickable calendar date icons
-    var days = 1;
+    var days = 0;
     var beginDays = false;
     var gapSize = 40;//distance between individual date squares
     var daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    dayNo[0] = 0;
 
     for (j = 0; j < 7; j++) {
         for (i = 0; i < 7; i++) {
@@ -97,34 +99,37 @@ function drawCalendar(daysInMonth, startDay) {
                 //Smaller squares for the days of the week at the beginning
                 drawRect((gapSize * i) + 20, (gapSize * j) + 40, 30, 15, "#000000");
                 jcoords[j] = 0;
+                icoords[i] = 0;
             } else {
                 //Larger boxes for the actual days - because otherwise a full month
                 //doesn't fit on the "screen"
-                var jcoord = (gapSize * j) + 20;
-                var icoord = (gapSize * i) + 20;
-                jcoords[j] = jcoord;
-                icoords[i] = icoord;
-                
-                var func = function() {
-                    addReminder(jcoord, icoord);
-                };
-                drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, func, false);
+                drawRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, "#FFFFFF");
             }
             //Writes the days of the week text.
             if (j === 0)
                 writeSomething(daysOfWeek[i], (gapSize * i) + 25, (gapSize * j) + 50, 8);
             if (i === startDay && j === 1)
                 beginDays = true;
-            if (j > 0 && days <= daysInMonth && beginDays) {
-                writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
+            if (j > 0 && days < daysInMonth && beginDays) {
+                var jcoord = (gapSize * j) + 20;
+                var icoord = (gapSize * i) + 20;
+                jcoords[j] = jcoord;
+                icoords[i] = icoord;
                 days++;
+                dayNo[days] = days;
+                var func = function() {
+                    addReminder(jcoord, icoord, days);
+                };
+                drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, func, false);
+                writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
+                
             }
         }
     }
 }
 
 //Functions for to do when each day is clicked
-function addReminder(x, y) {
+function addReminder(x, y, day) {
     //add code to actually set dates and stuff, later
     var offset = 15;
     var init = function () { refreshInit(daysInMonth(month), startDay); };
@@ -141,7 +146,10 @@ function addReminder(x, y) {
     
     var c = returnCanvas();
     var input;
-    var str = "Helllloo";
+    var str = dayNo[day];
+    var i = day;
+
+    console.log(dayNo);
     
     $.get("CanvasInput-master/CanvasInput.js", function() {
         input = new CanvasInput({
@@ -156,7 +164,7 @@ function addReminder(x, y) {
     
     var init = function () {
         refreshInit(daysInMonth(month), startDay);
-    }
+    };
     drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");
     singleMouseClick(0, 0, offset, cHeight, init);
     singleMouseClick(0, 0, cWidth, 15, init);
@@ -228,8 +236,11 @@ function reverseMonth() {
 
 //Enables swiping screen to change the month, Does not work yet though, WHY! Not sure. 
 function swipeMonth() {
+    var dir = "";
     $.get("emulatorBasics.js", function () {
-        var dir = swipe();
+        //Returns undefined because there's no swipe on initialisation.
+        dir = swipe(reverseMonth, advanceMonth, false, false);
+        console.log("In prototype: " + dir);
         if (dir === "left") {
             console.log('left swipe detected');
             reverseMonth();
@@ -239,6 +250,7 @@ function swipeMonth() {
             advanceMonth();
         }
     });
+
 }
 
 /**
@@ -301,11 +313,11 @@ function monthToInt(monthString) {
 
 //Find out when the month starts
 //THIS METHOD: It makes no sense at all, and does not work, i guess it is old and forgotten?
-//function calcStartDay(month, year) {
-//    var d = new Date();
-//    d.setFullYear(year, month);
-//    return d.getDay();
-//}
+function calcStartDay(month, year) {
+    var d = new Date();
+    d.setFullYear(year, month);
+    return d.getDay();
+}
 
 /**
  * Function Wrapped-JQuery Call to the emulator
