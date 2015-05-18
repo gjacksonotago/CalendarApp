@@ -91,7 +91,8 @@ function emulatorInitialise() {
     canvasHeight = c.height;
     var offset = 60;
 
-    setInterval(updateTime, 100);
+    //setInterval(updateTime, 100);
+    updateTime();
     
     //Emulator full screen event listener(s)
     swipe(false, false, false, false);//this does not actually do anything yet except print the direction to the console
