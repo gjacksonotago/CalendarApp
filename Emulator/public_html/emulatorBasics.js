@@ -4,12 +4,12 @@
  * These functions grab the current Time and convert it to a string
  * and from there, colour a canvas, and write the Time as a Text element
  * to the Canvas.
+ * They also now provide some basic smart watch like functions such as a basic swipe
+ * function and starting the calendar app.
  * 
  * Authors: George Jackson, Ben Ryan
  * Date Created: 24/04/2015
  */
-
-
 
 //Global variables
 var canvasHeight, canvasHeight;
@@ -27,9 +27,7 @@ var canvasString =
         'style="' + 'border:5px solid #000000;"' + '>' +
         '</canvas>';
 
-/*
- * These functions are used for the mouse cordinates
- */
+//Write a message to the canvas. --->An outdate method now, I think. (Ben)
 function writeMessage(canvas, message) {
     var context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -37,7 +35,9 @@ function writeMessage(canvas, message) {
     context.fillStyle = 'black';
     context.fillText(message, 10, 100);
 }
-
+/*
+ * This function is used for the mouse cordinates
+ */
 function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
     return {
@@ -91,7 +91,7 @@ function emulatorInitialise() {
     canvasHeight = c.height;
     var offset = 60;
 
-    //updateTime();Will use this method instead of below once we get it working
+    //updateTime();//Will use this method instead of below once we get it working
     var minutes = createTime().substring(0, 5);
     var ampm = createTime().substring(9, 11);
     writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
@@ -99,7 +99,7 @@ function emulatorInitialise() {
     //Emulator full screen event listener(s)
     swipe(false, false, false, false);//this does not actually do anything yet except print the direction to the console
 
-    //Populates the 'screen' with clickable 'app' icons
+    //Populates the 'screen' with clickable 'app' icons --->Now only prints the one we need.
     for (j = 0; j < 5; j++) {
         for (i = 0; i < 5; i++) {
             if (i === 2 && j === 0) {
@@ -119,14 +119,10 @@ function updateTime() {
     //clearThis(50, 240, 320, 50);
     var minutes = createTime().substring(0, 5);
     var ampm = createTime().substring(9, 11);
-    writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
+    writeSomethingColour(createTime(), 80, 240, 48, '#FFFFFF');
     setTimeout("emulatorInitialise()", 30000);//every 30 seconds
     //setTimeout("updateTime()", 1000);
 }
-
-//Creates some data to emulate the watch!
-//Need more functions maybe?
-
 
 function clearThis(xPos, yPos, xSize, ySize) {
     var c = document.getElementById("canvas_1");
@@ -173,6 +169,7 @@ function protoClick() {
     init;
 }
 
+//Write text at specified location with chosen fontsize the the canvas
 function writeSomething(message, x, y, fontSize) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
@@ -181,6 +178,7 @@ function writeSomething(message, x, y, fontSize) {
     ctx.fillText(message, x, y);
 }
 
+//same as above but with the colour option. --->probably only need this one? (Ben)
 function writeSomethingColour(message, x, y, fontSize, colour) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
@@ -189,7 +187,7 @@ function writeSomethingColour(message, x, y, fontSize, colour) {
     ctx.fillText(message, x, y);
 }
 
-/*
+/* 
  * Creates a mouseover listener at the specified location
  * (worked out using an (x, y) origin point and the width/height
  * passed as variables) to execute 'actionTaken' on mouseover.
