@@ -91,11 +91,6 @@ function emulatorInitialise() {
     canvasHeight = c.height;
     var offset = 60;
 
-<<<<<<< HEAD
-    //setInterval(updateTime, 100);
-    updateTime();
-    
-=======
     //updateTime();//Will use this method instead of below once we get it working
     if (createTime().substring(1, 2) === ':') {
         var minutes = createTime().substring(0, 4);
@@ -107,7 +102,6 @@ function emulatorInitialise() {
 
     writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
 
->>>>>>> master
     //Emulator full screen event listener(s)
     swipe(false, false, false, false);
 
@@ -128,26 +122,12 @@ function emulatorInitialise() {
 //Keeps the clock ticking, not the way to go, but a start. Goes back to home screen from calendar
 //Will find a way to not do that, until then, nevermind.
 function updateTime() {
-<<<<<<< HEAD
     clearThis(50, 180, 250, 100); 
     var minutes = createTime().substring(0, 4);
     var ampm = createTime().substring(8, 10);
     writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
 }
 
-//Creates some data to emulate the watch!
-//Need more functions maybe?
-
-=======
-    //clearThis(50, 240, 320, 50);
-    var minutes = createTime().substring(0, 5);
-    var ampm = createTime().substring(9, 11);
-    writeSomethingColour(createTime(), 80, 240, 48, '#FFFFFF');
-    setTimeout("emulatorInitialise()", 30000);//every 30 seconds
-    //setTimeout("updateTime()", 1000);
-}
-
->>>>>>> master
 function clearThis(xPos, yPos, xSize, ySize) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
