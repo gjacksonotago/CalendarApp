@@ -166,6 +166,12 @@ function addReminder(x, y, day) {
      * http://goldfirestudios.com/blog/108/CanvasInput-HTML5-Canvas-Text-Input
      * on 18th May 2015. (The lib was on github, link to their
      * github is on that site.
+     * 
+     * MAYBE I WANT TO DO THIS INSTEAD:
+     * http://jsfiddle.net/fmnBa/
+     * 
+     * It's HTML text input with an HTML button, so I'm not sure it'll
+     * be able to go 'over' the canvas, but I'm sure as hell gonna try.
      */
     $.get("CanvasInput-master/CanvasInput.js", function() {
         input = new CanvasInput({
@@ -173,8 +179,10 @@ function addReminder(x, y, day) {
             x: (320/3) + 15,
             y: 50,
             onsubmit: function() {
-                writeSomethingColour(str, offset + 10, offset + 25, 20, "#000000")
-            }
+                str = input.selectText();
+                writeSomethingColour(str, offset + 10, offset + 25, 20, "#000000");
+            },
+            placeHolder: "Name your Reminder."
         });
     });
     
