@@ -128,9 +128,19 @@ function drawCalendar(daysInMonth, startDay) {
     }
 }
 
-//Functions for what to do when each day is clicked
+/**
+ * Creates a reminder when a calendar day is double-clicked on.
+ * Currently working on being able to have user entered text and
+ * date/times.
+ * 
+ * Alerts to be done later, along with recurring events.
+ * 
+ * @param {integer} x the x co-ordinate of the box that was clicked.
+ * @param {integer} y the y co-ordinate of the box that was clicked.
+ * @param {integer} day the day number (as an int) to hold on to.
+ * @returns {undefined}
+ */
 function addReminder(x, y, day) {
-    //add code to actually set dates and stuff, later
     var offset = 15;
     var init = function () { refreshInit(daysInMonth(month), startDay); };
 
@@ -148,9 +158,15 @@ function addReminder(x, y, day) {
     var input;
     var str = dayNo[day];
     var i = day;
-
+    //debugging code (obviously)
     console.log(dayNo);
     
+    /** 
+     * This library was downloaded from 
+     * http://goldfirestudios.com/blog/108/CanvasInput-HTML5-Canvas-Text-Input
+     * on 18th May 2015. (The lib was on github, link to their
+     * github is on that site.
+     */
     $.get("CanvasInput-master/CanvasInput.js", function() {
         input = new CanvasInput({
             canvas: c,
@@ -162,9 +178,11 @@ function addReminder(x, y, day) {
         });
     });
     
+    //function wrapped so that I can pass arguments without immediate eval.
     var init = function () {
         refreshInit(daysInMonth(month), startDay);
     };
+    //These create the great white square and the boundaries to get rid of it.
     drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");
     singleMouseClick(0, 0, offset, cHeight, init);
     singleMouseClick(0, 0, cWidth, 15, init);
@@ -214,6 +232,12 @@ function advanceMonth() {
     });
 }
 
+/**
+ * Reverses the month by calculating a start day as an offset and populating 
+ * the calendar with however many days are in that month.
+ * 
+ * @returns {undefined}
+ */
 function reverseMonth() {
     if (month > 0) {
         month--;
@@ -236,21 +260,10 @@ function reverseMonth() {
 
 //Enables swiping screen to change the month back and forth.
 function swipeMonth() {
-    var dir = "";
     $.get("emulatorBasics.js", function () {
         //Returns undefined because there's no swipe on initialisation.
-        dir = swipe(reverseMonth, advanceMonth, false, false);
-        console.log("In prototype: " + dir);
-        if (dir === "left") {
-            console.log('left swipe detected');
-            reverseMonth();
-        }
-        else if (dir === "right") {
-            console.log('right swipe detected');
-            advanceMonth();
-        }
+        swipe(reverseMonth, advanceMonth, false, false);
     });
-
 }
 
 /**
