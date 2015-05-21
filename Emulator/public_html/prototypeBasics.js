@@ -4,7 +4,7 @@
  * This file will contain the basics of the Prototype
  * Smartwatch Application we're developing.
  * 
- * Author: George Jackson
+ * Authors: George Jackson, Ben Ryan
  * Date Created: 24/04/2015
  */
 
@@ -18,7 +18,7 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
 var cWidth = 320;
 var cHeight = 320;
 var month = 4;
-var stringMonth = "May";//That's what the method initMonth() does
+var stringMonth = "May";
 var startDay = 5;
 var months = 12;
 var year = 2015;
@@ -82,7 +82,7 @@ function refreshInit(daysformonth, startDay) {
 }
 
 /*
- * Intended to draw the calendar dates to the canvas from inside the calendar app
+ * Draws the calendar dates to the canvas from inside the calendar app
  * Takes number of days in the month and the day to start on
  */
 function drawCalendar(daysInMonth, startDay) {
@@ -128,7 +128,7 @@ function drawCalendar(daysInMonth, startDay) {
     }
 }
 
-//Functions for to do when each day is clicked
+//Functions for what to do when each day is clicked
 function addReminder(x, y, day) {
     //add code to actually set dates and stuff, later
     var offset = 15;
@@ -173,7 +173,7 @@ function addReminder(x, y, day) {
 
 }
 
-//Find how many days in the month, possibly need another function for Feb
+//Find how many days in the month, given month and year.
 function daysInMonth(month, year) {
     if (month === 1 && (year % 4 === 0) && ((year % 100 !== 0) || (year % 400 === 0))) {
         return 29;
@@ -234,7 +234,7 @@ function reverseMonth() {
     });
 }
 
-//Enables swiping screen to change the month, Does not work yet though, WHY! 
+//Enables swiping screen to change the month back and forth.
 function swipeMonth() {
     var dir = "";
     $.get("emulatorBasics.js", function () {
@@ -313,11 +313,11 @@ function monthToInt(monthString) {
 
 //Find out when the month starts
 //THIS METHOD: It makes no sense at all, and does not work, i guess it is old and forgotten?
-//function calcStartDay(month, year) {
-//    var d = new Date();
-//    d.setFullYear(year, month);
-//    return d.getDay();
-//}
+function calcStartDay(month, year) {
+    var d = new Date();
+    d.setFullYear(year, month);
+    return d.getDay();
+}
 
 /**
  * Function Wrapped-JQuery Call to the emulator
