@@ -95,7 +95,7 @@ function emulatorInitialise() {
     updateTime();
     
     //Emulator full screen event listener(s)
-    swipe(false, false, false, false);//this does not actually do anything yet except print the direction to the console
+    swipe(false, false, false, false);
 
     //Populates the 'screen' with clickable 'app' icons
     for (j = 0; j < 5; j++) {
@@ -114,17 +114,14 @@ function emulatorInitialise() {
 //Keeps the clock ticking, not the way to go, but a start. Goes back to home screen from calendar
 //Will find a way to not do that, until then, nevermind.
 function updateTime() {
-    clearThis(50, 180, 250, 100);
-    //drawRect(50, 180, 320, 100, "#FFFFFF");
+    clearThis(50, 180, 250, 100); 
     var minutes = createTime().substring(0, 4);
     var ampm = createTime().substring(8, 10);
     writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
-    //setInterval(emulatorInitialise, 30000);//every 30 seconds
 }
 
 //Creates some data to emulate the watch!
 //Need more functions maybe?
-
 
 function clearThis(xPos, yPos, xSize, ySize) {
     var c = document.getElementById("canvas_1");
