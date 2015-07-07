@@ -349,7 +349,7 @@ function swipe(actionLeft, actionRight, actionUp, actionDown) {
 //Finds the direction of a swipe based on two coordinates
 //returns string  up/down left/right     
 function swipeDirection(x1, y1, x2, y2) {
-    var dir = "Swipe Direction: Too diagonal, must be fairly straight in one direction";
+    var dir = "Swipe Direction: Too diagonal, must be one of up/down/left/right";
     var error = 50;//how far the mouse can sway in the other axis to main direction
     if (x1 < x2 && Math.abs(y2 - y1) < error)
         dir = "right";

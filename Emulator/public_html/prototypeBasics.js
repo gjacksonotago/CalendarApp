@@ -27,6 +27,13 @@ var jcoords = [];
 var icoords = [];
 var dayNo = [];
 
+//Fake enums for display type settings becuase javascript does not enum properly
+var TODAY = 1000;//arbitrary values (can we make these final/immutable somehow?
+var WEEK = 1001;
+var MONTH = 1002;
+var displayType = MONTH;//Determines which display we want for the calendar (month, day, week)
+//defaults to TODAY.
+
 //var sizeParam = 1;//probably not going to be used. For changing size of icons relative to canvas size
 
 function getDate() {
@@ -43,17 +50,31 @@ function getDate() {
  * @returns {undefined}
  */
 function protoInitialise() {
-    refreshInit(daysInMonth(month), startDay);
+    refreshInit();
     //pollTime();
 }
 
 /**
  * Function that sets up the Prototype, starting with
  * a "home" button - but hopefully more will be added.
+ * @returns {undefined}
+ */
+function refreshInit() {
+    if(displayType === MONTH) {
+        displayMonth(daysInMonth(month), startDay);
+    }else if(displayType === DAY) {
+        //call day drawing method
+    }else if(displatType === WEEK) {
+        //call week method
+    }
+}
+/**
+ * @param {int} daysformonth
+ * @param {int} startDay
  * 
  * @returns {undefined}
  */
-function refreshInit(daysformonth, startDay) {
+function displayMonth(daysformonth, startDay) {
     var homeX = 115;
     var homeY = 294;
     var buttonX = (cWidth / 4);
@@ -63,17 +84,22 @@ function refreshInit(daysformonth, startDay) {
     
     $.get("emulatorBasics.js", function () {
         resetCanvas(oldCanvas);
+        //Home button
         drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
         writeSomething("Home", pixelX, pixelY, 12);
+        //Month display rectangle
         drawRect(20, 10, buttonX + 10, 25, "#FF0000");
-        drawCalendar(daysformonth, startDay);
         writeSomething(stringMonth + " " + year, 25, 25, 12);
+        //Back/forward month buttons
         drawColourRect(25 + (buttonX + 10), 10,
                 15, 25, reverseMonth, true, "#FF0000");
         writeSomething("<", 30 + (buttonX + 10), 25, 12);
         drawColourRect(45 + (buttonX + 10), 10,
                 15, 25, advanceMonth, true, "#FF0000");
         writeSomething(">", 50 + (buttonX + 10), 25, 12);
+        //days of month for month display
+        drawCalendar(daysformonth, startDay);
+
     });
     requestTime();
     writeTime();
@@ -132,8 +158,6 @@ function drawCalendar(daysInMonth, startDay) {
 function addReminder(x, y, day) {
     //add code to actually set dates and stuff, later
     var offset = 15;
-    var init = function () { refreshInit(daysInMonth(month), startDay); };
-
     for (j = 0; j < 7; j++) {
         for (i = 0; i < 7; i++) {
             console.log("Listing saved coords j: " + j + " " + jcoords[j] 
