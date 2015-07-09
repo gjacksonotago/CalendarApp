@@ -18,6 +18,7 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
 var cWidth = 320;
 var cHeight = 320;
 var month = 4;
+var setStartMonth = 4;
 var stringMonth = "May";
 var startDay = 5;
 var months = 12;
@@ -42,7 +43,9 @@ function getDate() {
  * 
  * @returns {undefined}
  */
-function protoInitialise() {
+function protoInitialise(thisMonth) {
+    stringMonth = monthToString(thisMonth);
+    month = monthToInt(thisMonth);
     refreshInit(daysInMonth(month), startDay);
     //pollTime();
 }
@@ -212,6 +215,11 @@ function daysInMonth(month, year) {
         console.log("31 days this month" + month);
         return 31;
     }
+}
+
+function initStartDay() {
+    var diff = month - setStartMonth;
+    for(i = 0; )
 }
 
 /**

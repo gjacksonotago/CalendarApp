@@ -167,8 +167,9 @@ function createPrototype(xPos, yPos, xSize, ySize) {
  * @returns {undefined}
  */
 function protoClick() {
+    var thisMonth = currentMonth();
     var init = $.get("prototypeBasics.js", function () {
-        protoInitialise();
+        protoInitialise(thisMonth);
     });
     init;
 }
