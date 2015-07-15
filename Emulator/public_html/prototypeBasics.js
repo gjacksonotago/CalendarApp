@@ -60,13 +60,23 @@ function protoInitialise() {
  * @returns {undefined}
  */
 function refreshInit() {
-    if(displayType === MONTH) {
+    if (displayType === MONTH) {
         displayMonth(daysInMonth(month), startDay);
-    }else if(displayType === DAY) {
+    } else if (displayType === TODAY) {
         //call day drawing method
-    }else if(displatType === WEEK) {
+    } else if (displayType === WEEK) {
         //call week method
     }
+}
+
+function displayDay() {
+    var homeX = 115;
+    var homeY = 295;
+    //Home Button: Or back button instead? Just something.
+    drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
+    writeSomething("Home", pixelX, pixelY, 12);
+    
+    
 }
 /**
  * @param {int} daysformonth
@@ -76,12 +86,12 @@ function refreshInit() {
  */
 function displayMonth(daysformonth, startDay) {
     var homeX = 115;
-    var homeY = 294;
+    var homeY = 295;
     var buttonX = (cWidth / 4);
     var buttonY = 310;
     var pixelX = ((buttonX) + homeX / 2);
     var pixelY = (buttonY);
-    
+
     $.get("emulatorBasics.js", function () {
         resetCanvas(oldCanvas);
         //Home button
@@ -90,7 +100,7 @@ function displayMonth(daysformonth, startDay) {
         //Month display rectangle
         drawRect(20, 10, buttonX + 10, 25, "#FF0000");
         writeSomething(stringMonth + " " + year, 25, 25, 12);
-        //Back/forward month buttons
+        //Back & forward month buttons
         drawColourRect(25 + (buttonX + 10), 10,
                 15, 25, reverseMonth, true, "#FF0000");
         writeSomething("<", 30 + (buttonX + 10), 25, 12);
@@ -143,12 +153,12 @@ function drawCalendar(daysInMonth, startDay) {
                 icoords[i] = icoord;
                 days++;
                 dayNo[days] = days;
-                var func = function() {
+                var func = function () {
                     addReminder(jcoord, icoord, days);
                 };
                 drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, func, false);
                 writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
-                
+
             }
         }
     }
@@ -160,32 +170,31 @@ function addReminder(x, y, day) {
     var offset = 15;
     for (j = 0; j < 7; j++) {
         for (i = 0; i < 7; i++) {
-            console.log("Listing saved coords j: " + j + " " + jcoords[j] 
+            console.log("Listing saved coords j: " + j + " " + jcoords[j]
                     + " i: " + i + " " + icoords[i]);
             if ((icoords[i] === x) && (jcoords[j] === y)) {
                 printMessage("Y is " + i + " and X is " + j);
             }
         }
     }
-    
+
     var c = returnCanvas();
     var input;
     var str = dayNo[day];
     var i = day;
 
     console.log(dayNo);
-    
-    $.get("CanvasInput-master/CanvasInput.js", function() {
+
+    $.get("CanvasInput-master/CanvasInput.js", function () {
         input = new CanvasInput({
             canvas: c,
-            x: (320/3) + 15,
+            x: (320 / 3) + 15,
             y: 50,
-            onsubmit: function() {
-                writeSomethingColour(str, offset + 10, offset + 25, 20, "#000000")
-            }
+            onsubmit: writeSomethingColour(str, offset + 10, offset + 25, 20, "#000000")
+            
         });
     });
-    
+
     var init = function () {
         refreshInit(daysInMonth(month), startDay);
     };
