@@ -18,7 +18,6 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
 var cWidth = 320;
 var cHeight = 320;
 var month = 4;
-var setStartMonth = 4;
 var stringMonth = "May";
 var startDay = 5;
 var months = 12;
@@ -46,6 +45,11 @@ function getDate() {
 function protoInitialise(thisMonth) {
     stringMonth = monthToString(thisMonth);
     month = monthToInt(thisMonth);
+    var d = new Date();
+    //date is 1-31
+    var oldD = d.getDate()-1;
+    startDay = Math.abs(d.getDay() - oldD)%7;
+    
     refreshInit(daysInMonth(month), startDay);
     //pollTime();
 }
@@ -176,18 +180,7 @@ function addReminder(x, y, day) {
      * It's HTML text input with an HTML button, so I'm not sure it'll
      * be able to go 'over' the canvas, but I'm sure as hell gonna try.
      */
-    $.get("CanvasInput-master/CanvasInput.js", function() {
-        input = new CanvasInput({
-            canvas: c,
-            x: (320/3) + 15,
-            y: 50,
-            onsubmit: function() {
-                str = input.selectText();
-                writeSomethingColour(str, offset + 10, offset + 25, 20, "#000000");
-            },
-            placeHolder: "Name your Reminder."
-        });
-    });
+
     
     //function wrapped so that I can pass arguments without immediate eval.
     var init = function () {
@@ -217,10 +210,6 @@ function daysInMonth(month, year) {
     }
 }
 
-function initStartDay() {
-    var diff = month - setStartMonth;
-    for(i = 0; )
-}
 
 /**
  * This is the function used by clicking the
