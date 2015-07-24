@@ -63,7 +63,7 @@ function currentDate() {
     return stringDate;
 }
 
-//Returns just the month in three letters i.e May, Jun etc. from the internet, may not be needed.
+//Returns an integer!
 function currentMonth() {
     var month = new Date();
     return month.getMonth();
@@ -103,7 +103,7 @@ function emulatorInitialise() {
     writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
 
     //Emulator full screen event listener(s)
-    swipe(false, false, false, false);//this does not actually do anything yet except print the direction to the console
+    swipe(false, false, false, false);
 
     //Populates the 'screen' with clickable 'app' icons --->Now only prints the one we need.
     for (j = 0; j < 5; j++) {
@@ -122,12 +122,10 @@ function emulatorInitialise() {
 //Keeps the clock ticking, not the way to go, but a start. Goes back to home screen from calendar
 //Will find a way to not do that, until then, nevermind.
 function updateTime() {
-    //clearThis(50, 240, 320, 50);
-    var minutes = createTime().substring(0, 5);
-    var ampm = createTime().substring(9, 11);
-    writeSomethingColour(createTime(), 80, 240, 48, '#FFFFFF');
-    setTimeout("emulatorInitialise()", 30000);//every 30 seconds
-    //setTimeout("updateTime()", 1000);
+    clearThis(50, 180, 250, 100); 
+    var minutes = createTime().substring(0, 4);
+    var ampm = createTime().substring(8, 10);
+    writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
 }
 
 function clearThis(xPos, yPos, xSize, ySize) {
