@@ -36,14 +36,6 @@ test('daysInMonth', function () {
     equal(daysInMonth(1, 2100), 28, 'Should be 28 days');
 });
 
-test('calcStartDay', function () {
-    equal(calcStartDay(2015, 0), 4, 'Should be 4, Thursday.');
-    equal(calcStartDay(2016, 0), 5, 'Should be 5, Friday.');
-    equal(calcStartDay(2015, 6), 3, 'Should be 3, Wednesday.');
-    equal(calcStartDay(2015, 2), 0, 'Should be 0, Sunday.');
-    equal(calcStartDay(2015, 6), 6, 'Should be 6, Saturday.');
-});
-
 //-----> EmulatorBasics
 //
 test('swipeDirection', function () {

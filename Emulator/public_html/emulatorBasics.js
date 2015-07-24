@@ -63,7 +63,7 @@ function currentDate() {
     return stringDate;
 }
 
-//Returns just the month in three letters i.e May, Jun etc. from the internet, may not be needed.
+//Returns an integer!
 function currentMonth() {
     var month = new Date();
     return month.getMonth();
@@ -167,9 +167,8 @@ function createPrototype(xPos, yPos, xSize, ySize) {
  * @returns {undefined}
  */
 function protoClick() {
-    var thisMonth = currentMonth();
     var init = $.get("prototypeBasics.js", function () {
-        protoInitialise(thisMonth);
+        protoInitialise();
     });
     init;
 }
