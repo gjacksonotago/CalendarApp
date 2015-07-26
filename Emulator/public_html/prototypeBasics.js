@@ -196,7 +196,7 @@ function addReminder(x, y, day) {
      * @type Date
      */
     var reminderDate = new Date();
-    var stringReminDate = reminderDate.toDateString()
+    var stringReminDate = reminderDate.toDateString();
     
     var j, i;
     for (j = 0; j < 7; j+=1) {
@@ -222,12 +222,21 @@ function addReminder(x, y, day) {
     //At the moment, what will be used to select the day for the reminder
     writeSomethingColour(stringReminDate, 50, 40, "12", "black");
     
-    var nextDay = function() { reminderDate.setDate(reminderDate+1);
+    console.log("Date: " + reminderDate.getDate());
+    var nextDay = function() { 
+        console.log("Date: " + reminderDate.getDate());
+        reminderDate.setDate(reminderDate.getDate()+1);
+        console.log("Date now is: " + reminderDate.getDate());
         clearThis(49, 25, 100, 30);
+        stringReminDate = reminderDate.toDateString();
         writeSomethingColour(stringReminDate, 50, 40, "12", "black");
     };
-    var prevDay = function() { reminderDate.setDate(reminderDate-1);
+    var prevDay = function() { 
+        console.log("Date: " + reminderDate.getDate());
+        reminderDate.setDate(reminderDate.getDate()-1);
+        console.log("Date is now: " + reminderDate.getDate());
         clearThis(49, 25, 100, 30);
+        stringReminDate = reminderDate.toDateString();
         writeSomethingColour(stringReminDate, 50, 40, "12", "black");
     };
     //Need to be encapsulated in a function
@@ -237,7 +246,6 @@ function addReminder(x, y, day) {
     drawColourRect(45, 10,
             15, 25, nextDay, true, "#FF0000");
     writeSomething(">", 50, 25, 12);
-
 }
 
 //Find how many days in the month, given month and year.
