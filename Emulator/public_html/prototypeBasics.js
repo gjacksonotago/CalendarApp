@@ -184,7 +184,6 @@ function drawCalendar(daysInMonth, startDay) {
  * 
  * @param {integer} x the x co-ordinate of the box that was clicked.
  * @param {integer} y the y co-ordinate of the box that was clicked.
- * @param {integer} day the day number (as an int) to hold on to.
  * @returns {undefined}
  */
 function addReminder(x, y) {
