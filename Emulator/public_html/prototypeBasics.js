@@ -200,6 +200,11 @@ function addReminder(x, y) {
     //debugging code (obviously)
     console.log(dayNo);
     
+    //Something about this isn't working - I think it's causing
+    // a function to screw up somewhere maybe by removing some kind of
+    // expected end point.
+    newCanvas(320, 320, 'canvas_reminder');
+    
     //These create the great white square and the boundaries to get rid of it.
     drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");
     singleMouseClick(0, 0, offset, cHeight, init);
