@@ -165,7 +165,7 @@ function drawCalendar(daysInMonth, startDay) {
                 days+=1;
                 dayNo[days] = days;
                 var func = function() {
-                    addReminder(jcoord, icoord, days);
+                    addReminder(jcoord, icoord);
                 };
                 drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, func, false);
                 writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
@@ -187,7 +187,7 @@ function drawCalendar(daysInMonth, startDay) {
  * @param {integer} day the day number (as an int) to hold on to.
  * @returns {undefined}
  */
-function addReminder(x, y, day) {
+function addReminder(x, y) {
     var offset = 15;
     //function wrapped so that I can pass arguments without immediate eval.
     var init = function () { refreshInit(daysInMonth(month), startDay); };
@@ -197,17 +197,6 @@ function addReminder(x, y, day) {
      */
     var reminderDate = new Date();
     var stringReminDate = reminderDate.toDateString();
-    
-    var j, i;
-    for (j = 0; j < 7; j+=1) {
-        for (i = 0; i < 7; i+=1) {
-            //console.log("Listing saved coords j: " + j + " " + jcoords[j] 
-                    //+ " i: " + i + " " + icoords[i]);
-            if ((icoords[i] === x) && (jcoords[j] === y)) {
-                //console.log("Y is " + i + " and X is " + j);
-            }
-        }
-    }
  
     //debugging code (obviously)
     console.log(dayNo);
