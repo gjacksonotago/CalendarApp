@@ -380,6 +380,26 @@ function resetCanvas(string) {
     document.getElementById("canvasDiv").innerHTML = string;
 }
 
+/**
+ * Creates a new Canvas to be used.
+ * 
+ * Ideally this is to be used to help create reminders, and
+ * maybe needs to save the previous context....
+ * 
+ * @param {type} width
+ * @param {type} height
+ * @param {type} idNo
+ * @returns {undefined}
+ */
+function newCanvas(width, height, idNo) {
+    var newCanvasString = '<canvas width="' + width + '" height="' + height
+        + '" id="' + idNo + '"' + 'style="' +
+        'border:5px solid #000000;">' +
+        'Canvas Tag not Supported by your browser version!' +
+        '</canvas>';
+    document.getElementById("canvasDiv").innerHTML = newCanvasString;
+}
+
 //Draws non clickable rectangle, because they don't all need clicking
 //And can take a colour, should be passed in quotes
 function drawRect(xPos, yPos, xSize, ySize, colour) {
@@ -420,14 +440,6 @@ function drawColourRect(xPos, yPos, xSize, ySize, actionToTake, sglclick, colour
     }
 }
 
-//Will soon (HOPEFULLY) convert a date/time to a string
-// in JSON to be able to send to a prototype, because
-// JSON doesn't support native date format.
-function dateStringForJSON(toConvert) {
-    //At the moment, nothing needs to be converted
-    //but later things might.
-    return toConvert;
-}
 
 //===============================================================/
 /*

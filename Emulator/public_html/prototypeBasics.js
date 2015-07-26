@@ -82,7 +82,7 @@ function refreshInit() {
         displayMonth(daysInMonth(month), startDay);
     }else if(displayType === DAY) {
         //call day drawing method
-    }else if(displatType === WEEK) {
+    }else if(displayType === WEEK) {
         //call week method
     }
 }
@@ -189,7 +189,14 @@ function drawCalendar(daysInMonth, startDay) {
  */
 function addReminder(x, y, day) {
     var offset = 15;
+    //function wrapped so that I can pass arguments without immediate eval.
     var init = function () { refreshInit(daysInMonth(month), startDay); };
+    /* This I envision to be changed somehow by the user -
+     *  will be using the setDate function to do that maybe?
+     * @type Date
+     */
+    var reminderDate = new Date().toDateString();
+    
     var j, i;
     for (j = 0; j < 7; j+=1) {
         for (i = 0; i < 7; i+=1) {
@@ -204,17 +211,14 @@ function addReminder(x, y, day) {
     //debugging code (obviously)
     console.log(dayNo);
     
-    //function wrapped so that I can pass arguments without immediate eval.
-    var init = function () {
-        refreshInit(daysInMonth(month), startDay);
-    };
-    
     //These create the great white square and the boundaries to get rid of it.
     drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");
     singleMouseClick(0, 0, offset, cHeight, init);
     singleMouseClick(0, 0, cWidth, 15, init);
     singleMouseClick(cWidth - (offset), 0, offset, cHeight, init);
     singleMouseClick(0, cHeight - (offset), cWidth, offset, init);
+    //At the moment, what will be used to select the day for the reminder
+    writeSomethingColour(reminderDate, 50, 40, "12", "black");
 
 }
 
