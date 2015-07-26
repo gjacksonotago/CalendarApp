@@ -195,7 +195,8 @@ function addReminder(x, y, day) {
      *  will be using the setDate function to do that maybe?
      * @type Date
      */
-    var reminderDate = new Date().toDateString();
+    var reminderDate = new Date();
+    var stringReminDate = reminderDate.toDateString()
     
     var j, i;
     for (j = 0; j < 7; j+=1) {
@@ -217,8 +218,25 @@ function addReminder(x, y, day) {
     singleMouseClick(0, 0, cWidth, 15, init);
     singleMouseClick(cWidth - (offset), 0, offset, cHeight, init);
     singleMouseClick(0, cHeight - (offset), cWidth, offset, init);
+    
     //At the moment, what will be used to select the day for the reminder
-    writeSomethingColour(reminderDate, 50, 40, "12", "black");
+    writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+    
+    var nextDay = function() { reminderDate.setDate(reminderDate+1);
+        clearThis(49, 25, 100, 30);
+        writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+    };
+    var prevDay = function() { reminderDate.setDate(reminderDate-1);
+        clearThis(49, 25, 100, 30);
+        writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+    };
+    //Need to be encapsulated in a function
+    drawColourRect(25, 10,
+            15, 25, prevDay, true, "#FF0000");
+    writeSomething("<", 30, 25, 12);
+    drawColourRect(45, 10,
+            15, 25, nextDay, true, "#FF0000");
+    writeSomething(">", 50, 25, 12);
 
 }
 
