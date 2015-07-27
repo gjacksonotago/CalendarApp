@@ -392,11 +392,16 @@ function resetCanvas(string) {
  * @returns {undefined}
  */
 function newCanvas(width, height, idNo) {
+    width = 320;
+    height = 320;
+    idNo = "canvas_2";
+    /*
     var newCanvasString = '<canvas width="' + width + '" height="' + height
-        + '" id="' + idNo + '"' + 'style="' +
+        + '" id="' + idNo + '" ' + 'style="' +
         'border:5px solid #000000;">' +
         'Canvas Tag not Supported by your browser version!' +
-        '</canvas>';
+        '</canvas>'; */
+    var newCanvasString = oldCanvas;
     document.getElementById("canvasDiv").innerHTML = newCanvasString;
 }
 
