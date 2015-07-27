@@ -202,8 +202,10 @@ function addReminder(x, y) {
     
     //Something about this isn't working - I think it's causing
     // a function to screw up somewhere maybe by removing some kind of
-    // expected end point.
-    newCanvas(320, 320, 'canvas_reminder');
+    // expected end point. Probably want to save previous context and
+    // restore it when done with the reminder.
+    var canvasreminder = 'canvas_2';
+    newCanvas(320, 320, canvasreminder);
     
     //These create the great white square and the boundaries to get rid of it.
     drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");

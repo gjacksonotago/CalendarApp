@@ -393,7 +393,7 @@ function resetCanvas(string) {
  */
 function newCanvas(width, height, idNo) {
     var newCanvasString = '<canvas width="' + width + '" height="' + height
-        + '" id="' + idNo + '"' + 'style="' +
+        + '" id="' + idNo + '" ' + 'style="' +
         'border:5px solid #000000;">' +
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
