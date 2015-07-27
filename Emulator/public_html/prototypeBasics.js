@@ -82,7 +82,7 @@ function refreshInit() {
         displayMonth(daysInMonth(month), startDay);
     }else if(displayType === DAY) {
         //call day drawing method
-    }else if(displatType === WEEK) {
+    }else if(displayType === WEEK) {
         //call week method
     }
 }
@@ -165,7 +165,7 @@ function drawCalendar(daysInMonth, startDay) {
                 days+=1;
                 dayNo[days] = days;
                 var func = function() {
-                    addReminder(jcoord, icoord, days);
+                    addReminder(jcoord, icoord);
                 };
                 drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, func, false);
                 writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
@@ -184,30 +184,26 @@ function drawCalendar(daysInMonth, startDay) {
  * 
  * @param {integer} x the x co-ordinate of the box that was clicked.
  * @param {integer} y the y co-ordinate of the box that was clicked.
- * @param {integer} day the day number (as an int) to hold on to.
  * @returns {undefined}
  */
-function addReminder(x, y, day) {
+function addReminder(x, y) {
     var offset = 15;
+    //function wrapped so that I can pass arguments without immediate eval.
     var init = function () { refreshInit(daysInMonth(month), startDay); };
-    var j, i;
-    for (j = 0; j < 7; j+=1) {
-        for (i = 0; i < 7; i+=1) {
-            //console.log("Listing saved coords j: " + j + " " + jcoords[j] 
-                    //+ " i: " + i + " " + icoords[i]);
-            if ((icoords[i] === x) && (jcoords[j] === y)) {
-                //console.log("Y is " + i + " and X is " + j);
-            }
-        }
-    }
+    /* This I envision to be changed somehow by the user -
+     *  will be using the setDate function to do that maybe?
+     * @type Date
+     */
+    var reminderDate = new Date();
+    var stringReminDate = reminderDate.toDateString();
  
     //debugging code (obviously)
     console.log(dayNo);
     
-    //function wrapped so that I can pass arguments without immediate eval.
-    var init = function () {
-        refreshInit(daysInMonth(month), startDay);
-    };
+    //Something about this isn't working - I think it's causing
+    // a function to screw up somewhere maybe by removing some kind of
+    // expected end point.
+    newCanvas(320, 320, 'canvas_reminder');
     
     //These create the great white square and the boundaries to get rid of it.
     drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");
@@ -215,7 +211,28 @@ function addReminder(x, y, day) {
     singleMouseClick(0, 0, cWidth, 15, init);
     singleMouseClick(cWidth - (offset), 0, offset, cHeight, init);
     singleMouseClick(0, cHeight - (offset), cWidth, offset, init);
-
+    
+    //At the moment, what will be used to select the day for the reminder
+    writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+    
+    var nextDay = function() { 
+        reminderDate.setDate(reminderDate.getDate()+1);
+        clearThis(49, 25, 100, 30);
+        stringReminDate = reminderDate.toDateString();
+        writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+    };   
+    var prevDay = function() { 
+        reminderDate.setDate(reminderDate.getDate()-1);
+        clearThis(49, 25, 100, 30);
+        stringReminDate = reminderDate.toDateString();
+        writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+    };
+    
+    //Need to be encapsulated in a function
+    drawColourRect(25 + 120, 10 + 15, 15, 25, prevDay, true, "#FF0000");
+    writeSomething("<", 30 + 120, 25 + 15, 12);
+    drawColourRect(45 + 120, 10 + 15, 15, 25, nextDay, true, "#FF0000");
+    writeSomething(">", 50 + 120, 25 + 15, 12);
 }
 
 //Find how many days in the month, given month and year.
