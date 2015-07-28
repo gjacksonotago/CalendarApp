@@ -218,7 +218,7 @@ function addReminder(x, y, day) {
     singleMouseClick(cWidth - (offset), 0, offset, cHeight, init);
     singleMouseClick(0, cHeight - (offset), cWidth, offset, init);
     //At the moment, what will be used to select the day for the reminder
-    writeSomethingColour(reminderDate, 50, 40, "12", "black");
+    writeSomethingColour(reminderDate, 50, 40, "12", "blue");
 
 }
 
