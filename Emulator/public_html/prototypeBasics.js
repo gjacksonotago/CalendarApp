@@ -50,8 +50,26 @@ function getDate() {
  * @returns {undefined}
  */
 function protoInitialise() {
-    refreshInit();
+    initMonth();
+    startDay = setDay();
+    refreshInit(daysInMonth(month), startDay);
     //pollTime();
+}
+
+/**
+ * Creates a new date object to set the date
+ * to the first of the month, so that it returns
+ * the correct number of the day of the week of
+ * the first of the month.
+ * 
+ * @returns {Number}
+ */
+function setDay() {
+    var newDay = new Date();
+    //set to the first of the month, because
+    //0 is the last day of the previous month.
+    newDay.setDate(1);
+    return newDay.getDay();
 }
 
 /**
@@ -64,7 +82,7 @@ function refreshInit() {
         displayMonth(daysInMonth(month), startDay);
     }else if(displayType === DAY) {
         //call day drawing method
-    }else if(displatType === WEEK) {
+    }else if(displayType === WEEK) {
         //call week method
     }
 }
@@ -118,9 +136,10 @@ function drawCalendar(daysInMonth, startDay) {
     var gapSize = 40;//distance between individual date squares
     var daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     dayNo[0] = 0;
-
-    for (j = 0; j < 7; j++) {
-        for (i = 0; i < 7; i++) {
+    
+    var j, i;
+    for (j = 0; j < 7; j+=1) {
+        for (i = 0; i < 7; i+=1) {
             if (j === 0) {
                 //Smaller squares for the days of the week at the beginning
                 drawRect((gapSize * i) + 20, (gapSize * j) + 40, 30, 15, "#000000");
@@ -132,16 +151,18 @@ function drawCalendar(daysInMonth, startDay) {
                 drawRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, "#FFFFFF");
             }
             //Writes the days of the week text.
-            if (j === 0)
+            if (j === 0) {
                 writeSomething(daysOfWeek[i], (gapSize * i) + 25, (gapSize * j) + 50, 8);
-            if (i === startDay && j === 1)
+            }
+            if (i === startDay && j === 1) {
                 beginDays = true;
+            }
             if (j > 0 && days < daysInMonth && beginDays) {
                 var jcoord = (gapSize * j) + 20;
                 var icoord = (gapSize * i) + 20;
                 jcoords[j] = jcoord;
                 icoords[i] = icoord;
-                days++;
+                days+=1;
                 dayNo[days] = days;
                 var func = function() {
                     addReminder(jcoord, icoord, days);
@@ -154,46 +175,50 @@ function drawCalendar(daysInMonth, startDay) {
     }
 }
 
-//Functions for what to do when each day is clicked
+/**
+ * Creates a reminder when a calendar day is double-clicked on.
+ * Currently working on being able to have user entered text and
+ * date/times.
+ * 
+ * Alerts to be done later, along with recurring events.
+ * 
+ * @param {integer} x the x co-ordinate of the box that was clicked.
+ * @param {integer} y the y co-ordinate of the box that was clicked.
+ * @param {integer} day the day number (as an int) to hold on to.
+ * @returns {undefined}
+ */
 function addReminder(x, y, day) {
-    //add code to actually set dates and stuff, later
     var offset = 15;
-    for (j = 0; j < 7; j++) {
-        for (i = 0; i < 7; i++) {
-            console.log("Listing saved coords j: " + j + " " + jcoords[j] 
-                    + " i: " + i + " " + icoords[i]);
+    //function wrapped so that I can pass arguments without immediate eval.
+    var init = function () { refreshInit(daysInMonth(month), startDay); };
+    /* This I envision to be changed somehow by the user -
+     *  will be using the setDate function to do that maybe?
+     * @type Date
+     */
+    var reminderDate = new Date().toDateString();
+    
+    var j, i;
+    for (j = 0; j < 7; j+=1) {
+        for (i = 0; i < 7; i+=1) {
+            //console.log("Listing saved coords j: " + j + " " + jcoords[j] 
+                    //+ " i: " + i + " " + icoords[i]);
             if ((icoords[i] === x) && (jcoords[j] === y)) {
-                printMessage("Y is " + i + " and X is " + j);
+                //console.log("Y is " + i + " and X is " + j);
             }
         }
     }
-    
-    var c = returnCanvas();
-    var input;
-    var str = dayNo[day];
-    var i = day;
-
+ 
+    //debugging code (obviously)
     console.log(dayNo);
     
-    $.get("CanvasInput-master/CanvasInput.js", function() {
-        input = new CanvasInput({
-            canvas: c,
-            x: (320/3) + 15,
-            y: 50,
-            onsubmit: function() {
-                writeSomethingColour(str, offset + 10, offset + 25, 20, "#000000")
-            }
-        });
-    });
-    
-    var init = function () {
-        refreshInit(daysInMonth(month), startDay);
-    };
+    //These create the great white square and the boundaries to get rid of it.
     drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");
     singleMouseClick(0, 0, offset, cHeight, init);
     singleMouseClick(0, 0, cWidth, 15, init);
     singleMouseClick(cWidth - (offset), 0, offset, cHeight, init);
     singleMouseClick(0, cHeight - (offset), cWidth, offset, init);
+    //At the moment, what will be used to select the day for the reminder
+    writeSomethingColour(reminderDate, 50, 40, "12", "black");
 
 }
 
@@ -211,6 +236,7 @@ function daysInMonth(month, year) {
         return 31;
     }
 }
+
 
 /**
  * This is the function used by clicking the
@@ -231,14 +257,16 @@ function advanceMonth() {
     }
     var newDays = daysInMonth(month, year);
     refreshInit(newDays, startDay);
-
-    //Bug checking coooode!
-    $.get("emulatorBasics.js", function () {
-        printMessage("Start Day of " + month + " is " + startDay);
-    });
 }
 
+/**
+ * Reverses the month by calculating a start day as an offset and populating 
+ * the calendar with however many days are in that month.
+ * 
+ * @returns {undefined}
+ */
 function reverseMonth() {
+    console.log("reversal: " + month + " " + startDay);
     if (month > 0) {
         month--;
         changeMonth(month);
@@ -249,32 +277,17 @@ function reverseMonth() {
     }
     newDays = daysInMonth(month, year);
     tmp = startDay - newDays;
-    startDay = ((tmp % 7) + 7) % 7; //Sneaky negative modulo trick!
+    startDay = (((tmp % 7) + 7) % 7); //Sneaky negative modulo trick!
     refreshInit(newDays, startDay);
 
-    //Bug checking coooode!
-    $.get("emulatorBasics.js", function () {
-        printMessage("Start Day of " + month + " is " + startDay);
-    });
 }
 
 //Enables swiping screen to change the month back and forth.
 function swipeMonth() {
-    var dir = "";
     $.get("emulatorBasics.js", function () {
         //Returns undefined because there's no swipe on initialisation.
-        dir = swipe(reverseMonth, advanceMonth, false, false);
-        console.log("In prototype: " + dir);
-        if (dir === "left") {
-            console.log('left swipe detected');
-            reverseMonth();
-        }
-        else if (dir === "right") {
-            console.log('right swipe detected');
-            advanceMonth();
-        }
+        swipe(reverseMonth, advanceMonth, false, false);
     });
-
 }
 
 /**
@@ -285,8 +298,8 @@ function swipeMonth() {
  */
 function initMonth() {
     $.get("emulatorBasics.js", function () {
-        stringMonth = currentMonth();
-        month = monthToInt(currentMonth);
+        stringMonth = monthToString(currentMonth());
+        month = currentMonth();
     });
 }
 
@@ -328,19 +341,11 @@ function monthToInt(monthString) {
     var stringMonths = ["January", "February", "March", "April", "May",
         "June", "July", "August", "September", "October", "November",
         "December"];
-    for (i = 0; i < 12; i++) {
+    for (i = 0; i < 12; i+=1) {
         if (stringMonths[i] === monthString) {
             return i;
         }
     }
-}
-
-//Find out when the month starts
-//THIS METHOD: It makes no sense at all, and does not work, i guess it is old and forgotten?
-function calcStartDay(month, year) {
-    var d = new Date();
-    d.setFullYear(year, month);
-    return d.getDay();
 }
 
 /**
