@@ -18,7 +18,7 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
 var cWidth = 320;
 var cHeight = 320;
 var month = 4;
-var stringMonth = "May";
+var stringMonth = "June";
 var startDay = 5;
 var months = 12;
 var year = 2015;
