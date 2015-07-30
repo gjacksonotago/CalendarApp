@@ -216,7 +216,7 @@ function addReminder(x, y) {
     // a function to screw up somewhere maybe by removing some kind of
     // expected end point. Probably want to save previous context and
     // restore it when done with the reminder.
-    var canvasreminder = 'canvas_2';
+    var canvasreminder = 'canvas_1';
     var ctx;
     
     $.get("emulatorBasics.js", function () {
