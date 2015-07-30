@@ -5,7 +5,7 @@ is where we will host the Emulator and prototype.
 -->
 <html>
     <head>
-        <title>Emulator v 1.17.3</title>
+        <title>Emulator v 1.17.4</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type='text/javascript' src="js/libs/jquery/jquery.js"></script>
@@ -18,8 +18,8 @@ is where we will host the Emulator and prototype.
         <!-- The text division -->
         <div id="textDescription">
 
-            <h3>Generic Smart Watch Emulator v. 1.17.3</h3>
-           
+            <h3>Generic Smart Watch Emulator</h3>
+
             <!-- This div below shows the mouse click co-ords currently 
             <div id="divShow">Mouse position: No clicks yet!</div> -->
             <p>
@@ -35,12 +35,16 @@ is where we will host the Emulator and prototype.
         imported javascript files. Specifically the emulatorBasics.js -->
         <div id="canvasDiv">
             <canvas width="320" height="320" id="canvas_1" 
-                    style="border:5px solid #000000;">
+                    style="border:5px solid #000000; z-index: 0;">
                 Canvas Tag not supported by your browser version!
             </canvas>
-            <input type="text"  id="words" value="reminder name"> 
-            <button id="entertext"> Enter. </button>
+      
         </div>
+        <!-- The z-index's are supposed to place the buttons above the canvas. However, even this does not work! -->
+        <input type="text"  id="words" value="reminder name" style="z-index: 5; position: relative;">
+        <button style="position: relative;  z-index: 5;"> 
+            Enter. 
+        </button>
 
         <!-- 
         This displays the time on the canvas and updates the mouse 
@@ -49,10 +53,10 @@ is where we will host the Emulator and prototype.
         -->
         <script>
             emulatorInitialise();
-            
+
             //Old stuff
             //drawToCanvas();
-            
+
             //simply calls mouse event listener functions
             /* Old bit:
              * 

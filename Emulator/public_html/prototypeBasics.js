@@ -11,7 +11,7 @@
 var current = "";
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         + '" id="' + 'canvas_1"' + 'style="' +
-        'border:1px solid #000000;">' +
+        'border:1px solid #000000; z-index: 0;">' +
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
 
@@ -78,13 +78,23 @@ function setDay() {
  * @returns {undefined}
  */
 function refreshInit() {
-    if(displayType === MONTH) {
+    if (displayType === MONTH) {
         displayMonth(daysInMonth(month), startDay);
-    }else if(displayType === DAY) {
+    } else if (displayType === TODAY) {
         //call day drawing method
     }else if(displayType === WEEK) {
         //call week method
     }
+}
+
+function displayDay() {
+    var homeX = 115;
+    var homeY = 295;
+    //Home Button: Or back button instead? Just something.
+    drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
+    writeSomething("Home", pixelX, pixelY, 12);
+    
+    
 }
 /**
  * @param {int} daysformonth
@@ -94,12 +104,12 @@ function refreshInit() {
  */
 function displayMonth(daysformonth, startDay) {
     var homeX = 115;
-    var homeY = 294;
+    var homeY = 295;
     var buttonX = (cWidth / 4);
     var buttonY = 310;
     var pixelX = ((buttonX) + homeX / 2);
     var pixelY = (buttonY);
-    
+
     $.get("emulatorBasics.js", function () {
         resetCanvas(oldCanvas);
         //Home button
@@ -108,7 +118,7 @@ function displayMonth(daysformonth, startDay) {
         //Month display rectangle
         drawRect(20, 10, buttonX + 10, 25, "#FF0000");
         writeSomething(stringMonth + " " + year, 25, 25, 12);
-        //Back/forward month buttons
+        //Back & forward month buttons
         drawColourRect(25 + (buttonX + 10), 10,
                 15, 25, reverseMonth, true, "#FF0000");
         writeSomething("<", 30 + (buttonX + 10), 25, 12);
@@ -164,12 +174,12 @@ function drawCalendar(daysInMonth, startDay) {
                 icoords[i] = icoord;
                 days+=1;
                 dayNo[days] = days;
-                var func = function() {
-                    addReminder(jcoord, icoord);
+                var func = new function () {
+                    addReminder(jcoord, icoord, days);
                 };
                 drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, func, false);
                 writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
-                
+
             }
         }
     }
@@ -202,8 +212,21 @@ function addReminder(x, y) {
     
     //Something about this isn't working - I think it's causing
     // a function to screw up somewhere maybe by removing some kind of
-    // expected end point.
-    newCanvas(320, 320, 'canvas_reminder');
+    // expected end point. Probably want to save previous context and
+    // restore it when done with the reminder.
+    var canvasreminder = 'canvas_2';
+    var reminderCanvas;
+    $.get("emulatorBasics.js", function () {
+        newCanvas(320, 320, canvasreminder);
+    });
+   
+   /* Checking arrays */
+    for (i = 0; i < jcoords.length; i+=1) {
+        console.log("Jcoord: " + i + " " + jcoords[i]);
+    }
+    for (i = 0; i < icoords.length; i+=1) {
+        console.log("Icoord: " + i + " " + icoords[i]);
+    }
     
     //These create the great white square and the boundaries to get rid of it.
     drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");
@@ -227,7 +250,6 @@ function addReminder(x, y) {
         stringReminDate = reminderDate.toDateString();
         writeSomethingColour(stringReminDate, 50, 40, "12", "black");
     };
-    
     //Need to be encapsulated in a function
     drawColourRect(25 + 120, 10 + 15, 15, 25, prevDay, true, "#FF0000");
     writeSomething("<", 30 + 120, 25 + 15, 12);
