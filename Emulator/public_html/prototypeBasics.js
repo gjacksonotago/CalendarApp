@@ -78,13 +78,23 @@ function setDay() {
  * @returns {undefined}
  */
 function refreshInit() {
-    if(displayType === MONTH) {
+    if (displayType === MONTH) {
         displayMonth(daysInMonth(month), startDay);
-    }else if(displayType === DAY) {
+    } else if (displayType === TODAY) {
         //call day drawing method
     }else if(displayType === WEEK) {
         //call week method
     }
+}
+
+function displayDay() {
+    var homeX = 115;
+    var homeY = 295;
+    //Home Button: Or back button instead? Just something.
+    drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
+    writeSomething("Home", pixelX, pixelY, 12);
+    
+    
 }
 /**
  * @param {int} daysformonth
@@ -94,12 +104,12 @@ function refreshInit() {
  */
 function displayMonth(daysformonth, startDay) {
     var homeX = 115;
-    var homeY = 294;
+    var homeY = 295;
     var buttonX = (cWidth / 4);
     var buttonY = 310;
     var pixelX = ((buttonX) + homeX / 2);
     var pixelY = (buttonY);
-    
+
     $.get("emulatorBasics.js", function () {
         resetCanvas(oldCanvas);
         //Home button
@@ -108,7 +118,7 @@ function displayMonth(daysformonth, startDay) {
         //Month display rectangle
         drawRect(20, 10, buttonX + 10, 25, "#FF0000");
         writeSomething(stringMonth + " " + year, 25, 25, 12);
-        //Back/forward month buttons
+        //Back & forward month buttons
         drawColourRect(25 + (buttonX + 10), 10,
                 15, 25, reverseMonth, true, "#FF0000");
         writeSomething("<", 30 + (buttonX + 10), 25, 12);
@@ -164,12 +174,12 @@ function drawCalendar(daysInMonth, startDay) {
                 icoords[i] = icoord;
                 days+=1;
                 dayNo[days] = days;
-                var func = function() {
-                    addReminder(jcoord, icoord);
+                var func = function () {
+                    addReminder(jcoord, icoord, days);
                 };
                 drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, func, false);
                 writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
-                
+
             }
         }
     }
