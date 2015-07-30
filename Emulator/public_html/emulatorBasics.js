@@ -317,7 +317,7 @@ function doubleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     }, false);
 }
 
-//Suppposed to detect a swipe with mouse held down, then released
+//Assumes a swipe is a click, mouse held down, then released
 function swipe(actionLeft, actionRight, actionUp, actionDown) {
     var x1, x2, y1, y2;
     var canvas = document.getElementById('canvas_1');
