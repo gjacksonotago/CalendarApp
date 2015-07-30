@@ -18,13 +18,13 @@ var message, sqMes;
 //These string are used for rewriting the canvas to a larger size
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         + '" id="' + 'canvas_1"' + 'style="' +
-        'border:5px solid #000000;">' +
+        'border:5px solid #000000; z-index: 0">' +
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
 var canvasString =
         '<canvas width="' + (canvasHeight + 20) + '" height="' + (canvasHeight + 20) +
         '" id="' + 'canvas_1"' +
-        'style="' + 'border:5px solid #000000;"' + '>' +
+        'style="' + 'border:5px solid #000000;z-index: 0"' + '>' +
         '</canvas>';
 
 //Write a message to the canvas. --->An outdate method now, I think. (Ben)
@@ -225,8 +225,13 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
     }, false);
 }
 
-function returnCanvas() {
-    var canvas = document.getElementById('canvas_1');
+/**
+ * 
+ * @param {String} canvasID
+ * @returns {Element} The canvas identified by canvasID
+ */
+function returnCanvas(canvasID) {
+    var canvas = document.getElementById(canvasID);
     return canvas;
 }
 
@@ -347,17 +352,17 @@ function swipe(actionLeft, actionRight, actionUp, actionDown) {
 //Finds the direction of a swipe based on two coordinates
 //returns string  up/down left/right     
 function swipeDirection(x1, y1, x2, y2) {
-    var dir = "Swipe Direction: Too diagonal, must be one of up/down/left/right";
+    var dir = "Invalid swipe";
     var error = 50;//how far the mouse can sway in the other axis to main direction
     if (x1 < x2 && Math.abs(y2 - y1) < error)
         dir = "right";
-    else if (x1 > x2 && Math.abs(y2 - y1) < error)
+    else if (x2 < x1 && Math.abs(y2 - y1) < error)
         dir = "left";
     else if (y1 < y2 && Math.abs(x2 - x1) < error)
         dir = "down";
-    else if (y1 > y2 && Math.abs(x2 - x1) < error)
+    else if (y2 < y1 && Math.abs(x2 - x1) < error)
         dir = "up";
-    console.log(dir);
+    //console.log(dir); //Screw this, we know it basically works. Except that invalid swipes happen A LOT.
     return dir;
 }
 
@@ -394,7 +399,7 @@ function resetCanvas(string) {
 function newCanvas(width, height, idNo) {
     var newCanvasString = '<canvas width="' + width + '" height="' + height
         + '" id="' + idNo + '" ' + 'style="' +
-        'border:5px solid #000000;">' +
+        'border:5px solid #000000; z-index: 0">' +
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
     document.getElementById("canvasDiv").innerHTML = newCanvasString;

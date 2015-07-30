@@ -11,7 +11,7 @@
 var current = "";
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         + '" id="' + 'canvas_1"' + 'style="' +
-        'border:1px solid #000000;">' +
+        'border:1px solid #000000; z-index: 0;">' +
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
 
@@ -174,7 +174,7 @@ function drawCalendar(daysInMonth, startDay) {
                 icoords[i] = icoord;
                 days+=1;
                 dayNo[days] = days;
-                var func = function () {
+                var func = new function () {
                     addReminder(jcoord, icoord, days);
                 };
                 drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, func, false);
@@ -215,7 +215,18 @@ function addReminder(x, y) {
     // expected end point. Probably want to save previous context and
     // restore it when done with the reminder.
     var canvasreminder = 'canvas_2';
-    //newCanvas(320, 320, canvasreminder);
+    var reminderCanvas;
+    $.get("emulatorBasics.js", function () {
+        newCanvas(320, 320, canvasreminder);
+    });
+   
+   /* Checking arrays */
+    for (i = 0; i < jcoords.length; i+=1) {
+        console.log("Jcoord: " + i + " " + jcoords[i]);
+    }
+    for (i = 0; i < icoords.length; i+=1) {
+        console.log("Icoord: " + i + " " + icoords[i]);
+    }
     
     //These create the great white square and the boundaries to get rid of it.
     drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");
@@ -239,7 +250,6 @@ function addReminder(x, y) {
         stringReminDate = reminderDate.toDateString();
         writeSomethingColour(stringReminDate, 50, 40, "12", "black");
     };
-    
     //Need to be encapsulated in a function
     drawColourRect(25 + 120, 10 + 15, 15, 25, prevDay, true, "#FF0000");
     writeSomething("<", 30 + 120, 25 + 15, 12);
