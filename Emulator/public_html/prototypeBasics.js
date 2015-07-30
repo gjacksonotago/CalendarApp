@@ -174,6 +174,8 @@ function drawCalendar(daysInMonth, startDay) {
                 icoords[i] = icoord;
                 days+=1;
                 dayNo[days] = days;
+                //Function wrapped to prevent evaluation on passing as function.
+                //Please don't make this a "new function" ever.
                 var func = function() {
                     addReminder(jcoord, icoord);
                 };
@@ -215,8 +217,15 @@ function addReminder(x, y) {
     // expected end point. Probably want to save previous context and
     // restore it when done with the reminder.
     var canvasreminder = 'canvas_2';
+    var ctx;
+    
     $.get("emulatorBasics.js", function () {
+        ctx = returnCanvas("canvas_1");
+        ctx.getContext("2d").save();
+        var restore = ctx.getContext("2d").restore();
         newCanvas(320, 320, canvasreminder);
+        drawColourRect(25 + 120, 10 + 15, 15, 25, restore, true, "#FFFFFF");
+        writeSomething("Click to return!", 30 + 120, 25 + 15, 12);
     });
    
     /* Checking arrays */
