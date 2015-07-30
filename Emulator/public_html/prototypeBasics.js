@@ -78,23 +78,13 @@ function setDay() {
  * @returns {undefined}
  */
 function refreshInit() {
-    if (displayType === MONTH) {
+    if(displayType === MONTH) {
         displayMonth(daysInMonth(month), startDay);
-    } else if (displayType === TODAY) {
+    }else if(displayType === DAY) {
         //call day drawing method
     }else if(displayType === WEEK) {
         //call week method
     }
-}
-
-function displayDay() {
-    var homeX = 115;
-    var homeY = 295;
-    //Home Button: Or back button instead? Just something.
-    drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
-    writeSomething("Home", pixelX, pixelY, 12);
-    
-    
 }
 /**
  * @param {int} daysformonth
@@ -104,12 +94,12 @@ function displayDay() {
  */
 function displayMonth(daysformonth, startDay) {
     var homeX = 115;
-    var homeY = 295;
+    var homeY = 294;
     var buttonX = (cWidth / 4);
     var buttonY = 310;
     var pixelX = ((buttonX) + homeX / 2);
     var pixelY = (buttonY);
-
+    
     $.get("emulatorBasics.js", function () {
         resetCanvas(oldCanvas);
         //Home button
@@ -118,7 +108,7 @@ function displayMonth(daysformonth, startDay) {
         //Month display rectangle
         drawRect(20, 10, buttonX + 10, 25, "#FF0000");
         writeSomething(stringMonth + " " + year, 25, 25, 12);
-        //Back & forward month buttons
+        //Back/forward month buttons
         drawColourRect(25 + (buttonX + 10), 10,
                 15, 25, reverseMonth, true, "#FF0000");
         writeSomething("<", 30 + (buttonX + 10), 25, 12);
@@ -174,12 +164,12 @@ function drawCalendar(daysInMonth, startDay) {
                 icoords[i] = icoord;
                 days+=1;
                 dayNo[days] = days;
-                var func = function () {
-                    addReminder(jcoord, icoord, days);
+                var func = function() {
+                    addReminder(jcoord, icoord);
                 };
                 drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, func, false);
                 writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
-
+                
             }
         }
     }
@@ -194,10 +184,9 @@ function drawCalendar(daysInMonth, startDay) {
  * 
  * @param {integer} x the x co-ordinate of the box that was clicked.
  * @param {integer} y the y co-ordinate of the box that was clicked.
- * @param {integer} day the day number (as an int) to hold on to.
  * @returns {undefined}
  */
-function addReminder(x, y, day) {
+function addReminder(x, y) {
     var offset = 15;
     //function wrapped so that I can pass arguments without immediate eval.
     var init = function () { refreshInit(daysInMonth(month), startDay); };
@@ -205,21 +194,18 @@ function addReminder(x, y, day) {
      *  will be using the setDate function to do that maybe?
      * @type Date
      */
-    var reminderDate = new Date().toDateString();
-    
-    var j, i;
-    for (j = 0; j < 7; j+=1) {
-        for (i = 0; i < 7; i+=1) {
-            //console.log("Listing saved coords j: " + j + " " + jcoords[j] 
-                    //+ " i: " + i + " " + icoords[i]);
-            if ((icoords[i] === x) && (jcoords[j] === y)) {
-                //console.log("Y is " + i + " and X is " + j);
-            }
-        }
-    }
+    var reminderDate = new Date();
+    var stringReminDate = reminderDate.toDateString();
  
     //debugging code (obviously)
     console.log(dayNo);
+    
+    //Something about this isn't working - I think it's causing
+    // a function to screw up somewhere maybe by removing some kind of
+    // expected end point. Probably want to save previous context and
+    // restore it when done with the reminder.
+    var canvasreminder = 'canvas_2';
+    newCanvas(320, 320, canvasreminder);
     
     //These create the great white square and the boundaries to get rid of it.
     drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");
@@ -227,9 +213,28 @@ function addReminder(x, y, day) {
     singleMouseClick(0, 0, cWidth, 15, init);
     singleMouseClick(cWidth - (offset), 0, offset, cHeight, init);
     singleMouseClick(0, cHeight - (offset), cWidth, offset, init);
+    
     //At the moment, what will be used to select the day for the reminder
-    writeSomethingColour(reminderDate, 50, 40, "12", "blue");
-
+    writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+    
+    var nextDay = function() { 
+        reminderDate.setDate(reminderDate.getDate()+1);
+        clearThis(49, 25, 100, 30);
+        stringReminDate = reminderDate.toDateString();
+        writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+    };   
+    var prevDay = function() { 
+        reminderDate.setDate(reminderDate.getDate()-1);
+        clearThis(49, 25, 100, 30);
+        stringReminDate = reminderDate.toDateString();
+        writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+    };
+    
+    //Need to be encapsulated in a function
+    drawColourRect(25 + 120, 10 + 15, 15, 25, prevDay, true, "#FF0000");
+    writeSomething("<", 30 + 120, 25 + 15, 12);
+    drawColourRect(45 + 120, 10 + 15, 15, 25, nextDay, true, "#FF0000");
+    writeSomething(">", 50 + 120, 25 + 15, 12);
 }
 
 //Find how many days in the month, given month and year.
