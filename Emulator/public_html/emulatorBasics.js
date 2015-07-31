@@ -235,6 +235,18 @@ function returnCanvas(canvasID) {
     return canvas;
 }
 
+/**
+ * Assuming you pass an HTML canvas context object, this
+ * will restore any saved state from the draw stack.
+ * 
+ * @param {type} ctx
+ * @returns {undefined}
+ */
+function restoreCtx(ctx) {
+    console.log("cliiiicked!");
+    ctx.restore();
+}
+
 /*
  * Adds a MouseClick event listener across the given
  * co-ordinates - which it works out like the fillRectangle 

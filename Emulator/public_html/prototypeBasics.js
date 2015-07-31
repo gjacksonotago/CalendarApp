@@ -78,9 +78,9 @@ function setDay() {
  * @returns {undefined}
  */
 function refreshInit() {
-    if(displayType === MONTH) {
+    if (displayType === MONTH) {
         displayMonth(daysInMonth(month), startDay);
-    }else if(displayType === DAY) {
+    } else if (displayType === TODAY) {
         //call day drawing method
     } else if (displayType === WEEK) {
         //call week method
@@ -104,12 +104,12 @@ function displayDay() {
  */
 function displayMonth(daysformonth, startDay) {
     var homeX = 115;
-    var homeY = 294;
+    var homeY = 295;
     var buttonX = (cWidth / 4);
     var buttonY = 310;
     var pixelX = ((buttonX) + homeX / 2);
     var pixelY = (buttonY);
-    
+
     $.get("emulatorBasics.js", function () {
         resetCanvas(oldCanvas);
         //Home button
@@ -118,7 +118,7 @@ function displayMonth(daysformonth, startDay) {
         //Month display rectangle
         drawRect(20, 10, buttonX + 10, 25, "#FF0000");
         writeSomething(stringMonth + " " + year, 25, 25, 12);
-        //Back/forward month buttons
+        //Back & forward month buttons
         drawColourRect(25 + (buttonX + 10), 10,
                 15, 25, reverseMonth, true, "#FF0000");
         writeSomething("<", 30 + (buttonX + 10), 25, 12);
@@ -153,7 +153,7 @@ function drawCalendar(daysInMonth, startDay) {
             if (j === 0) {
                 //Smaller squares for the days of the week at the beginning
                 drawRect((gapSize * i) + 20, (gapSize * j) + 40, 30, 15, "#000000");
-                
+
             } else {
                 //Larger boxes for the actual days - because otherwise a full month
                 //doesn't fit on the "screen"
@@ -169,12 +169,12 @@ function drawCalendar(daysInMonth, startDay) {
             if (j > 0 && days < daysInMonth && beginDays) {
                 var jcoord = (gapSize * j) + 20;
                 var icoord = (gapSize * i) + 20;
-                
+
                 days += 1;
                 dayNo[days] = days;
                 var key = icoord + "" + jcoord;
                 reminderCoords[key] = days;
-              
+
                 //Function wrapped to prevent evaluation on passing as function.
                 //Please don't make this a "new function" ever.
                 var func = function (x, y) {
@@ -203,9 +203,9 @@ function drawCalendar(daysInMonth, startDay) {
 function addReminder(day) {
 
     //ADDING A REMINDER!
-    var key = day + (month+1) + year;
+    var key = day + (month + 1) + year;
     $.get("reminder.js", function () {
-        reminders[key] = new Reminder(day, month+1, year);
+        reminders[key] = new Reminder(day, month + 1, year);
         console.log(reminders[key].print());
     });
     //REMINDER COMPLETE!
@@ -230,48 +230,43 @@ function addReminder(day) {
     // expected end point. Probably want to save previous context and
     // restore it when done with the reminder.
     var canvasreminder = 'canvas_1';
+    var canvas;
     var ctx;
+
     $.get("emulatorBasics.js", function () {
-        ctx = returnCanvas("canvas_1").getContext("2d");
-        ctx.font = 'Arial';
+        canvas = returnCanvas("canvas_1");
+        ctx = canvas.getContext('2d');
         ctx.save();
-        newCanvas(300, 300, 'canvas_1');
-        var canvasRestore = function () {
-            ctx.restore();
-            ctx.beginPath();
+
+        var returnFunc = function () {
+            restoreCtx(ctx);
         };
-        drawColourRect(25 + 120, 10 + 15, 15, 25, canvasRestore, true, "#000000");
-        writeSomethingColour("Click to return!", 30 + 150, 25 + 15, 12, "#000000");
+        newCanvas(320, 320, canvasreminder);
+
+        drawColourRect(25, cHeight - 35, 15, 25, returnFunc, true, "#FFFFFF");
+        writeSomething("Click to return!", 50, cHeight - 15, 12);
+
+        //At the moment, what follows will be used to select the day for the reminder
+        writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+
+        var nextDay = function () {
+            reminderDate.setDate(reminderDate.getDate() + 1);
+            clearThis(49, 25, 92, 30);
+            stringReminDate = reminderDate.toDateString();
+            writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+        };
+        var prevDay = function () {
+            reminderDate.setDate(reminderDate.getDate() - 1);
+            clearThis(49, 25, 92, 30);
+            stringReminDate = reminderDate.toDateString();
+            writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+        };
+        //Need to be encapsulated in a function
+        drawColourRect(25 + 120, 10 + 15, 15, 25, prevDay, true, "#FF0000");
+        writeSomething("<", 30 + 120, 25 + 15, 12);
+        drawColourRect(45 + 120, 10 + 15, 15, 25, nextDay, true, "#FF0000");
+        writeSomething(">", 50 + 120, 25 + 15, 12);
     });
-
-
-    //These create the great white square and the boundaries to get rid of it.
-//    drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");
-//    singleMouseClick(0, 0, offset, cHeight, init);
-//    singleMouseClick(0, 0, cWidth, 15, init);
-//    singleMouseClick(cWidth - (offset), 0, offset, cHeight, init);
-//    singleMouseClick(0, cHeight - (offset), cWidth, offset, init);
-//
-//    //At the moment, what follows will be used to select the day for the reminder
-//    writeSomethingColour(stringReminDate, 50, 40, "12", "black");
-//
-//    var nextDay = function () {
-//        reminderDate.setDate(reminderDate.getDate() + 1);
-//        clearThis(49, 25, 100, 30);
-//        stringReminDate = reminderDate.toDateString();
-//        writeSomethingColour(stringReminDate, 50, 40, "12", "black");
-//    };
-//    var prevDay = function () {
-//        reminderDate.setDate(reminderDate.getDate() - 1);
-//        clearThis(49, 25, 100, 30);
-//        stringReminDate = reminderDate.toDateString();
-//        writeSomethingColour(stringReminDate, 50, 40, "12", "black");
-//    };
-//    //Need to be encapsulated in a function
-//    drawColourRect(25 + 120, 10 + 15, 15, 25, prevDay, true, "#FF0000");
-//    writeSomething("<", 30 + 120, 25 + 15, 12);
-//    drawColourRect(45 + 120, 10 + 15, 15, 25, nextDay, true, "#FF0000");
-//    writeSomething(">", 50 + 120, 25 + 15, 12);
 }
 
 //Find how many days in the month, given month and year.

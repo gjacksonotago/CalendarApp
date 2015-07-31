@@ -3,6 +3,7 @@
  * 
  * @author Ben Ryan
  */
+
 /**
  * 
  * @type @new;_L10
@@ -19,7 +20,8 @@ function Reminder(day, month, year) {
 
     this.newReminder = function (reminder) {
         this.reminders.push(reminder);
-    }
+    };
+    
     //The stupidest syntax ever. Called by "Reminder.print()"
      this.print = function () {
         var s = this.day + "-" + this.month + "-" + this.year;
