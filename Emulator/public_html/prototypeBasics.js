@@ -174,8 +174,10 @@ function drawCalendar(daysInMonth, startDay) {
                 icoords[i] = icoord;
                 days+=1;
                 dayNo[days] = days;
-                var func = new function () {
-                    addReminder(jcoord, icoord, days);
+                //Function wrapped to prevent evaluation on passing as function.
+                //Please don't make this a "new function" ever.
+                var func = function() {
+                    addReminder(jcoord, icoord);
                 };
                 drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, func, false);
                 writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
@@ -208,19 +210,25 @@ function addReminder(x, y) {
     var stringReminDate = reminderDate.toDateString();
  
     //debugging code (obviously)
-    console.log(dayNo);
+    //console.log(dayNo);
     
     //Something about this isn't working - I think it's causing
     // a function to screw up somewhere maybe by removing some kind of
     // expected end point. Probably want to save previous context and
     // restore it when done with the reminder.
-    var canvasreminder = 'canvas_2';
-    var reminderCanvas;
+    var canvasreminder = 'canvas_1';
+    var ctx;
+    
     $.get("emulatorBasics.js", function () {
+        ctx = returnCanvas("canvas_1");
+        ctx.getContext("2d").save();
+        var restore = ctx.getContext("2d").restore();
         newCanvas(320, 320, canvasreminder);
+        drawColourRect(25 + 120, 10 + 15, 15, 25, restore, true, "#FFFFFF");
+        writeSomething("Click to return!", 30 + 120, 25 + 15, 12);
     });
    
-   /* Checking arrays */
+    /* Checking arrays */
     for (i = 0; i < jcoords.length; i+=1) {
         console.log("Jcoord: " + i + " " + jcoords[i]);
     }
@@ -235,7 +243,7 @@ function addReminder(x, y) {
     singleMouseClick(cWidth - (offset), 0, offset, cHeight, init);
     singleMouseClick(0, cHeight - (offset), cWidth, offset, init);
     
-    //At the moment, what will be used to select the day for the reminder
+    //At the moment, what follows will be used to select the day for the reminder
     writeSomethingColour(stringReminDate, 50, 40, "12", "black");
     
     var nextDay = function() { 
