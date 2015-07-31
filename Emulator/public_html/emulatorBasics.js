@@ -100,7 +100,7 @@ function emulatorInitialise() {
         var ampm = createTime().substring(9, 11);
     }
 
-    writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
+    writeSomethingColour(minutes + ampm, 70, 240, 48, '#FFFFFF');
 
     //Emulator full screen event listener(s)
     swipe(false, false, false, false);
@@ -329,6 +329,30 @@ function doubleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     }, false);
 }
 
+//So we can save reminders using the position of the box
+function positionClick(xPosition, yPosition, xSize, ySize, actionTaken) {
+    var canvas = document.getElementById('canvas_1');
+
+    //The mouseclick event listener.
+    canvas.addEventListener('dblclick', function (evt) {
+
+        var mousePos = getMousePos(canvas, evt);
+        message = 'Mouse position: ' + mousePos.x + ', ' +
+                Math.round(mousePos.y);
+        sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' +
+                Math.round(mousePos.y);
+
+        var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
+        var yCalc = (canvasHeight + ySize + yPosition) - canvasHeight;
+
+        //If Mouse Clicked on the Black Square, new message!
+        if (mousePos.x <= xCalc && mousePos.y <= yCalc
+                && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
+            actionTaken(xPosition, yPosition);
+        }
+    }, false);
+}
+
 //Assumes a swipe is a click, mouse held down, then released
 function swipe(actionLeft, actionRight, actionUp, actionDown) {
     var x1, x2, y1, y2;
@@ -413,7 +437,7 @@ function newCanvas(width, height, idNo) {
         + '" id="' + idNo + '" ' + 'style="' +
         'border:5px solid #000000;">' +
         'Canvas Tag not Supported by your browser version!' +
-        '</canvas>';
+        '</canvas> ';
     document.getElementById("canvasDiv").innerHTML = newCanvasString;
 }
 
@@ -441,6 +465,19 @@ function drawClickRect(xPos, yPos, xSize, ySize, actionToTake, sglclick) {
     } else {
         doubleMouseClick(xPos, yPos, xSize, ySize, actionToTake);
     }
+}
+
+/*For reminder storing! */
+//Creates a black rectangle on the canvas with a singleMouseClick listener
+// which listens for 'actionToTake'
+function drawPositionRect(xPos, yPos, xSize, ySize, actionToTake) {
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = "#000000";
+    //Create the rectangle
+    ctx.fillRect(xPos, yPos, xSize, ySize);
+    //Add the clickable listener
+    positionClick(xPos, yPos, xSize, ySize, actionToTake);
 }
 
 function drawColourRect(xPos, yPos, xSize, ySize, actionToTake, sglclick, colour) {

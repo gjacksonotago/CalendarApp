@@ -7,9 +7,19 @@ The stylesheet that we shall make it look pretty with!
 */
 
 #canvas_1 {
-   background-image: url('Frog-and-butterfly.jpg');/* we'll add more, eventually.*/
+    background-image: url('Frog-and-butterfly.jpg');/* we'll add more, eventually.*/
 }
 
-#canvas_2 {
-    background-color: white;
+#reminder { 
+    position: absolute; 
+    left: 145px; 
+    bottom: 130px;  
+    z-index: 1;
+}
+
+#words{
+    position: absolute; 
+    left: 105px; 
+    bottom: 155px;  
+    z-index: 1;
 }

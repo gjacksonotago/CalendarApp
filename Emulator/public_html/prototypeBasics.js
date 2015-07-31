@@ -23,9 +23,9 @@ var startDay = 5;
 var months = 12;
 var year = 2015;
 
-var jcoords = [];
-var icoords = [];
+var reminderCoords = {};//I think i love these things.
 var dayNo = [];
+var reminders = {};//Associative array! e.g reminders['31052015'] = reminder;
 
 //Fake enums for display type settings becuase javascript does not enum properly
 var TODAY = 1000;//arbitrary values (can we make these final/immutable somehow?
@@ -82,7 +82,7 @@ function refreshInit() {
         displayMonth(daysInMonth(month), startDay);
     } else if (displayType === TODAY) {
         //call day drawing method
-    }else if(displayType === WEEK) {
+    } else if (displayType === WEEK) {
         //call week method
     }
 }
@@ -93,8 +93,8 @@ function displayDay() {
     //Home Button: Or back button instead? Just something.
     drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
     writeSomething("Home", pixelX, pixelY, 12);
-    
-    
+
+
 }
 /**
  * @param {int} daysformonth
@@ -146,15 +146,14 @@ function drawCalendar(daysInMonth, startDay) {
     var gapSize = 40;//distance between individual date squares
     var daysOfWeek = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
     dayNo[0] = 0;
-    
+
     var j, i;
-    for (j = 0; j < 7; j+=1) {
-        for (i = 0; i < 7; i+=1) {
+    for (j = 0; j < 7; j += 1) {
+        for (i = 0; i < 7; i += 1) {
             if (j === 0) {
                 //Smaller squares for the days of the week at the beginning
                 drawRect((gapSize * i) + 20, (gapSize * j) + 40, 30, 15, "#000000");
-                jcoords[j] = 0;
-                icoords[i] = 0;
+
             } else {
                 //Larger boxes for the actual days - because otherwise a full month
                 //doesn't fit on the "screen"
@@ -170,17 +169,20 @@ function drawCalendar(daysInMonth, startDay) {
             if (j > 0 && days < daysInMonth && beginDays) {
                 var jcoord = (gapSize * j) + 20;
                 var icoord = (gapSize * i) + 20;
-                jcoords[j] = jcoord;
-                icoords[i] = icoord;
-                days+=1;
+
+                days += 1;
                 dayNo[days] = days;
+                var key = icoord + "" + jcoord;
+                reminderCoords[key] = days;
+
                 //Function wrapped to prevent evaluation on passing as function.
                 //Please don't make this a "new function" ever.
-                var func = function() {
-                    addReminder(jcoord, icoord);
+                var func = function (x, y) {
+                    var r = x + "" + y;
+                    addReminder(reminderCoords[r]);
                 };
-                drawClickRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, func, false);
-                writeSomething(days, (gapSize * i) + 25, (gapSize * j) + 30, 8);
+                drawPositionRect(icoord, jcoord, 30, 30, func);
+                writeSomething(days, icoord + 5, jcoord + 10, 8);
 
             }
         }
@@ -198,20 +200,31 @@ function drawCalendar(daysInMonth, startDay) {
  * @param {integer} y the y co-ordinate of the box that was clicked.
  * @returns {undefined}
  */
-function addReminder(x, y) {
+function addReminder(day) {
+
+    //ADDING A REMINDER!
+    var key = day + (month + 1) + year;
+    $.get("reminder.js", function () {
+        reminders[key] = new Reminder(day, month + 1, year);
+        console.log(reminders[key].print());
+    });
+    //REMINDER COMPLETE!
+
     var offset = 15;
     //function wrapped so that I can pass arguments without immediate eval.
-    var init = function () { refreshInit(daysInMonth(month), startDay); };
+    var init = function () {
+        refreshInit(daysInMonth(month), startDay);
+    };
     /* This I envision to be changed somehow by the user -
      *  will be using the setDate function to do that maybe?
      * @type Date
      */
     var reminderDate = new Date();
     var stringReminDate = reminderDate.toDateString();
- 
+
     //debugging code (obviously)
     //console.log(dayNo);
-    
+
     //Something about this isn't working - I think it's causing
     // a function to screw up somewhere maybe by removing some kind of
     // expected end point. Probably want to save previous context and
@@ -219,16 +232,18 @@ function addReminder(x, y) {
     var canvasreminder = 'canvas_1';
     var canvas;
     var ctx;
-    
+
     $.get("emulatorBasics.js", function () {
         canvas = returnCanvas("canvas_1");
         ctx = canvas.getContext('2d');
         ctx.save();
-        
-        var returnFunc = function() { restoreCtx(ctx); };
+
+        var returnFunc = function () {
+            restoreCtx(ctx);
+        };
         newCanvas(320, 320, canvasreminder);
-        
-        drawColourRect(25, cHeight-35, 15, 25, returnFunc, true, "#FFFFFF");
+
+        drawColourRect(25, cHeight - 35, 15, 25, returnFunc, true, "#FFFFFF");
         writeSomething("Click to return!", 50, cHeight - 15, 12);
 
         //At the moment, what follows will be used to select the day for the reminder
@@ -252,17 +267,7 @@ function addReminder(x, y) {
         drawColourRect(45 + 120, 10 + 15, 15, 25, nextDay, true, "#FF0000");
         writeSomething(">", 50 + 120, 25 + 15, 12);
     });
-   
-    /* Checking arrays */
-    /*for (i = 0; i < jcoords.length; i+=1) {
-        console.log("Jcoord: " + i + " " + jcoords[i]);
-    }
-    for (i = 0; i < icoords.length; i+=1) {
-        console.log("Icoord: " + i + " " + icoords[i]);
-    }*/
 }
-
-
 
 //Find how many days in the month, given month and year.
 function daysInMonth(month, year) {
@@ -383,7 +388,7 @@ function monthToInt(monthString) {
     var stringMonths = ["January", "February", "March", "April", "May",
         "June", "July", "August", "September", "October", "November",
         "December"];
-    for (i = 0; i < 12; i+=1) {
+    for (i = 0; i < 12; i += 1) {
         if (stringMonths[i] === monthString) {
             return i;
         }
