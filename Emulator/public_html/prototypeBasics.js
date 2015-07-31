@@ -94,7 +94,6 @@ function displayDay() {
     drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
     writeSomething("Home", pixelX, pixelY, 12);
 
-
 }
 /**
  * @param {int} daysformonth
@@ -196,9 +195,9 @@ function drawCalendar(daysInMonth, startDay) {
  * 
  * Alerts to be done later, along with recurring events.
  * 
- * @param {integer} x the x co-ordinate of the box that was clicked.
- * @param {integer} y the y co-ordinate of the box that was clicked.
- * @returns {undefined}
+ * @param {integer} day The Day that was clicked on. Used to
+ *                      automatically add a reminder to an associative
+ *                      array.
  */
 function addReminder(day) {
 
@@ -210,20 +209,12 @@ function addReminder(day) {
     });
     //REMINDER COMPLETE!
 
-    var offset = 15;
-    //function wrapped so that I can pass arguments without immediate eval.
-    var init = function () {
-        refreshInit(daysInMonth(month), startDay);
-    };
     /* This I envision to be changed somehow by the user -
      *  will be using the setDate function to do that maybe?
      * @type Date
      */
     var reminderDate = new Date();
     var stringReminDate = reminderDate.toDateString();
-
-    //debugging code (obviously)
-    //console.log(dayNo);
 
     //Something about this isn't working - I think it's causing
     // a function to screw up somewhere maybe by removing some kind of
