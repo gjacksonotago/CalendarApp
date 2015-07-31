@@ -217,53 +217,52 @@ function addReminder(x, y) {
     // expected end point. Probably want to save previous context and
     // restore it when done with the reminder.
     var canvasreminder = 'canvas_1';
+    var canvas;
     var ctx;
     
     $.get("emulatorBasics.js", function () {
-        ctx = returnCanvas("canvas_1");
-        ctx.getContext("2d").save();
-        var restore = ctx.getContext("2d").restore();
+        canvas = returnCanvas("canvas_1");
+        ctx = canvas.getContext('2d');
+        ctx.save();
+        
+        var returnFunc = function() { restoreCtx(ctx); };
         newCanvas(320, 320, canvasreminder);
-        drawColourRect(25 + 120, 10 + 15, 15, 25, restore, true, "#FFFFFF");
-        writeSomething("Click to return!", 30 + 120, 25 + 15, 12);
+        
+        drawColourRect(25, cHeight-35, 15, 25, returnFunc, true, "#FFFFFF");
+        writeSomething("Click to return!", 50, cHeight - 15, 12);
+
+        //At the moment, what follows will be used to select the day for the reminder
+        writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+
+        var nextDay = function () {
+            reminderDate.setDate(reminderDate.getDate() + 1);
+            clearThis(49, 25, 92, 30);
+            stringReminDate = reminderDate.toDateString();
+            writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+        };
+        var prevDay = function () {
+            reminderDate.setDate(reminderDate.getDate() - 1);
+            clearThis(49, 25, 92, 30);
+            stringReminDate = reminderDate.toDateString();
+            writeSomethingColour(stringReminDate, 50, 40, "12", "black");
+        };
+        //Need to be encapsulated in a function
+        drawColourRect(25 + 120, 10 + 15, 15, 25, prevDay, true, "#FF0000");
+        writeSomething("<", 30 + 120, 25 + 15, 12);
+        drawColourRect(45 + 120, 10 + 15, 15, 25, nextDay, true, "#FF0000");
+        writeSomething(">", 50 + 120, 25 + 15, 12);
     });
    
     /* Checking arrays */
-    for (i = 0; i < jcoords.length; i+=1) {
+    /*for (i = 0; i < jcoords.length; i+=1) {
         console.log("Jcoord: " + i + " " + jcoords[i]);
     }
     for (i = 0; i < icoords.length; i+=1) {
         console.log("Icoord: " + i + " " + icoords[i]);
-    }
-    
-    //These create the great white square and the boundaries to get rid of it.
-    drawRect(offset, offset, cWidth - (offset * 2), cHeight - (offset * 2), "#FFFFFF");
-    singleMouseClick(0, 0, offset, cHeight, init);
-    singleMouseClick(0, 0, cWidth, 15, init);
-    singleMouseClick(cWidth - (offset), 0, offset, cHeight, init);
-    singleMouseClick(0, cHeight - (offset), cWidth, offset, init);
-    
-    //At the moment, what follows will be used to select the day for the reminder
-    writeSomethingColour(stringReminDate, 50, 40, "12", "black");
-    
-    var nextDay = function() { 
-        reminderDate.setDate(reminderDate.getDate()+1);
-        clearThis(49, 25, 100, 30);
-        stringReminDate = reminderDate.toDateString();
-        writeSomethingColour(stringReminDate, 50, 40, "12", "black");
-    };   
-    var prevDay = function() { 
-        reminderDate.setDate(reminderDate.getDate()-1);
-        clearThis(49, 25, 100, 30);
-        stringReminDate = reminderDate.toDateString();
-        writeSomethingColour(stringReminDate, 50, 40, "12", "black");
-    };
-    //Need to be encapsulated in a function
-    drawColourRect(25 + 120, 10 + 15, 15, 25, prevDay, true, "#FF0000");
-    writeSomething("<", 30 + 120, 25 + 15, 12);
-    drawColourRect(45 + 120, 10 + 15, 15, 25, nextDay, true, "#FF0000");
-    writeSomething(">", 50 + 120, 25 + 15, 12);
+    }*/
 }
+
+
 
 //Find how many days in the month, given month and year.
 function daysInMonth(month, year) {
