@@ -5,7 +5,7 @@ is where we will host the Emulator and prototype.
 -->
 <html>
     <head>
-        <title>Emulator v 1.17.4</title>
+        <title>Emulator v 1.18.0</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type='text/javascript' src="js/libs/jquery/jquery.js"></script>
@@ -35,16 +35,12 @@ is where we will host the Emulator and prototype.
         imported javascript files. Specifically the emulatorBasics.js -->
         <div id="canvasDiv">
             <canvas width="320" height="320" id="canvas_1" 
-                    style="border:5px solid #000000; z-index: 0;">
+                    style="border:5px solid #000000;">
                 Canvas Tag not supported by your browser version!
             </canvas>
-      
+            <input id="words" type="text" >
+            <button id="reminder">   Enter. </button>
         </div>
-        <!-- The z-index's are supposed to place the buttons above the canvas. However, even this does not work! -->
-        <input type="text"  id="words" value="reminder name" style="z-index: 5; position: relative;">
-        <button style="position: relative;  z-index: 5;"> 
-            Enter. 
-        </button>
 
         <!-- 
         This displays the time on the canvas and updates the mouse 
@@ -52,6 +48,7 @@ is where we will host the Emulator and prototype.
         divShow division. Updates time on mouseover on the canvas! 
         -->
         <script>
+           
             emulatorInitialise();
 
             //Old stuff

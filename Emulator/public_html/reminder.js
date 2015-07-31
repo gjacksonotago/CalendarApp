@@ -3,22 +3,28 @@
  * 
  * @author Ben Ryan
  */
-
 /**
  * 
  * @type @new;_L10
  * 
- * @param {Date} date  The full date for this reminder (day, month, year)
- * @param {String} reminder  The text string that is the reminder
+ * @param {int} day (day, month, year)
+ * @param {int} month 
+ * @param {int} year
  */
-function Reminder(date, reminder) {
-    this.date = date;
-    this.day = date.getDay();
-    this.reminders = [reminder];
-    
-    function newReminder(reminder) {
-        reminders.push(reminder);
+function Reminder(day, month, year) {
+    this.year = year;
+    this.month = month;
+    this.day = day;
+    this.reminders = [];
+
+    this.newReminder = function (reminder) {
+        this.reminders.push(reminder);
     }
+    //The stupidest syntax ever. Called by "Reminder.print()"
+     this.print = function () {
+        var s = this.day + "-" + this.month + "-" + this.year;
+        return s;
+    };
 }
 
 
