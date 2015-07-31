@@ -100,7 +100,7 @@ function emulatorInitialise() {
         var ampm = createTime().substring(9, 11);
     }
 
-    writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
+    writeSomethingColour(minutes + ampm, 70, 240, 48, '#FFFFFF');
 
     //Emulator full screen event listener(s)
     swipe(false, false, false, false);
@@ -225,8 +225,13 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
     }, false);
 }
 
-function returnCanvas() {
-    var canvas = document.getElementById('canvas_1');
+/**
+ * 
+ * @param {String} canvasID
+ * @returns {Element} The canvas identified by canvasID
+ */
+function returnCanvas(canvasID) {
+    var canvas = document.getElementById(canvasID);
     return canvas;
 }
 
@@ -312,7 +317,31 @@ function doubleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     }, false);
 }
 
-//Suppposed to detect a swipe with mouse held down, then released
+//So we can save reminders using the position of the box
+function positionClick(xPosition, yPosition, xSize, ySize, actionTaken) {
+    var canvas = document.getElementById('canvas_1');
+
+    //The mouseclick event listener.
+    canvas.addEventListener('dblclick', function (evt) {
+
+        var mousePos = getMousePos(canvas, evt);
+        message = 'Mouse position: ' + mousePos.x + ', ' +
+                Math.round(mousePos.y);
+        sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' +
+                Math.round(mousePos.y);
+
+        var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
+        var yCalc = (canvasHeight + ySize + yPosition) - canvasHeight;
+
+        //If Mouse Clicked on the Black Square, new message!
+        if (mousePos.x <= xCalc && mousePos.y <= yCalc
+                && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
+            actionTaken(xPosition, yPosition);
+        }
+    }, false);
+}
+
+//Assumes a swipe is a click, mouse held down, then released
 function swipe(actionLeft, actionRight, actionUp, actionDown) {
     var x1, x2, y1, y2;
     var canvas = document.getElementById('canvas_1');
@@ -347,17 +376,17 @@ function swipe(actionLeft, actionRight, actionUp, actionDown) {
 //Finds the direction of a swipe based on two coordinates
 //returns string  up/down left/right     
 function swipeDirection(x1, y1, x2, y2) {
-    var dir = "Swipe Direction: Too diagonal, must be one of up/down/left/right";
+    var dir = "Invalid swipe";
     var error = 50;//how far the mouse can sway in the other axis to main direction
     if (x1 < x2 && Math.abs(y2 - y1) < error)
         dir = "right";
-    else if (x1 > x2 && Math.abs(y2 - y1) < error)
+    else if (x2 < x1 && Math.abs(y2 - y1) < error)
         dir = "left";
     else if (y1 < y2 && Math.abs(x2 - x1) < error)
         dir = "down";
-    else if (y1 > y2 && Math.abs(x2 - x1) < error)
+    else if (y2 < y1 && Math.abs(x2 - x1) < error)
         dir = "up";
-    console.log(dir);
+    //console.log(dir); //Screw this, we know it basically works. Except that invalid swipes happen A LOT.
     return dir;
 }
 
@@ -393,10 +422,10 @@ function resetCanvas(string) {
  */
 function newCanvas(width, height, idNo) {
     var newCanvasString = '<canvas width="' + width + '" height="' + height
-        + '" id="' + idNo + '"' + 'style="' +
+        + '" id="' + idNo + '" ' + 'style="' +
         'border:5px solid #000000;">' +
         'Canvas Tag not Supported by your browser version!' +
-        '</canvas>';
+        '</canvas> ';
     document.getElementById("canvasDiv").innerHTML = newCanvasString;
 }
 
@@ -424,6 +453,19 @@ function drawClickRect(xPos, yPos, xSize, ySize, actionToTake, sglclick) {
     } else {
         doubleMouseClick(xPos, yPos, xSize, ySize, actionToTake);
     }
+}
+
+/*For reminder storing! */
+//Creates a black rectangle on the canvas with a singleMouseClick listener
+// which listens for 'actionToTake'
+function drawPositionRect(xPos, yPos, xSize, ySize, actionToTake) {
+    var c = document.getElementById("canvas_1");
+    var ctx = c.getContext("2d");
+    ctx.fillStyle = "#000000";
+    //Create the rectangle
+    ctx.fillRect(xPos, yPos, xSize, ySize);
+    //Add the clickable listener
+    positionClick(xPos, yPos, xSize, ySize, actionToTake);
 }
 
 function drawColourRect(xPos, yPos, xSize, ySize, actionToTake, sglclick, colour) {

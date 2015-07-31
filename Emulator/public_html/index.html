@@ -5,7 +5,7 @@ is where we will host the Emulator and prototype.
 -->
 <html>
     <head>
-        <title>Emulator v 1.17.3</title>
+        <title>Emulator v 1.18.0</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type='text/javascript' src="js/libs/jquery/jquery.js"></script>
@@ -18,8 +18,8 @@ is where we will host the Emulator and prototype.
         <!-- The text division -->
         <div id="textDescription">
 
-            <h3>Generic Smart Watch Emulator v. 1.17.3</h3>
-           
+            <h3>Generic Smart Watch Emulator</h3>
+
             <!-- This div below shows the mouse click co-ords currently 
             <div id="divShow">Mouse position: No clicks yet!</div> -->
             <p>
@@ -38,8 +38,8 @@ is where we will host the Emulator and prototype.
                     style="border:5px solid #000000;">
                 Canvas Tag not supported by your browser version!
             </canvas>
-            <input type="text"  id="words" value="reminder name"> 
-            <button id="entertext"> Enter. </button>
+            <input id="words" type="text" >
+            <button id="reminder">   Enter. </button>
         </div>
 
         <!-- 
@@ -48,11 +48,12 @@ is where we will host the Emulator and prototype.
         divShow division. Updates time on mouseover on the canvas! 
         -->
         <script>
+           
             emulatorInitialise();
-            
+
             //Old stuff
             //drawToCanvas();
-            
+
             //simply calls mouse event listener functions
             /* Old bit:
              * 
