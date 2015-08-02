@@ -34,10 +34,25 @@ var MONTH = 1002;
 var displayType = MONTH;//Determines which display we want for the calendar (month, day, week)
 //defaults to TODAY.
 
+var savedMonth = month;
+var savedDay = startDay;
+
 //var sizeParam = 1;//probably not going to be used. For changing size of icons relative to canvas size
 
 function getDate() {
     return current;
+}
+
+function saveState(month, startday) {
+    savedMonth = month;
+    savedDay = startday;
+}
+
+function returnToCalendar(month_passed, startday) {
+    month = month_passed;
+    changeMonth(month);
+    startDay = startday;
+    refreshInit(daysInMonth(month), startday);
 }
 
 /**
@@ -93,8 +108,8 @@ function displayDay() {
     //Home Button: Or back button instead? Just something.
     drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
     writeSomething("Home", pixelX, pixelY, 12);
-
 }
+
 /**
  * @param {int} daysformonth
  * @param {int} startDay
@@ -220,8 +235,9 @@ function addReminder(day) {
 
     $.get("emulatorBasics.js", function () {
         newCanvas(320, 320, canvasreminder);
+        saveState(month, startDay);
         var returnFunc = function () {
-            protoInitialise();
+            returnToCalendar(savedMonth, savedDay);
         };
         drawColourRect(25, cHeight - 35, 15, 25, returnFunc, true, "#FFFFFF");
         writeSomething("Click to return!", 50, cHeight - 15, 12);
