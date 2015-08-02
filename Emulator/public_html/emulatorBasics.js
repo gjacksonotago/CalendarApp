@@ -17,14 +17,13 @@ var canvasHeight, canvasHeight;
 var message, sqMes;
 //These string are used for rewriting the canvas to a larger size
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
-        + '" id="' + 'canvas_1"' + 'style="' +
-        'border:5px solid #000000;">' +
+        + '" id="' + 'canvas_1">' +
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
 var canvasString =
         '<canvas width="' + (canvasHeight + 20) + '" height="' + (canvasHeight + 20) +
-        '" id="' + 'canvas_1"' +
-        'style="' + 'border:5px solid #000000;"' + '>' +
+        '" id="' + 'canvas_1">' +
+        'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
 
 //assuming a single string is passed to this function
@@ -445,8 +444,7 @@ function resetCanvas(string) {
  */
 function newCanvas(width, height, idNo) {
     var newCanvasString = '<canvas width="' + width + '" height="' + height
-        + '" id="' + idNo + '" ' + 'style="' +
-        'border:5px solid #000000;">' +
+        + '" id="' + idNo + '" ' + '>' +
         'Canvas Tag not Supported by your browser version!' +
         '</canvas> ' + '<input id=' +'"words"' + 'type="text" >' +
         '<button id="reminder" onclick="myfunc()">   Enter. </button>';
