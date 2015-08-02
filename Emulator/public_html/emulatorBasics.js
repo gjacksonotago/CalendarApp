@@ -27,6 +27,16 @@ var canvasString =
         'style="' + 'border:5px solid #000000;"' + '>' +
         '</canvas>';
 
+//assuming a single string is passed to this function
+// a global variable is assigned that string value.
+// primarily envisioned to handle HTML form input to hand
+// up the chain to the prototype.
+function getFormText() {
+    var text = document.getElementById("words").value;
+    console.log(text);
+    return text;
+}
+
 //Write a message to the canvas. --->An outdate method now, I think. (Ben)
 function writeMessage(canvas, message) {
     var context = canvas.getContext('2d');
@@ -35,6 +45,7 @@ function writeMessage(canvas, message) {
     context.fillStyle = 'black';
     context.fillText(message, 10, 100);
 }
+
 /*
  * This function is used for the mouse cordinates
  */
@@ -438,7 +449,7 @@ function newCanvas(width, height, idNo) {
         'border:5px solid #000000;">' +
         'Canvas Tag not Supported by your browser version!' +
         '</canvas> ' + '<input id=' +'"words"' + 'type="text" >' +
-        '<button id="reminder">   Enter. </button>;'
+        '<button id="reminder" onclick="myfunc()">   Enter. </button>';
     document.getElementById("canvasDiv").innerHTML = newCanvasString;
 }
 

@@ -14,7 +14,6 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         'border:1px solid #000000; z-index: 0;">' +
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
-
 var cWidth = 320;
 var cHeight = 320;
 var month = 4;
@@ -36,6 +35,9 @@ var displayType = MONTH;//Determines which display we want for the calendar (mon
 
 var savedMonth = month;
 var savedDay = startDay;
+var savedYear = year;
+
+var reminderText = "";
 
 //var sizeParam = 1;//probably not going to be used. For changing size of icons relative to canvas size
 
@@ -43,16 +45,26 @@ function getDate() {
     return current;
 }
 
-function saveState(month, startday) {
+function saveState(month, startday, savetheyear) {
     savedMonth = month;
     savedDay = startday;
+    savedYear = savetheyear;
 }
 
-function returnToCalendar(month_passed, startday) {
+function returnToCalendar(month_passed, startday, savetheyear) {
     month = month_passed;
+    year = savetheyear;
     changeMonth(month);
     startDay = startday;
     refreshInit(daysInMonth(month), startday);
+}
+
+function getReminderText() {
+    $("emulatorBasics.js", function () {
+        reminderText = getFormText();
+        console.log("remindertext: " + reminderText);
+        writeSomethingColour(reminderText, 25, cHeight / 4, 15, "#000000");
+    });
 }
 
 /**
@@ -235,12 +247,13 @@ function addReminder(day) {
 
     $.get("emulatorBasics.js", function () {
         newCanvas(320, 320, canvasreminder);
-        saveState(month, startDay);
+        saveState(month, startDay, year);
         var returnFunc = function () {
-            returnToCalendar(savedMonth, savedDay);
+            returnToCalendar(savedMonth, savedDay, savedYear);
         };
         drawColourRect(25, cHeight - 35, 15, 25, returnFunc, true, "#FFFFFF");
         writeSomething("Click to return!", 50, cHeight - 15, 12);
+
         writeSomethingColour(reminderDate, 50, 40, "12", "black");
     });
 }
@@ -259,7 +272,6 @@ function daysInMonth(month, year) {
         return 31;
     }
 }
-
 
 /**
  * This is the function used by clicking the
@@ -302,7 +314,6 @@ function reverseMonth() {
     tmp = startDay - newDays;
     startDay = (((tmp % 7) + 7) % 7); //Sneaky negative modulo trick!
     refreshInit(newDays, startDay);
-
 }
 
 //Enables swiping screen to change the month back and forth.

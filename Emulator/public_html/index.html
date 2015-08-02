@@ -5,12 +5,13 @@ is where we will host the Emulator and prototype.
 -->
 <html>
     <head>
-        <title>Emulator v 1.19.0</title>
+        <title>Emulator v 1.19.1</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type='text/javascript' src="js/libs/jquery/jquery.js"></script>
         <script type='text/javascript' src="js/libs/json3/json3.js"></script>
         <script type='text/javascript' src="emulatorBasics.js"></script>
+        <script type='text/javascript' src="prototypeBasics.js"></script>
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
     </head>
     <body>
@@ -39,7 +40,7 @@ is where we will host the Emulator and prototype.
                 Canvas Tag not supported by your browser version!
             </canvas>
             <input id="words" type="text" >
-            <button id="reminder">   Enter. </button>
+            <button id="reminder" onclick="myfunc()">   Enter. </button>
         </div>
 
         <!-- 
@@ -48,13 +49,17 @@ is where we will host the Emulator and prototype.
         divShow division. Updates time on mouseover on the canvas! 
         -->
         <script>
-           
             emulatorInitialise();
-
+            function myfunc() {
+                console.log("clicked button!");
+                $("prototypeBasics.js", function () {
+                    getReminderText();
+                });
+            }
             //Old stuff
             //drawToCanvas();
 
-            //simply calls mouse event listener functions
+            //simp]ly calls mouse event listener functions
             /* Old bit:
              * 
              * listeners();    
