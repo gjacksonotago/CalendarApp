@@ -26,8 +26,8 @@ is where we will host the Emulator and prototype.
             <p>
                 Below is the canvas element. Right now it's emulating
                 a very primitive mobile OS - should show a black square
-                for an "App" icon.<br> This is clickable and changes the 
-                text above.
+                for an "App" icon.<br> This is clickable and should start our 
+                Application Prototype running.
             </p>
 
         </div>
@@ -50,8 +50,12 @@ is where we will host the Emulator and prototype.
         -->
         <script>
             emulatorInitialise();
+            
+            /* Assumes the prototype is loaded into the scripts on
+             * this page so that it can call a particular function on
+             * the button set up. 
+             */
             function myfunc() {
-                console.log("clicked button!");
                 $("prototypeBasics.js", function () {
                     getReminderText();
                 });
