@@ -437,7 +437,8 @@ function newCanvas(width, height, idNo) {
         + '" id="' + idNo + '" ' + 'style="' +
         'border:5px solid #000000;">' +
         'Canvas Tag not Supported by your browser version!' +
-        '</canvas> ';
+        '</canvas> ' + '<input id=' +'"words"' + 'type="text" >' +
+        '<button id="reminder">   Enter. </button>;'
     document.getElementById("canvasDiv").innerHTML = newCanvasString;
 }
 
