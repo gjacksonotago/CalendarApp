@@ -94,7 +94,6 @@ function displayDay() {
     drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
     writeSomething("Home", pixelX, pixelY, 12);
 
-
 }
 /**
  * @param {int} daysformonth
@@ -196,76 +195,37 @@ function drawCalendar(daysInMonth, startDay) {
  * 
  * Alerts to be done later, along with recurring events.
  * 
- * @param {integer} x the x co-ordinate of the box that was clicked.
- * @param {integer} y the y co-ordinate of the box that was clicked.
- * @returns {undefined}
+ * @param {integer} day The Day that was clicked on. Used to
+ *                      automatically add a reminder to an associative
+ *                      array.
  */
 function addReminder(day) {
 
     //ADDING A REMINDER!
     var key = day + (month + 1) + year;
+    var reminderDate;
     $.get("reminder.js", function () {
         reminders[key] = new Reminder(day, month + 1, year);
+        reminderDate = reminders[key].print();
         console.log(reminders[key].print());
     });
     //REMINDER COMPLETE!
-
-    var offset = 15;
-    //function wrapped so that I can pass arguments without immediate eval.
-    var init = function () {
-        refreshInit(daysInMonth(month), startDay);
-    };
-    /* This I envision to be changed somehow by the user -
-     *  will be using the setDate function to do that maybe?
-     * @type Date
-     */
-    var reminderDate = new Date();
-    var stringReminDate = reminderDate.toDateString();
-
-    //debugging code (obviously)
-    //console.log(dayNo);
-
-    //Something about this isn't working - I think it's causing
-    // a function to screw up somewhere maybe by removing some kind of
-    // expected end point. Probably want to save previous context and
-    // restore it when done with the reminder.
+    
+    //Saving and restoring canvas context doesn't work
+    // as we've not actually drawn anything there. It's 
+    // all javascript, so I just reinitialise the prototype
+    // instead. We'll need to create a custom script to "store"
+    // the current month they were on last to send them back to that.
     var canvasreminder = 'canvas_1';
-    var canvas;
-    var ctx;
 
     $.get("emulatorBasics.js", function () {
-        canvas = returnCanvas("canvas_1");
-        ctx = canvas.getContext('2d');
-        ctx.save();
-
-        var returnFunc = function () {
-            restoreCtx(ctx);
-        };
         newCanvas(320, 320, canvasreminder);
-
+        var returnFunc = function () {
+            protoInitialise();
+        };
         drawColourRect(25, cHeight - 35, 15, 25, returnFunc, true, "#FFFFFF");
         writeSomething("Click to return!", 50, cHeight - 15, 12);
-
-        //At the moment, what follows will be used to select the day for the reminder
-        writeSomethingColour(stringReminDate, 50, 40, "12", "black");
-
-        var nextDay = function () {
-            reminderDate.setDate(reminderDate.getDate() + 1);
-            clearThis(49, 25, 92, 30);
-            stringReminDate = reminderDate.toDateString();
-            writeSomethingColour(stringReminDate, 50, 40, "12", "black");
-        };
-        var prevDay = function () {
-            reminderDate.setDate(reminderDate.getDate() - 1);
-            clearThis(49, 25, 92, 30);
-            stringReminDate = reminderDate.toDateString();
-            writeSomethingColour(stringReminDate, 50, 40, "12", "black");
-        };
-        //Need to be encapsulated in a function
-        drawColourRect(25 + 120, 10 + 15, 15, 25, prevDay, true, "#FF0000");
-        writeSomething("<", 30 + 120, 25 + 15, 12);
-        drawColourRect(45 + 120, 10 + 15, 15, 25, nextDay, true, "#FF0000");
-        writeSomething(">", 50 + 120, 25 + 15, 12);
+        writeSomethingColour(reminderDate, 50, 40, "12", "black");
     });
 }
 
