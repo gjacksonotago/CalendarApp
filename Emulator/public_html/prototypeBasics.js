@@ -59,6 +59,23 @@ function returnToCalendar(month_passed, startday, savetheyear) {
     refreshInit(daysInMonth(month), startday);
 }
 
+/**
+ * A function to get the text from
+ * an HTML input tag and save it locally.
+ * 
+ * It assumes there a) is actually text in the input
+ * field, b) is a button or some other event in the HTML
+ * to call this method, c) the prototype is loaded in the HTML
+ * document so this method may be called and d) that there is 
+ * a return button or something of the sort below cHeight-160
+ * so that is never cleared - and thus that the text will never
+ * be written that far down the canvas without some kind of scroll
+ * bar.
+ * 
+ * Author: George Jackson
+ * 
+ * @returns {undefined}
+ */
 function getReminderText() {
     $("emulatorBasics.js", function () {
         reminderText = getFormText();
