@@ -10,8 +10,7 @@
 
 var current = "";
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
-        + '" id="' + 'canvas_1"' + 'style="' +
-        'border:1px solid #000000; z-index: 0;">' +
+        + '" id="' + 'canvas_1">' +
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
 var cWidth = 320;
@@ -38,6 +37,7 @@ var savedDay = startDay;
 var savedYear = year;
 
 var reminderText = "";
+var remNum = 1;
 
 //var sizeParam = 1;//probably not going to be used. For changing size of icons relative to canvas size
 
@@ -69,8 +69,11 @@ function returnToCalendar(month_passed, startday, savetheyear) {
  * document so this method may be called and d) that there is 
  * a return button or something of the sort below cHeight-160
  * so that is never cleared - and thus that the text will never
- * be written that far down the canvas without some kind of scroll
- * bar.
+ * be written that far down the canvas or has some kind of scroll
+ * bar. 
+ * 
+ * This also relies on the emulator to know what the tags are called
+ * and how/where to find it and grab the text from it.
  * 
  * Author: George Jackson
  * 
@@ -230,6 +233,11 @@ function drawCalendar(daysInMonth, startDay) {
                 };
                 drawPositionRect(icoord, jcoord, 30, 30, func);
                 writeSomething(days, icoord + 5, jcoord + 10, 8);
+                if(hasReminder(reminderCoords[icoord+""+jcoord], month, year)){
+                    var remName = displayReminder(reminderCoords[icoord+""+
+                                jcoord], month, year);
+                    writeSomething(remName, icoord +5, jcoord+25, 8);
+                }
 
             }
         }
@@ -254,6 +262,7 @@ function addReminder(day) {
     var reminderDate;
     $.get("reminder.js", function () {
         reminders[key] = new Reminder(day, month + 1, year);
+        reminders[key].addName("reminder"+remNum++);
         reminderDate = reminders[key].print();
         console.log(reminders[key].print());
     });
@@ -277,6 +286,24 @@ function addReminder(day) {
 
         writeSomethingColour(reminderDate, 50, 40, "12", "black");
     });
+}
+
+
+function hasReminder(day, month, year) {
+    var key = day + (month + 1) + year;
+    if (reminders[key] !== null && reminders[key] !== undefined) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+function displayReminder(day, month, year) {
+    var key = day + (month + 1) + year;
+    if (reminders[key] !== null && reminders[key] !== undefined) {
+        return reminders[key].returnName();
+    }
 }
 
 //Find how many days in the month, given month and year.
