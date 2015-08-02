@@ -63,6 +63,10 @@ function getReminderText() {
     $("emulatorBasics.js", function () {
         reminderText = getFormText();
         console.log("remindertext: " + reminderText);
+        //This is assuming that the return button is a set
+        // height and in the position from the bottom of the
+        // canvas.
+        clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
         writeSomethingColour(reminderText, 25, cHeight / 4, 15, "#000000");
     });
 }
