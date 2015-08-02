@@ -8,6 +8,9 @@ The stylesheet that we shall make it look pretty with!
 
 #canvas_1 {
     background-image: url('Frog-and-butterfly.jpg');/* we'll add more, eventually.*/
+    border: #000000;
+    border-style: solid;
+    border-width: 1px;
 }
 
 #reminder { 
@@ -17,7 +20,7 @@ The stylesheet that we shall make it look pretty with!
     z-index: 1;
 }
 
-#words{
+#words {
     position: absolute; 
     left: 105px; 
     bottom: 155px;  

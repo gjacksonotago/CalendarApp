@@ -5,7 +5,7 @@ is where we will host the Emulator and prototype.
 -->
 <html>
     <head>
-        <title>Emulator v 1.19.2</title>
+        <title>Emulator v 1.20.0</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type='text/javascript' src="js/libs/jquery/jquery.js"></script>
@@ -26,8 +26,8 @@ is where we will host the Emulator and prototype.
             <p>
                 Below is the canvas element. Right now it's emulating
                 a very primitive mobile OS - should show a black square
-                for an "App" icon.<br> This is clickable and changes the 
-                text above.
+                for an "App" icon.<br> This is clickable and should start our 
+                Application Prototype running.
             </p>
 
         </div>
@@ -35,8 +35,7 @@ is where we will host the Emulator and prototype.
         <!-- The actual canvas element - script for editing it is in the
         imported javascript files. Specifically the emulatorBasics.js -->
         <div id="canvasDiv">
-            <canvas width="320" height="320" id="canvas_1" 
-                    style="border:5px solid #000000;">
+            <canvas width="320" height="320" id="canvas_1">
                 Canvas Tag not supported by your browser version!
             </canvas>
             <input id="words" type="text" >
@@ -50,8 +49,12 @@ is where we will host the Emulator and prototype.
         -->
         <script>
             emulatorInitialise();
+            
+            /* Assumes the prototype is loaded into the scripts on
+             * this page so that it can call a particular function on
+             * the button set up. 
+             */
             function myfunc() {
-                console.log("clicked button!");
                 $("prototypeBasics.js", function () {
                     getReminderText();
                 });
