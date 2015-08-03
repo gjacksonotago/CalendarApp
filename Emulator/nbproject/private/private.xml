@@ -3,11 +3,22 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< Updated upstream
             <file>file:/Users/benryan/Desktop/Uni%20Stuff/Cosc345/Project/CalendarApp/Emulator/public_html/emulatorBasics.js</file>
             <file>file:/Users/benryan/Desktop/Uni%20Stuff/Cosc345/Project/CalendarApp/Emulator/public_html/prototypeBasics.js</file>
             <file>file:/Users/benryan/Desktop/Uni%20Stuff/Cosc345/Project/CalendarApp/Emulator/public_html/index.html</file>
             <file>file:/Users/benryan/Desktop/Uni%20Stuff/Cosc345/Project/CalendarApp/Emulator/public_html/CanvasInput-master/CanvasInput.js</file>
             <file>file:/Users/benryan/Desktop/Uni%20Stuff/Cosc345/Project/CalendarApp/Emulator/public_html/stylesheet.css</file>
+        </group>
+    </open-files>
+</project-private>
+>>>>>>> Stashed changes
+=======
+            <file>file:/home/cshome/b/bryan/345/CalendarApp/Emulator/public_html/reminder.js</file>
+            <file>file:/home/cshome/b/bryan/345/CalendarApp/Emulator/public_html/stylesheet.css</file>
+            <file>file:/home/cshome/b/bryan/345/CalendarApp/Emulator/public_html/index.html</file>
+            <file>file:/home/cshome/b/bryan/345/CalendarApp/Emulator/public_html/prototypeBasics.js</file>
+            <file>file:/home/cshome/b/bryan/345/CalendarApp/Emulator/public_html/emulatorBasics.js</file>
         </group>
     </open-files>
 </project-private>
