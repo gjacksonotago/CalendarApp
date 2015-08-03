@@ -207,7 +207,7 @@ function drawCalendar(daysInMonth, startDay) {
             } else {
                 //Larger boxes for the actual days - because otherwise a full month
                 //doesn't fit on the "screen"
-                drawRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, "#FFFFFF");
+                //drawRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, "#FFFFFF");
             }
             //Writes the days of the week text.
             if (j === 0) {

@@ -444,10 +444,11 @@ function resetCanvas(string) {
  */
 function newCanvas(width, height, idNo) {
     var newCanvasString = '<canvas width="' + width + '" height="' + height
-        + '" id="' + idNo + '" ' + '>' +
+        + '" id="' + idNo + '">' +
         'Canvas Tag not Supported by your browser version!' +
-        '</canvas> ' + '<input id=' +'"words"' + 'type="text" >' +
-        '<button id="reminder" onclick="myfunc()">   Enter. </button>';
+        '</canvas>' + '<div style="position: relative;"><input id=' +
+        '"words" type="text;">' +
+        '<button id="reminder" onclick="myfunc()">Enter</button></div>';
     document.getElementById("canvasDiv").innerHTML = newCanvasString;
 }
 
