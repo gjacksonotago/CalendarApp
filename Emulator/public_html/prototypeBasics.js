@@ -289,8 +289,10 @@ function addReminder(day) {
 
 
 function hasReminder(day, month, year) {
-    var key = day + (month + 1) + year;
+    var key = day + "" + (month + 1) + "" + year;
+    
     if (reminders[key] !== null && reminders[key] !== undefined) {
+        console.log("Key is: " + key + " day: " + day +" month: " + month);
         return true;
     } else {
         return false;
@@ -299,7 +301,8 @@ function hasReminder(day, month, year) {
 
 
 function displayReminder(day, month, year) {
-    var key = day + (month + 1) + year;
+    var key = day + "" + (month + 1) + "" + year;
+    console.log("Key is: " + key + " day: " + day +" month: " + month);
     if (reminders[key] !== null && reminders[key] !== undefined) {
         return reminders[key].returnName();
     }
