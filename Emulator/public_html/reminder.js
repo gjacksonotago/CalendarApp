@@ -17,6 +17,8 @@ function Reminder(day, month, year) {
     this.month = month;
     this.day = day;
     this.reminders = [];
+    this.text = "";
+    this.name = "";
 
     this.newReminder = function (reminder) {
         this.reminders.push(reminder);
@@ -26,6 +28,18 @@ function Reminder(day, month, year) {
      this.print = function () {
         var s = this.day + "-" + this.month + "-" + this.year;
         return s;
+    };
+    
+    this.addText = function(string) {
+        this.text = string;
+    };
+    
+    this.addName = function(string) {
+        this.name = string;
+    };
+    
+    this.returnName = function() {
+      return this.name;  
     };
 }
 

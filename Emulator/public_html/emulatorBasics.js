@@ -17,15 +17,24 @@ var canvasHeight, canvasHeight;
 var message, sqMes;
 //These string are used for rewriting the canvas to a larger size
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
-        + '" id="' + 'canvas_1"' + 'style="' +
-        'border:5px solid #000000;">' +
+        + '" id="' + 'canvas_1">' +
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
 var canvasString =
         '<canvas width="' + (canvasHeight + 20) + '" height="' + (canvasHeight + 20) +
-        '" id="' + 'canvas_1"' +
-        'style="' + 'border:5px solid #000000;"' + '>' +
+        '" id="' + 'canvas_1">' +
+        'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
+
+//assuming a single string is passed to this function
+// a global variable is assigned that string value.
+// primarily envisioned to handle HTML form input to hand
+// up the chain to the prototype.
+function getFormText() {
+    var text = document.getElementById("words").value;
+    console.log(text);
+    return text;
+}
 
 //Write a message to the canvas. --->An outdate method now, I think. (Ben)
 function writeMessage(canvas, message) {
@@ -35,6 +44,7 @@ function writeMessage(canvas, message) {
     context.fillStyle = 'black';
     context.fillText(message, 10, 100);
 }
+
 /*
  * This function is used for the mouse cordinates
  */
@@ -434,10 +444,10 @@ function resetCanvas(string) {
  */
 function newCanvas(width, height, idNo) {
     var newCanvasString = '<canvas width="' + width + '" height="' + height
-        + '" id="' + idNo + '" ' + 'style="' +
-        'border:5px solid #000000;">' +
+        + '" id="' + idNo + '" ' + '>' +
         'Canvas Tag not Supported by your browser version!' +
-        '</canvas> ';
+        '</canvas> ' + '<input id=' +'"words"' + 'type="text" >' +
+        '<button id="reminder" onclick="myfunc()">   Enter. </button>';
     document.getElementById("canvasDiv").innerHTML = newCanvasString;
 }
 
