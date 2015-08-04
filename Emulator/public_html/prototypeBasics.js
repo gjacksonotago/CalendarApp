@@ -58,6 +58,7 @@ function returnToCalendar(month_passed, startday, savetheyear) {
     changeMonth(month);
     startDay = startday;
     refreshInit(daysInMonth(month), startday);
+    console.log(reminders);
 }
 
 /**
@@ -81,21 +82,20 @@ function returnToCalendar(month_passed, startday, savetheyear) {
  * @returns {undefined}
  */
 function getReminderText() {
-    $("emulatorBasics.js", function () {
-        reminderText = getFormText();
-        console.log("remindertext: " + reminderText);
-        //This is assuming that the return button is a set
-        // height and in the position from the bottom of the
-        // canvas.
-        //clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
-        
-        //writeSomethingColour(reminderText, 25, cHeight / 4, 15, "#000000");
-        
-    });
-    
-    $("reminder.js", function () {
-        reminders[currentKey].newReminder(reminderText);
-    });
+    //$("emulatorBasics.js", function () {
+    reminderText = getFormText();
+    console.log("remindertext: " + reminderText);
+    //This is assuming that the return button is a set
+    // height and in the position from the bottom of the
+    // canvas.
+    //clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
+
+    writeSomethingColour(reminderText, 25, cHeight / 4, 18, "#000000");
+
+    //});
+
+    reminders[currentKey].newReminder(reminderText);
+
 }
 
 /**
@@ -240,12 +240,12 @@ function drawCalendar(daysInMonth, startDay) {
                 };
                 drawPositionRect(icoord, jcoord, 30, 30, func);
                 writeSomething(days, icoord + 5, jcoord + 10, 8);
-                if(hasReminder(days, month, year)){
+                //console.log(days + " " + month + " " + year);
+                if (hasReminder(days + "" + (month + 1) + "" + year)) {
                     //var remName = displayReminder(days, month, year);
                     //writeSomething(remName, icoord+5, jcoord+25, 8);
-                   drawRect(icoord + 18, jcoord + 18, 12, 12, "red");
+                    drawRect(icoord + 18, jcoord + 18, 12, 12, "red");
                 }
-
             }
         }
     }
@@ -267,15 +267,25 @@ function addReminder(day) {
     //ADDING A REMINDER!
     var key = day + "" + (month + 1) + "" + year;
     currentKey = key;//Store current key in global variable so ww know where to store reminder text
-    var reminderDate;
-    $.get("reminder.js", function () {
+
+    //IF reminder exists, do not overwrite it. I was overwriting it, BAD!
+    if (hasReminder(key)) {
+        var savedReminders = reminders[key].reminders[0];
+        console.log("I have no idea why this doesn't Work george, no idea! \n" + 
+                "Go to line 276 of protoType.");
+        writeSomethingColour(savedReminders, 60, 60, "15", "black");
+
+    } else {
         reminders[key] = new Reminder(day, month + 1, year);
-        reminders[key].addName("reminder"+remNum++);
-        reminderDate = reminders[key].print();
-        console.log(reminders[key].print());
-    });
+        reminders[key].addName("reminder" + remNum++);
+    }
+
+    var reminderDate = reminders[key].print();
+    console.log(reminderDate);
+
     //REMINDER COMPLETE!
-    
+
+
     //Saving and restoring canvas context doesn't work
     // as we've not actually drawn anything there. It's 
     // all javascript, so I just reinitialise the prototype
@@ -291,17 +301,23 @@ function addReminder(day) {
         };
         drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
         writeSomethingColour("Back", 23, cHeight - 20, 12, "black");
-        //writeSomethingColour(reminderDate, 50, 40, "12", "black");
+        writeSomethingColour(reminderDate, 30, 35, "20", "black");
     });
 }
 
 
-function hasReminder(day, month, year) {
-    var key = day + "" + (month + 1) + "" + year;
-    
+function hasReminder(key) {
+    //var key = day + "" + (month + 1) + "" + year;
+
     if (reminders[key] !== null && reminders[key] !== undefined) {
-        console.log("Key is: " + key + " day: " + day +" month: " + month);
-        return true;
+        if (reminders[key].reminders.length > 0) {
+            console.log("Key is: " + key + ", Length is: " + reminders[key].reminders.length);
+            console.log(reminders[key].reminders);
+            return true;
+        } else {
+            console.log("hasReminder() returning false! Key: " + key);
+            return false;
+        }
     } else {
         return false;
     }
@@ -310,7 +326,7 @@ function hasReminder(day, month, year) {
 
 function displayReminder(day, month, year) {
     var key = day + "" + (month + 1) + "" + year;
-    console.log("Key is: " + key + " day: " + day +" month: " + month);
+    console.log("Key is: " + key + " day: " + day + " month: " + month);
     if (reminders[key] !== null && reminders[key] !== undefined) {
         return reminders[key].returnName();
     }
