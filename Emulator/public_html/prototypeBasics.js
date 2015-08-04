@@ -24,6 +24,7 @@ var year = 2015;
 var reminderCoords = {};//I think i love these things.
 var dayNo = [];
 var reminders = {};//Associative array! e.g reminders['31052015'] = reminder;
+var currentKey;//The current key so we can store a reminder in the correct place
 
 //Fake enums for display type settings becuase javascript does not enum properly
 var TODAY = 1000;//arbitrary values (can we make these final/immutable somehow?
@@ -86,8 +87,14 @@ function getReminderText() {
         //This is assuming that the return button is a set
         // height and in the position from the bottom of the
         // canvas.
-        clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
-        writeSomethingColour(reminderText, 25, cHeight / 4, 15, "#000000");
+        //clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
+        
+        //writeSomethingColour(reminderText, 25, cHeight / 4, 15, "#000000");
+        
+    });
+    
+    $("reminder.js", function () {
+        reminders[currentKey].newReminder(reminderText);
     });
 }
 
@@ -182,7 +189,7 @@ function displayMonth(daysformonth, startDay) {
     requestTime();
     writeTime();
     //Allow swipes to change month
-    swipeMonth();
+    //swipeMonth();
 }
 
 /*
@@ -234,8 +241,9 @@ function drawCalendar(daysInMonth, startDay) {
                 drawPositionRect(icoord, jcoord, 30, 30, func);
                 writeSomething(days, icoord + 5, jcoord + 10, 8);
                 if(hasReminder(days, month, year)){
-                    var remName = displayReminder(days, month, year);
-                    writeSomething(remName, icoord+5, jcoord+25, 8);
+                    //var remName = displayReminder(days, month, year);
+                    //writeSomething(remName, icoord+5, jcoord+25, 8);
+                   drawRect(icoord + 18, jcoord + 18, 12, 12, "red");
                 }
 
             }
@@ -257,7 +265,8 @@ function drawCalendar(daysInMonth, startDay) {
 function addReminder(day) {
 
     //ADDING A REMINDER!
-    var key = day + (month + 1) + year;
+    var key = day + "" + (month + 1) + "" + year;
+    currentKey = key;//Store current key in global variable so ww know where to store reminder text
     var reminderDate;
     $.get("reminder.js", function () {
         reminders[key] = new Reminder(day, month + 1, year);
@@ -280,10 +289,9 @@ function addReminder(day) {
         var returnFunc = function () {
             returnToCalendar(savedMonth, savedDay, savedYear);
         };
-        drawColourRect(25, cHeight - 35, 15, 25, returnFunc, true, "#FFFFFF");
-        writeSomething("Click to return!", 50, cHeight - 15, 12);
-
-        writeSomethingColour(reminderDate, 50, 40, "12", "black");
+        drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
+        writeSomethingColour("Back", 23, cHeight - 20, 12, "black");
+        //writeSomethingColour(reminderDate, 50, 40, "12", "black");
     });
 }
 
