@@ -32,7 +32,7 @@ var canvasString =
 // up the chain to the prototype.
 function getFormText() {
     var text = document.getElementById("words").value;
-    console.log(text);
+    //console.log(text);
     return text;
 }
 
@@ -253,7 +253,7 @@ function returnCanvas(canvasID) {
  * @returns {undefined}
  */
 function restoreCtx(ctx) {
-    console.log("cliiiicked!");
+    //console.log("cliiiicked!");
     ctx.restore();
 }
 

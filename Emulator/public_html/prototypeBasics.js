@@ -58,7 +58,7 @@ function returnToCalendar(month_passed, startday, savetheyear) {
     changeMonth(month);
     startDay = startday;
     refreshInit(daysInMonth(month), startday);
-    console.log(reminders);
+    //console.log(reminders);
 }
 
 /**
@@ -189,7 +189,7 @@ function displayMonth(daysformonth, startDay) {
     requestTime();
     writeTime();
     //Allow swipes to change month
-    //swipeMonth();
+    swipeMonth();
 }
 
 /*
@@ -273,7 +273,7 @@ function addReminder(day) {
     }
 
     var reminderDate = reminders[key].print();
-    console.log(reminderDate);
+    //console.log(reminderDate);
 
     //Saving and restoring canvas context doesn't work
     // as we've not actually drawn anything there. It's 
@@ -307,11 +307,11 @@ function hasReminder(key) {
 
     if (reminders[key] !== null && reminders[key] !== undefined) {
         if (reminders[key].reminders.length > 0) {
-            console.log("Key is: " + key + ", Length is: " + reminders[key].reminders.length);
-            console.log(reminders[key].reminders);
+            //console.log("Key is: " + key + ", Length is: " + reminders[key].reminders.length);
+            //console.log(reminders[key].reminders);
             return true;
         } else {
-            console.log("hasReminder() returning false! Key: " + key);
+            //console.log("hasReminder() returning false! Key: " + key);
             return false;
         }
     } else {
@@ -322,7 +322,7 @@ function hasReminder(key) {
 
 function displayReminder(day, month, year) {
     var key = day + "" + (month + 1) + "" + year;
-    console.log("Key is: " + key + " day: " + day + " month: " + month);
+    //console.log("Key is: " + key + " day: " + day + " month: " + month);
     if (reminders[key] !== null && reminders[key] !== undefined) {
         return reminders[key].returnName();
     }
@@ -335,10 +335,10 @@ function daysInMonth(month, year) {
     } else if (month === 1) {
         return 28;
     } else if (month === 3 || month === 5 || month === 8 || month === 10) {
-        console.log("30 days this month" + month);
+        //console.log("30 days this month" + month);
         return 30;
     } else {
-        console.log("31 days this month" + month);
+        //console.log("31 days this month" + month);
         return 31;
     }
 }
@@ -371,7 +371,7 @@ function advanceMonth() {
  * @returns {undefined}
  */
 function reverseMonth() {
-    console.log("reversal: " + month + " " + startDay);
+    //console.log("reversal: " + month + " " + startDay);
     if (month > 0) {
         month--;
         changeMonth(month);
@@ -431,7 +431,7 @@ function monthToString(month) {
     if (month < 12 && month >= 0) {
         return stringMonths[month];
     } else {
-        console.log("Error: Month number out of range (0-11)");
+        //console.log("Error: Month number out of range (0-11)");
     }
 }
 
