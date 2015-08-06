@@ -1,9 +1,9 @@
-/* 
+/*
  * PrototypeBasics.js:
- * 
+ *
  * This file will contain the basics of the Prototype
  * Smartwatch Application we're developing.
- * 
+ *
  * Authors: George Jackson, Ben Ryan
  * Date Created: 24/04/2015
  */
@@ -64,21 +64,21 @@ function returnToCalendar(month_passed, startday, savetheyear) {
 /**
  * A function to get the text from
  * an HTML input tag and save it locally.
- * 
+ *
  * It assumes there a) is actually text in the input
  * field, b) is a button or some other event in the HTML
  * to call this method, c) the prototype is loaded in the HTML
- * document so this method may be called and d) that there is 
+ * document so this method may be called and d) that there is
  * a return button or something of the sort below cHeight-160
  * so that is never cleared - and thus that the text will never
  * be written that far down the canvas or has some kind of scroll
- * bar. 
- * 
+ * bar.
+ *
  * This also relies on the emulator to know what the tags are called
  * and how/where to find it and grab the text from it.
- * 
+ *
  * Author: George Jackson
- * 
+ *
  * @returns {undefined}
  */
 function getReminderText() {
@@ -101,10 +101,10 @@ function getReminderText() {
 /**
  * Initialises the Prototype
  * by calling the refresh method to reset and
- * repaint to the canvas, and then by pulling 
+ * repaint to the canvas, and then by pulling
  * and writing the current time to the canvas in
  * the corner.
- * 
+ *
  * @returns {undefined}
  */
 function protoInitialise() {
@@ -119,7 +119,7 @@ function protoInitialise() {
  * to the first of the month, so that it returns
  * the correct number of the day of the week of
  * the first of the month.
- * 
+ *
  * @returns {Number}
  */
 function setDay() {
@@ -156,7 +156,7 @@ function displayDay() {
 /**
  * @param {int} daysformonth
  * @param {int} startDay
- * 
+ *
  * @returns {undefined}
  */
 function displayMonth(daysformonth, startDay) {
@@ -255,9 +255,9 @@ function drawCalendar(daysInMonth, startDay) {
  * Creates a reminder when a calendar day is double-clicked on.
  * Currently working on being able to have user entered text and
  * date/times.
- * 
+ *
  * Alerts to be done later, along with recurring events.
- * 
+ *
  * @param {integer} day The Day that was clicked on. Used to
  *                      automatically add a reminder to an associative
  *                      array.
@@ -270,34 +270,52 @@ function addReminder(day) {
     if (!hasReminder(key)) {
         reminders[key] = new Reminder(day, month + 1, year);
         reminders[key].addName("reminder" + remNum++);
+        
+        var reminderDate = reminders[key].print();
+        console.log(reminderDate);
+    
+        //Saving and restoring canvas context doesn't work
+        // as we've not actually drawn anything there. It's
+        // all javascript, so I just reinitialise the prototype
+        // instead. We'll need to create a custom script to "store"
+        // the current month they were on last to send them back to that.
+        var canvasreminder = 'canvas_1';
+
+        $.get("emulatorBasics.js", function () {
+            newCanvas(320, 320, canvasreminder, true);
+            saveState(month, startDay, year);
+            var returnFunc = function () {
+                returnToCalendar(savedMonth, savedDay, savedYear);
+            };
+            drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
+            writeSomethingColour("Back", 23, cHeight - 20, 12, "black");
+            writeSomethingColour(reminderDate, 25, 35, "20", "black");
+
+        });
+
+    } else if (hasReminder(key)) {
+        //IF reminder exists, do not overwrite it. I was overwriting it, BAD!
+        var reminderDate = day + " " + monthToString(month) + " " + year;
+        var canvasreminder = 'canvas_1';
+        $.get("emulatorBasics.js", function () {
+            newCanvas(320, 320, canvasreminder, false);
+            saveState(month, startDay, year);
+            var returnFunc = function () {
+                returnToCalendar(savedMonth, savedDay, savedYear);
+            };
+            drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
+            writeSomethingColour("Back", 23, cHeight - 20, 12, "black");
+            writeSomethingColour(reminderDate, 25, 35, "20", "black");
+            
+            //Show all events on that day.
+            var i;
+            for (i = 0; i < reminders[key].reminders.length; i++) {
+                var savedReminders = reminders[key].reminders[i];
+                writeSomethingColour("" + savedReminders, 25, 60+(i*15), "15", "black");
+            }
+        });
     }
 
-    var reminderDate = reminders[key].print();
-    console.log(reminderDate);
-
-    //Saving and restoring canvas context doesn't work
-    // as we've not actually drawn anything there. It's 
-    // all javascript, so I just reinitialise the prototype
-    // instead. We'll need to create a custom script to "store"
-    // the current month they were on last to send them back to that.
-    var canvasreminder = 'canvas_1';
-
-    $.get("emulatorBasics.js", function () {
-        newCanvas(320, 320, canvasreminder);
-        saveState(month, startDay, year);
-        var returnFunc = function () {
-            returnToCalendar(savedMonth, savedDay, savedYear);
-        };
-        drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
-        writeSomethingColour("Back", 23, cHeight - 20, 12, "black");
-        writeSomethingColour(reminderDate, 30, 35, "20", "black");
-
-        //IF reminder exists, do not overwrite it. I was overwriting it, BAD!
-        if (hasReminder(key)) {
-            var savedReminders = reminders[key].reminders[0];
-            writeSomethingColour("" + savedReminders, 60, 60, "15", "black");
-        }
-    });
     //REMINDER COMPLETE!
 }
 
@@ -347,7 +365,7 @@ function daysInMonth(month, year) {
  * This is the function used by clicking the
  * Next Month button to advance the Calendar by
  * a Month.
- * 
+ *
  * @returns {undefined}
  */
 function advanceMonth() {
@@ -365,9 +383,9 @@ function advanceMonth() {
 }
 
 /**
- * Reverses the month by calculating a start day as an offset and populating 
+ * Reverses the month by calculating a start day as an offset and populating
  * the calendar with however many days are in that month.
- * 
+ *
  * @returns {undefined}
  */
 function reverseMonth() {
@@ -397,7 +415,7 @@ function swipeMonth() {
 /**
  * Sets up all the Month related variables,
  * but may not be needed.
- * 
+ *
  * @returns {undefined}
  */
 function initMonth() {
@@ -410,7 +428,7 @@ function initMonth() {
 /**
  * Just a small function to change the
  * month that the calendar is displaying.
- * 
+ *
  * @param {int} month
  * @returns {undefined}
  */
@@ -418,9 +436,9 @@ function changeMonth(month) {
     stringMonth = monthToString(month);
 }
 
-/** 
+/**
  * Changes an integer month value into the name/string version
- * 
+ *
  * @param {int} month
  * @returns {String}
  */
@@ -435,9 +453,9 @@ function monthToString(month) {
     }
 }
 
-/** 
+/**
  * Changes string into integer value for any month
- * 
+ *
  * @param {String} monthString
  * @returns {Number|i}
  */
@@ -456,7 +474,7 @@ function monthToInt(monthString) {
  * Function Wrapped-JQuery Call to the emulator
  * Initialise Function - basically to be used like
  * an "exit" or "back" button out of the app.
- * 
+ *
  * @returns {undefined}
  */
 function returnToEmu() {
@@ -468,8 +486,8 @@ function returnToEmu() {
 /**
  * Function Wrapped JQuery Call to the Emulator
  * to grab the time - and set the prototype variable
- * string to hold the current time. 
- * 
+ * string to hold the current time.
+ *
  * @returns {undefined}
  */
 function requestTime() {
@@ -483,7 +501,7 @@ function requestTime() {
  * to write the time (coloured black) to the canvas.
  * Makes use of the Canvas clearRect method called
  * through JQuery from the emulator script.
- * 
+ *
  * @returns {undefined}
  */
 
@@ -500,7 +518,7 @@ function writeTime() {
  * time and then write that time to the canvas
  * on a 1 second interval. (Hence the name
  * "Polling")
- * 
+ *
  * @returns {undefined}
  */
 function pollTime() {
@@ -509,10 +527,10 @@ function pollTime() {
 }
 
 /**
- * Function Wrapped JQuery call to 
+ * Function Wrapped JQuery call to
  * reset the canvas using the emulator
  * method.
- * 
+ *
  * @returns {undefined}
  */
 function resetWrap() {

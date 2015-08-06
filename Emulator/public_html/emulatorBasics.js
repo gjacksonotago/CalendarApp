@@ -442,14 +442,24 @@ function resetCanvas(string) {
  * @param {type} idNo
  * @returns {undefined}
  */
-function newCanvas(width, height, idNo) {
-    var newCanvasString = '<canvas width="' + width + '" height="' + height
-        + '" id="' + idNo + '">' +
-        'Canvas Tag not Supported by your browser version!' +
-        '</canvas>' + '<div style="position: relative;"><input id=' +
-        '"words" type="text;">' +
-        '<button id="reminder" onclick="myfunc()">Enter</button></div>';
-    document.getElementById("canvasDiv").innerHTML = newCanvasString;
+function newCanvas(width, height, idNo, button) {
+    if (button) {
+        var newCanvasString = '<canvas width="' + width + '" height="' + height
+                + '" id="' + idNo + '">' +
+                'Canvas Tag not Supported by your browser version!' +
+                '</canvas>' + '<div style="position: relative;"><input id=' +
+                '"words" type="text;">' +
+                '<button id="reminder" onclick="myfunc()">Enter</button></div>';
+        document.getElementById("canvasDiv").innerHTML = newCanvasString;
+    } else {
+        var newCanvasString = '<canvas width="' + width + '" height="' + height
+                + '" id="' + idNo + '">' +
+                'Canvas Tag not Supported by your browser version!' +
+                '</canvas>' + '<div style="position: relative;"><input hidden id=' +
+                '"words" type="text;">' +
+                '<button hidden id="reminder" onclick="myfunc()">Enter</button></div>';
+        document.getElementById("canvasDiv").innerHTML = newCanvasString;
+    }
 }
 
 //Draws non clickable rectangle, because they don't all need clicking
