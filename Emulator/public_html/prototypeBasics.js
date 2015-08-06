@@ -263,28 +263,17 @@ function drawCalendar(daysInMonth, startDay) {
  *                      array.
  */
 function addReminder(day) {
-
     //ADDING A REMINDER!
     var key = day + "" + (month + 1) + "" + year;
     currentKey = key;//Store current key in global variable so ww know where to store reminder text
 
-    //IF reminder exists, do not overwrite it. I was overwriting it, BAD!
-    if (hasReminder(key)) {
-        var savedReminders = reminders[key].reminders[0];
-        console.log("I have no idea why this doesn't Work george, no idea! \n" + 
-                "Go to line 276 of protoType.");
-        writeSomethingColour(savedReminders, 60, 60, "15", "black");
-
-    } else {
+    if (!hasReminder(key)) {
         reminders[key] = new Reminder(day, month + 1, year);
         reminders[key].addName("reminder" + remNum++);
     }
 
     var reminderDate = reminders[key].print();
     console.log(reminderDate);
-
-    //REMINDER COMPLETE!
-
 
     //Saving and restoring canvas context doesn't work
     // as we've not actually drawn anything there. It's 
@@ -302,7 +291,14 @@ function addReminder(day) {
         drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
         writeSomethingColour("Back", 23, cHeight - 20, 12, "black");
         writeSomethingColour(reminderDate, 30, 35, "20", "black");
+
+        //IF reminder exists, do not overwrite it. I was overwriting it, BAD!
+        if (hasReminder(key)) {
+            var savedReminders = reminders[key].reminders[0];
+            writeSomethingColour("" + savedReminders, 60, 60, "15", "black");
+        }
     });
+    //REMINDER COMPLETE!
 }
 
 
