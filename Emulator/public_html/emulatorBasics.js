@@ -400,9 +400,9 @@ function swipe(actionLeft, actionRight, actionUp, actionDown) {
 function swipeDirection(x1, y1, x2, y2) {
     var dir = "Invalid swipe";
     var error = 50;//how far the mouse can sway in the other axis to main direction
-    if (x1 > x2 && Math.abs(y2 - y1) < error)
+    if (x1 < x2 && Math.abs(y2 - y1) < error)
         dir = "right";
-    else if (x1 < x2 && Math.abs(y2 - y1) < error)
+    else if (x2 < x1 && Math.abs(y2 - y1) < error)
         dir = "left";
     else if (y1 < y2 && Math.abs(x2 - x1) < error)
         dir = "down";
