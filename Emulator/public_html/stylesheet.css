@@ -8,21 +8,24 @@ The stylesheet that we shall make it look pretty with!
 
 #canvas_1 {
     background-image: url('Frog-and-butterfly.jpg');/* we'll add more, eventually.*/
-    border: #000000;
-    border-style: solid;
-    border-width: 1px;
+    border: #000000 solid 2px;
+}
+
+#canvasDiv {
+    border: 1px solid black;
+    margin-right: 1045px;  
 }
 
 #reminder { 
     position: absolute; 
-    left: 145px; 
+    left: 130px; 
     bottom: 130px;  
     z-index: 1;
 }
 
 #words {
     position: absolute; 
-    left: 105px; 
+    left: 90px; 
     bottom: 155px;  
     z-index: 1;
 }

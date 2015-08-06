@@ -24,6 +24,7 @@ var year = 2015;
 var reminderCoords = {};//I think i love these things.
 var dayNo = [];
 var reminders = {};//Associative array! e.g reminders['31052015'] = reminder;
+var currentKey;//The current key so we can store a reminder in the correct place
 
 //Fake enums for display type settings becuase javascript does not enum properly
 var TODAY = 1000;//arbitrary values (can we make these final/immutable somehow?
@@ -57,6 +58,7 @@ function returnToCalendar(month_passed, startday, savetheyear) {
     changeMonth(month);
     startDay = startday;
     refreshInit(daysInMonth(month), startday);
+    console.log(reminders);
 }
 
 /**
@@ -80,15 +82,20 @@ function returnToCalendar(month_passed, startday, savetheyear) {
  * @returns {undefined}
  */
 function getReminderText() {
-    $("emulatorBasics.js", function () {
-        reminderText = getFormText();
-        console.log("remindertext: " + reminderText);
-        //This is assuming that the return button is a set
-        // height and in the position from the bottom of the
-        // canvas.
-        clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
-        writeSomethingColour(reminderText, 25, cHeight / 4, 15, "#000000");
-    });
+    //$("emulatorBasics.js", function () {
+    reminderText = getFormText();
+    console.log("remindertext: " + reminderText);
+    //This is assuming that the return button is a set
+    // height and in the position from the bottom of the
+    // canvas.
+    //clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
+
+    writeSomethingColour(reminderText, 25, cHeight / 4, 18, "#000000");
+
+    //});
+
+    reminders[currentKey].newReminder(reminderText);
+
 }
 
 /**
@@ -182,7 +189,7 @@ function displayMonth(daysformonth, startDay) {
     requestTime();
     writeTime();
     //Allow swipes to change month
-    swipeMonth();
+    //swipeMonth();
 }
 
 /*
@@ -207,7 +214,7 @@ function drawCalendar(daysInMonth, startDay) {
             } else {
                 //Larger boxes for the actual days - because otherwise a full month
                 //doesn't fit on the "screen"
-                drawRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, "#FFFFFF");
+                //drawRect((gapSize * i) + 20, (gapSize * j) + 20, 30, 30, "#FFFFFF");
             }
             //Writes the days of the week text.
             if (j === 0) {
@@ -233,11 +240,12 @@ function drawCalendar(daysInMonth, startDay) {
                 };
                 drawPositionRect(icoord, jcoord, 30, 30, func);
                 writeSomething(days, icoord + 5, jcoord + 10, 8);
-                if(hasReminder(days, month, year)){
-                    var remName = displayReminder(days, month, year);
-                    writeSomething(remName, icoord+5, jcoord+25, 8);
+                //console.log(days + " " + month + " " + year);
+                if (hasReminder(days + "" + (month + 1) + "" + year)) {
+                    //var remName = displayReminder(days, month, year);
+                    //writeSomething(remName, icoord+5, jcoord+25, 8);
+                    drawRect(icoord + 18, jcoord + 18, 12, 12, "red");
                 }
-
             }
         }
     }
@@ -255,18 +263,18 @@ function drawCalendar(daysInMonth, startDay) {
  *                      array.
  */
 function addReminder(day) {
-
     //ADDING A REMINDER!
-    var key = day + (month + 1) + year;
-    var reminderDate;
-    $.get("reminder.js", function () {
+    var key = day + "" + (month + 1) + "" + year;
+    currentKey = key;//Store current key in global variable so ww know where to store reminder text
+
+    if (!hasReminder(key)) {
         reminders[key] = new Reminder(day, month + 1, year);
-        reminders[key].addName("reminder"+remNum++);
-        reminderDate = reminders[key].print();
-        console.log(reminders[key].print());
-    });
-    //REMINDER COMPLETE!
-    
+        reminders[key].addName("reminder" + remNum++);
+    }
+
+    var reminderDate = reminders[key].print();
+    console.log(reminderDate);
+
     //Saving and restoring canvas context doesn't work
     // as we've not actually drawn anything there. It's 
     // all javascript, so I just reinitialise the prototype
@@ -280,20 +288,32 @@ function addReminder(day) {
         var returnFunc = function () {
             returnToCalendar(savedMonth, savedDay, savedYear);
         };
-        drawColourRect(25, cHeight - 35, 15, 25, returnFunc, true, "#FFFFFF");
-        writeSomething("Click to return!", 50, cHeight - 15, 12);
+        drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
+        writeSomethingColour("Back", 23, cHeight - 20, 12, "black");
+        writeSomethingColour(reminderDate, 30, 35, "20", "black");
 
-        writeSomethingColour(reminderDate, 50, 40, "12", "black");
+        //IF reminder exists, do not overwrite it. I was overwriting it, BAD!
+        if (hasReminder(key)) {
+            var savedReminders = reminders[key].reminders[0];
+            writeSomethingColour("" + savedReminders, 60, 60, "15", "black");
+        }
     });
+    //REMINDER COMPLETE!
 }
 
 
-function hasReminder(day, month, year) {
-    var key = day + "" + (month + 1) + "" + year;
-    
+function hasReminder(key) {
+    //var key = day + "" + (month + 1) + "" + year;
+
     if (reminders[key] !== null && reminders[key] !== undefined) {
-        console.log("Key is: " + key + " day: " + day +" month: " + month);
-        return true;
+        if (reminders[key].reminders.length > 0) {
+            console.log("Key is: " + key + ", Length is: " + reminders[key].reminders.length);
+            console.log(reminders[key].reminders);
+            return true;
+        } else {
+            console.log("hasReminder() returning false! Key: " + key);
+            return false;
+        }
     } else {
         return false;
     }
@@ -302,7 +322,7 @@ function hasReminder(day, month, year) {
 
 function displayReminder(day, month, year) {
     var key = day + "" + (month + 1) + "" + year;
-    console.log("Key is: " + key + " day: " + day +" month: " + month);
+    console.log("Key is: " + key + " day: " + day + " month: " + month);
     if (reminders[key] !== null && reminders[key] !== undefined) {
         return reminders[key].returnName();
     }
