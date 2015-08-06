@@ -268,8 +268,9 @@ function addReminder(day) {
         var savedReminders = reminders[key].reminders[0];
         console.log("I have no idea why this doesn't Work george, no idea! \n" +
                 "Go to line 276 of protoType.");
-        writeSomethingColour(savedReminders, 60, 60, "15", "black");
-
+        $.get("emulatorBasics.js", function () {
+            writeSomethingColour(""+savedReminders, 60, 60, "15", "black");
+        });
     } else {
         reminders[key] = new Reminder(day, month + 1, year);
         reminders[key].addName("reminder" + remNum++);
