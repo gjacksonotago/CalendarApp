@@ -265,14 +265,18 @@ function drawCalendar(daysInMonth, startDay) {
 function addReminder(day) {
     //ADDING A REMINDER!
     var key = day + "" + (month + 1) + "" + year;
-    currentKey = key;//Store current key in global variable so ww know where to store reminder text
+    //Store current key in global variable so we know where to store reminder text
+    currentKey = key;
+    //Offset "Magic Numbers" - note the NewEvent call can't use these
+    //and is hardcoded
+    var backXOffset = 22;
+    var textXOffset = 25;
 
     if (!hasReminder(key)) {
         reminders[key] = new Reminder(day, month + 1, year);
         reminders[key].addName("reminder" + remNum++);
         
         var reminderDate = reminders[key].print();
-        console.log(reminderDate);
     
         //Saving and restoring canvas context doesn't work
         // as we've not actually drawn anything there. It's
@@ -288,30 +292,46 @@ function addReminder(day) {
                 returnToCalendar(savedMonth, savedDay, savedYear);
             };
             drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
-            writeSomethingColour("Back", 23, cHeight - 20, 12, "black");
-            writeSomethingColour(reminderDate, 25, 35, "20", "black");
-
+            writeSomethingColour("Back", backXOffset, cHeight - 20, 12, "black");
+            writeSomethingColour("New Event for " + reminderDate, textXOffset, 35, "20", "black");
         });
 
     } else if (hasReminder(key)) {
         //IF reminder exists, do not overwrite it. I was overwriting it, BAD!
         var reminderDate = day + " " + monthToString(month) + " " + year;
         var canvasreminder = 'canvas_1';
+        
         $.get("emulatorBasics.js", function () {
             newCanvas(320, 320, canvasreminder, false);
             saveState(month, startDay, year);
+            //Return Button
             var returnFunc = function () {
                 returnToCalendar(savedMonth, savedDay, savedYear);
             };
             drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
-            writeSomethingColour("Back", 23, cHeight - 20, 12, "black");
-            writeSomethingColour(reminderDate, 25, 35, "20", "black");
+            writeSomethingColour("Back", backXOffset, cHeight - 20, 12, "black");
+            
+            //The "add new event" button
+            var newEvent = function () {
+                newCanvas(320, 320, canvasreminder, true);
+                var returnFunc = function () {
+                    returnToCalendar(savedMonth, savedDay, savedYear);
+                };
+                drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
+                writeSomethingColour("Back", 22, cHeight - 20, 12, "black");
+                writeSomethingColour("New Event for " + reminderDate, 25, 35, "20", "black");
+            };
+            
+            drawColourRect(cWidth-50, cHeight - 30, 30, 15, newEvent, true, "#FFFFFF");
+            writeSomethingColour("New", cWidth-47, cHeight - 20, 12, "black");
+            //What day is it?
+            writeSomethingColour("Events for " + reminderDate, textXOffset, 35, "20", "black");
             
             //Show all events on that day.
             var i;
             for (i = 0; i < reminders[key].reminders.length; i++) {
                 var savedReminders = reminders[key].reminders[i];
-                writeSomethingColour("" + savedReminders, 25, 60+(i*15), "15", "black");
+                writeSomethingColour("" + savedReminders, textXOffset, 60+(i*25), "15", "black");
             }
         });
     }

@@ -96,7 +96,6 @@ function emulatorInitialise() {
     //Create the Canvas stuff
     resetCanvas(oldCanvas);
     var c = document.getElementById("canvas_1");
-    var ctx = c.getContext("2d");
     canvasWidth = c.width;
     canvasHeight = c.height;
     var offset = 60;
