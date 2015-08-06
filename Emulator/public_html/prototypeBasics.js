@@ -82,6 +82,7 @@ function returnToCalendar(month_passed, startday, savetheyear) {
  * @returns {undefined}
  */
 function getReminderText() {
+    //$("emulatorBasics.js", function () {
     reminderText = getFormText();
     console.log("remindertext: " + reminderText);
     //This is assuming that the return button is a set
@@ -91,7 +92,10 @@ function getReminderText() {
 
     writeSomethingColour(reminderText, 25, cHeight / 4, 18, "#000000");
 
+    //});
+
     reminders[currentKey].newReminder(reminderText);
+
 }
 
 /**
@@ -163,28 +167,29 @@ function displayMonth(daysformonth, startDay) {
     var pixelX = ((buttonX) + homeX / 2);
     var pixelY = (buttonY);
 
-    resetCanvas(oldCanvas);
-    //Home button
-    drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
-    writeSomething("Home", pixelX, pixelY, 12);
-    //Month display rectangle
-    drawRect(20, 10, buttonX + 10, 25, "#FF0000");
-    writeSomething(stringMonth + " " + year, 25, 25, 12);
-    //Back & forward month buttons
-    drawColourRect(25 + (buttonX + 10), 10,
-            15, 25, reverseMonth, true, "#FF0000");
-    writeSomething("<", 30 + (buttonX + 10), 25, 12);
-    drawColourRect(45 + (buttonX + 10), 10,
-            15, 25, advanceMonth, true, "#FF0000");
-    writeSomething(">", 50 + (buttonX + 10), 25, 12);
-    //days of month for month display
-    drawCalendar(daysformonth, startDay);
+    $.get("emulatorBasics.js", function () {
+        resetCanvas(oldCanvas);
+        //Home button
+        drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
+        writeSomething("Home", pixelX, pixelY, 12);
+        //Month display rectangle
+        drawRect(20, 10, buttonX + 10, 25, "#FF0000");
+        writeSomething(stringMonth + " " + year, 25, 25, 12);
+        //Back & forward month buttons
+        drawColourRect(25 + (buttonX + 10), 10,
+                15, 25, reverseMonth, true, "#FF0000");
+        writeSomething("<", 30 + (buttonX + 10), 25, 12);
+        drawColourRect(45 + (buttonX + 10), 10,
+                15, 25, advanceMonth, true, "#FF0000");
+        writeSomething(">", 50 + (buttonX + 10), 25, 12);
+        //days of month for month display
+        drawCalendar(daysformonth, startDay);
 
+    });
     requestTime();
     writeTime();
-
     //Allow swipes to change month
-    swipeMonth();
+    //swipeMonth();
 }
 
 /*
@@ -258,28 +263,17 @@ function drawCalendar(daysInMonth, startDay) {
  *                      array.
  */
 function addReminder(day) {
-
     //ADDING A REMINDER!
     var key = day + "" + (month + 1) + "" + year;
     currentKey = key;//Store current key in global variable so ww know where to store reminder text
 
-    //IF reminder exists, do not overwrite it. I was overwriting it, BAD!
-    if (hasReminder(key)) {
-        var savedReminders = reminders[key].reminders[0];
-        console.log("I have no idea why this doesn't Work george, no idea! \n" +
-                "Go to line 276 of protoType.");
-        writeSomethingColour(savedReminders, 60, 60, "15", "black");
-
-    } else {
+    if (!hasReminder(key)) {
         reminders[key] = new Reminder(day, month + 1, year);
         reminders[key].addName("reminder" + remNum++);
     }
 
     var reminderDate = reminders[key].print();
     console.log(reminderDate);
-
-    //REMINDER COMPLETE!
-
 
     //Saving and restoring canvas context doesn't work
     // as we've not actually drawn anything there. It's 
@@ -288,14 +282,23 @@ function addReminder(day) {
     // the current month they were on last to send them back to that.
     var canvasreminder = 'canvas_1';
 
-    newCanvas(320, 320, canvasreminder);
-    saveState(month, startDay, year);
-    var returnFunc = function () {
-        returnToCalendar(savedMonth, savedDay, savedYear);
-    };
-    drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
-    writeSomethingColour("Back", 23, cHeight - 20, 12, "black");
-    writeSomethingColour(reminderDate, 30, 35, "20", "black");
+    $.get("emulatorBasics.js", function () {
+        newCanvas(320, 320, canvasreminder);
+        saveState(month, startDay, year);
+        var returnFunc = function () {
+            returnToCalendar(savedMonth, savedDay, savedYear);
+        };
+        drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
+        writeSomethingColour("Back", 23, cHeight - 20, 12, "black");
+        writeSomethingColour(reminderDate, 30, 35, "20", "black");
+
+        //IF reminder exists, do not overwrite it. I was overwriting it, BAD!
+        if (hasReminder(key)) {
+            var savedReminders = reminders[key].reminders[0];
+            writeSomethingColour("" + savedReminders, 60, 60, "15", "black");
+        }
+    });
+    //REMINDER COMPLETE!
 }
 
 
@@ -385,8 +388,10 @@ function reverseMonth() {
 
 //Enables swiping screen to change the month back and forth.
 function swipeMonth() {
-    //Returns undefined because there's no swipe on initialisation.
-    swipe(reverseMonth, advanceMonth, false, false);
+    $.get("emulatorBasics.js", function () {
+        //Returns undefined because there's no swipe on initialisation.
+        swipe(reverseMonth, advanceMonth, false, false);
+    });
 }
 
 /**
@@ -396,8 +401,10 @@ function swipeMonth() {
  * @returns {undefined}
  */
 function initMonth() {
-    stringMonth = monthToString(currentMonth());
-    month = currentMonth();
+    $.get("emulatorBasics.js", function () {
+        stringMonth = monthToString(currentMonth());
+        month = currentMonth();
+    });
 }
 
 /**
@@ -453,7 +460,9 @@ function monthToInt(monthString) {
  * @returns {undefined}
  */
 function returnToEmu() {
-    emulatorInitialise();
+    $.get("emulatorBasics.js", function () {
+        emulatorInitialise();
+    });
 }
 
 /**
@@ -464,7 +473,9 @@ function returnToEmu() {
  * @returns {undefined}
  */
 function requestTime() {
-    current = createTime();
+    $.get("emulatorBasics.js", function () {
+        current = createTime();
+    });
 }
 
 /**
@@ -477,8 +488,10 @@ function requestTime() {
  */
 
 function writeTime() {
-    clearThis(cWidth - (cWidth / 4), 15, 125, 15);
-    writeSomethingColour(current.substring(0, 11), cWidth - (cWidth / 4), 25, 12, "#000000");
+    $.get("emulatorBasics.js", function () {
+        clearThis(cWidth - (cWidth / 4), 15, 125, 15);
+        writeSomethingColour(current.substring(0, 11), cWidth - (cWidth / 4), 25, 12, "#000000");
+    });
 }
 
 
