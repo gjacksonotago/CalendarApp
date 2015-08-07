@@ -28,3 +28,15 @@ The stylesheet that we shall make it look pretty with!
     bottom: 65px;  
     z-index: 1;
 }
+
+p {
+    font-size: 15px;
+    font-family: serif;
+    color: black;
+    
+    margin-top: 2em;
+    margin-bottom: 2em;
+    margin-left: 0;
+    margin-right: .5em;
+    
+}
