@@ -83,7 +83,6 @@ function returnToCalendar(month_passed, startday, savetheyear) {
  * @returns {undefined}
  */
 function getReminderText() {
-    //$("emulatorBasics.js", function () {
     reminderText = getFormText();
     console.log("remindertext: " + reminderText);
     //This is assuming that the return button is a set
@@ -91,7 +90,6 @@ function getReminderText() {
     // canvas.
     //clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
     writeSomethingColour(reminderText, 25, cHeight / 4, 18, "#000000");
-    //});
     reminders[currentKey].newReminder(reminderText);
 }
 
