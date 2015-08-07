@@ -12,7 +12,6 @@ The stylesheet that we shall make it look pretty with!
 }
 
 #canvasDiv {
-    border: 1px solid black;
     margin-right: 1045px;  
 }
 
@@ -28,4 +27,16 @@ The stylesheet that we shall make it look pretty with!
     left: 90px; 
     bottom: 65px;  
     z-index: 1;
+}
+
+p {
+    font-size: 15px;
+    font-family: serif;
+    color: black;
+    
+    margin-top: 2em;
+    margin-bottom: 2em;
+    margin-left: 0;
+    margin-right: .5em;
+    
 }

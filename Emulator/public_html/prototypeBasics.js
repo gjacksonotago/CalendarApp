@@ -20,6 +20,7 @@ var stringMonth = "May";
 var startDay = 5;
 var months = 12;
 var year = 2015;
+var clock;
 
 var reminderCoords = {};//I think i love these things.
 var dayNo = [];
@@ -82,20 +83,14 @@ function returnToCalendar(month_passed, startday, savetheyear) {
  * @returns {undefined}
  */
 function getReminderText() {
-    //$("emulatorBasics.js", function () {
     reminderText = getFormText();
     console.log("remindertext: " + reminderText);
     //This is assuming that the return button is a set
     // height and in the position from the bottom of the
     // canvas.
     //clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
-
     writeSomethingColour(reminderText, 25, cHeight / 4, 18, "#000000");
-
-    //});
-
     reminders[currentKey].newReminder(reminderText);
-
 }
 
 /**
@@ -111,7 +106,7 @@ function protoInitialise() {
     initMonth();
     startDay = setDay();
     refreshInit(daysInMonth(month), startDay);
-    //pollTime();
+    clock = setInterval(writeTime, 1000);
 }
 
 /**
@@ -149,7 +144,7 @@ function displayDay() {
     var homeX = 115;
     var homeY = 295;
     //Home Button: Or back button instead? Just something.
-    drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
+    drawClickRect(homeX, homeY, 15, 25, returnToEmu, true);
     writeSomething("Home", pixelX, pixelY, 12);
 }
 
@@ -186,8 +181,6 @@ function displayMonth(daysformonth, startDay) {
         drawCalendar(daysformonth, startDay);
 
     });
-    requestTime();
-    writeTime();
     //Allow swipes to change month
     swipeMonth();
 }
@@ -297,7 +290,7 @@ function addReminder(day) {
         });
 
     } else if (hasReminder(key)) {
-        //IF reminder exists, do not overwrite it. I was overwriting it, BAD!
+        //If there are reminders, show an Event View of the day clicked on.
         var reminderDate = day + " " + monthToString(month) + " " + year;
         var canvasreminder = 'canvas_1';
         
@@ -314,6 +307,7 @@ function addReminder(day) {
             //The "add new event" button
             var newEvent = function () {
                 newCanvas(320, 320, canvasreminder, true);
+                
                 var returnFunc = function () {
                     returnToCalendar(savedMonth, savedDay, savedYear);
                 };
@@ -498,21 +492,9 @@ function monthToInt(monthString) {
  * @returns {undefined}
  */
 function returnToEmu() {
+    clearInterval(clock);
     $.get("emulatorBasics.js", function () {
         emulatorInitialise();
-    });
-}
-
-/**
- * Function Wrapped JQuery Call to the Emulator
- * to grab the time - and set the prototype variable
- * string to hold the current time.
- *
- * @returns {undefined}
- */
-function requestTime() {
-    $.get("emulatorBasics.js", function () {
-        current = createTime();
     });
 }
 
@@ -528,6 +510,7 @@ function requestTime() {
 function writeTime() {
     $.get("emulatorBasics.js", function () {
         clearThis(cWidth - (cWidth / 4), 15, 125, 15);
+        current = createTime();
         writeSomethingColour(current.substring(0, 11), cWidth - (cWidth / 4), 25, 12, "#000000");
     });
 }
