@@ -189,7 +189,7 @@ function displayMonth(daysformonth, startDay) {
     requestTime();
     writeTime();
     //Allow swipes to change month
-    //swipeMonth();
+    swipeMonth();
 }
 
 /*
