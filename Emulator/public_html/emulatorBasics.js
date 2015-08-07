@@ -26,6 +26,8 @@ var canvasString =
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
 
+var clock;
+
 //assuming a single string is passed to this function
 // a global variable is assigned that string value.
 // primarily envisioned to handle HTML form input to hand
@@ -100,16 +102,7 @@ function emulatorInitialise() {
     canvasHeight = c.height;
     var offset = 60;
 
-    //updateTime();//Will use this method instead of below once we get it working
-    if (createTime().substring(1, 2) === ':') {
-        var minutes = createTime().substring(0, 4);
-        var ampm = createTime().substring(8, 10);
-    } else {
-        var minutes = createTime().substring(0, 5);
-        var ampm = createTime().substring(9, 11);
-    }
-
-    writeSomethingColour(minutes + ampm, 70, 240, 48, '#FFFFFF');
+    clock = setInterval(updateTime, 1000);
 
     //Emulator full screen event listener(s)
     swipe(false, false, false, false);
@@ -131,10 +124,10 @@ function emulatorInitialise() {
 //Keeps the clock ticking, not the way to go, but a start. Goes back to home screen from calendar
 //Will find a way to not do that, until then, nevermind.
 function updateTime() {
-    clearThis(50, 180, 250, 100);
-    var minutes = createTime().substring(0, 4);
-    var ampm = createTime().substring(8, 10);
-    writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
+    clearThis(40, 180, 280, 100);
+    //var minutes = createTime().substring(0, 4);
+    //var ampm = createTime().substring(8, 10);
+    writeSomethingColour(createTime(), 40, 250, 44, '#FFFFFF');
 }
 
 function clearThis(xPos, yPos, xSize, ySize) {
@@ -179,6 +172,7 @@ function protoClick() {
     var init = $.get("prototypeBasics.js", function () {
         protoInitialise();
     });
+    clearInterval(clock);
     init;
 }
 
@@ -252,7 +246,7 @@ function returnCanvas(canvasID) {
  * @returns {undefined}
  */
 function restoreCtx(ctx) {
-    console.log("cliiiicked!");
+    //console.log("cliiiicked!");
     ctx.restore();
 }
 
