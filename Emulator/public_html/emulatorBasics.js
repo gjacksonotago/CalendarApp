@@ -26,6 +26,8 @@ var canvasString =
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
 
+var clock;
+
 //assuming a single string is passed to this function
 // a global variable is assigned that string value.
 // primarily envisioned to handle HTML form input to hand
@@ -96,21 +98,11 @@ function emulatorInitialise() {
     //Create the Canvas stuff
     resetCanvas(oldCanvas);
     var c = document.getElementById("canvas_1");
-    var ctx = c.getContext("2d");
     canvasWidth = c.width;
     canvasHeight = c.height;
     var offset = 60;
 
-    //updateTime();//Will use this method instead of below once we get it working
-    if (createTime().substring(1, 2) === ':') {
-        var minutes = createTime().substring(0, 4);
-        var ampm = createTime().substring(8, 10);
-    } else {
-        var minutes = createTime().substring(0, 5);
-        var ampm = createTime().substring(9, 11);
-    }
-
-    writeSomethingColour(minutes + ampm, 70, 240, 48, '#FFFFFF');
+    clock = setInterval(updateTime, 1000);
 
     //Emulator full screen event listener(s)
     swipe(false, false, false, false);
@@ -132,10 +124,10 @@ function emulatorInitialise() {
 //Keeps the clock ticking, not the way to go, but a start. Goes back to home screen from calendar
 //Will find a way to not do that, until then, nevermind.
 function updateTime() {
-    clearThis(50, 180, 250, 100); 
-    var minutes = createTime().substring(0, 4);
-    var ampm = createTime().substring(8, 10);
-    writeSomethingColour(minutes + ampm, 80, 240, 48, '#FFFFFF');
+    clearThis(40, 180, 280, 100);
+    //var minutes = createTime().substring(0, 4);
+    //var ampm = createTime().substring(8, 10);
+    writeSomethingColour(createTime(), 40, 250, 44, '#FFFFFF');
 }
 
 function clearThis(xPos, yPos, xSize, ySize) {
@@ -180,6 +172,7 @@ function protoClick() {
     var init = $.get("prototypeBasics.js", function () {
         protoInitialise();
     });
+    clearInterval(clock);
     init;
 }
 
@@ -253,7 +246,7 @@ function returnCanvas(canvasID) {
  * @returns {undefined}
  */
 function restoreCtx(ctx) {
-    console.log("cliiiicked!");
+    //console.log("cliiiicked!");
     ctx.restore();
 }
 
@@ -395,6 +388,44 @@ function swipe(actionLeft, actionRight, actionUp, actionDown) {
     });
 }
 
+//Assumes a swipe is a click, mouse held down, then released
+function swipeArea(actionLeft, actionRight, actionUp, actionDown, areaX,
+        areaY, lenX, lenY) {
+    var x1, x2, y1, y2;
+    var canvas = document.getElementById('canvas_1');
+    //The mousedown event listener.
+
+    canvas.addEventListener('mousedown', function (evt) {
+        var mousePos1 = getMousePos(canvas, evt);
+        x1 = mousePos1.x;
+        y1 = mousePos1.y;
+    });
+    if (x1 > areaX && x1 < areaX + lenX, y1 > areaY &&
+            y1 < areaY + lenY) {
+        //The mouseup event listener.
+        canvas.addEventListener('mouseup', function (evt) {
+            var mousePos2 = getMousePos(canvas, evt);
+            x2 = mousePos2.x;
+            y2 = mousePos2.y;
+
+            var dir = swipeDirection(x1, y1, x2, y2);
+            if (actionLeft !== false && dir === "left") {
+                actionLeft();
+            }
+            if (actionRight !== false && dir === "right") {
+                actionRight();
+            }
+            if (actionUp !== false && dir === "up") {
+                actionUp();
+            }
+            if (actionDown !== false && dir === "down") {
+                actionDown();
+            }
+            return dir;
+        });
+    }
+}
+
 //Finds the direction of a swipe based on two coordinates
 //returns string  up/down left/right     
 function swipeDirection(x1, y1, x2, y2) {
@@ -442,13 +473,24 @@ function resetCanvas(string) {
  * @param {type} idNo
  * @returns {undefined}
  */
-function newCanvas(width, height, idNo) {
-    var newCanvasString = '<canvas width="' + width + '" height="' + height
-        + '" id="' + idNo + '" ' + '>' +
-        'Canvas Tag not Supported by your browser version!' +
-        '</canvas> ' + '<input id=' +'"words"' + 'type="text" >' +
-        '<button id="reminder" onclick="myfunc()">   Enter. </button>';
-    document.getElementById("canvasDiv").innerHTML = newCanvasString;
+function newCanvas(width, height, idNo, button) {
+    if (button) {
+        var newCanvasString = '<canvas width="' + width + '" height="' + height
+                + '" id="' + idNo + '">' +
+                'Canvas Tag not Supported by your browser version!' +
+                '</canvas>' + '<div style="position: relative;"><input id=' +
+                '"words" type="text;">' +
+                '<button id="reminder" onclick="myfunc()">Enter</button></div>';
+        document.getElementById("canvasDiv").innerHTML = newCanvasString;
+    } else {
+        var newCanvasString = '<canvas width="' + width + '" height="' + height
+                + '" id="' + idNo + '">' +
+                'Canvas Tag not Supported by your browser version!' +
+                '</canvas>' + '<div style="position: relative;"><input hidden id=' +
+                '"words" type="text;">' +
+                '<button hidden id="reminder" onclick="myfunc()">Enter</button></div>';
+        document.getElementById("canvasDiv").innerHTML = newCanvasString;
+    }
 }
 
 //Draws non clickable rectangle, because they don't all need clicking
