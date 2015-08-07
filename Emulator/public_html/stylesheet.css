@@ -6,7 +6,37 @@ The stylesheet that we shall make it look pretty with!
     Author     : bryan
 */
 
-canvas {
-   //background-color: #00ccff;
-   background-image: url('Frog-and-butterfly.jpg');//we'll add more, eventually.
+#canvas_1 {
+    background-image: url('Frog-and-butterfly.jpg');/* we'll add more, eventually.*/
+    border: #000000 solid 2px;
+}
+
+#canvasDiv {
+    margin-right: 1045px;  
+}
+
+#reminder { 
+    position: absolute; 
+    left: 130px; 
+    bottom: 40px;  
+    z-index: 1;
+}
+
+#words {
+    position: absolute; 
+    left: 90px; 
+    bottom: 65px;  
+    z-index: 1;
+}
+
+p {
+    font-size: 15px;
+    font-family: serif;
+    color: black;
+    
+    margin-top: 2em;
+    margin-bottom: 2em;
+    margin-left: 0;
+    margin-right: .5em;
+    
 }

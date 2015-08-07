@@ -5,12 +5,14 @@ is where we will host the Emulator and prototype.
 -->
 <html>
     <head>
-        <title>Emulator v 1.17.3</title>
+        <title>Emulator v 1.21.3</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type='text/javascript' src="js/libs/jquery/jquery.js"></script>
         <script type='text/javascript' src="js/libs/json3/json3.js"></script>
         <script type='text/javascript' src="emulatorBasics.js"></script>
+        <script type='text/javascript' src="prototypeBasics.js"></script>
+        <script type='text/javascript' src="reminder.js"></script>
         <link rel="stylesheet" type="text/css" href="stylesheet.css">
     </head>
     <body>
@@ -18,15 +20,15 @@ is where we will host the Emulator and prototype.
         <!-- The text division -->
         <div id="textDescription">
 
-            <h3>Generic Smart Watch Emulator v. 1.17.3</h3>
-           
+            <h3>Generic Smart Watch Emulator</h3>
+
             <!-- This div below shows the mouse click co-ords currently 
             <div id="divShow">Mouse position: No clicks yet!</div> -->
             <p>
                 Below is the canvas element. Right now it's emulating
                 a very primitive mobile OS - should show a black square
-                for an "App" icon.<br> This is clickable and changes the 
-                text above.
+                for an "App" icon.<br> This is clickable and should start our 
+                Application Prototype running.
             </p>
 
         </div>
@@ -34,12 +36,9 @@ is where we will host the Emulator and prototype.
         <!-- The actual canvas element - script for editing it is in the
         imported javascript files. Specifically the emulatorBasics.js -->
         <div id="canvasDiv">
-            <canvas width="320" height="320" id="canvas_1" 
-                    style="border:5px solid #000000;">
+            <canvas width="320" height="320" id="canvas_1">
                 Canvas Tag not supported by your browser version!
             </canvas>
-            <input type="text"  id="words" value="reminder name"> 
-            <button id="entertext"> Enter. </button>
         </div>
 
         <!-- 
@@ -50,10 +49,19 @@ is where we will host the Emulator and prototype.
         <script>
             emulatorInitialise();
             
+            /* Assumes the prototype is loaded into the scripts on
+             * this page so that it can call a particular function on
+             * the button set up. 
+             */
+            function myfunc() {
+                $("prototypeBasics.js", function () {
+                    getReminderText();
+                });
+            }
             //Old stuff
             //drawToCanvas();
-            
-            //simply calls mouse event listener functions
+
+            //simp]ly calls mouse event listener functions
             /* Old bit:
              * 
              * listeners();    
