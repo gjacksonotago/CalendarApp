@@ -24,7 +24,7 @@ function Reminder(day, month, year) {
 
     this.newReminder = function (reminder) {
         this.reminders.push(reminder);
-        this.times.push(defaultTime);
+        this.times.push(this.defaultTime);
     };
 
     this.newReminderWithTime = function (reminder, time) {

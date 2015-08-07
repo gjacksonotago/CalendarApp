@@ -292,7 +292,7 @@ function addReminder(day) {
         });
 
     } else if (hasReminder(key)) {
-        //IF reminder exists, do not overwrite it. I was overwriting it, BAD!
+        //If there are reminders, show an Event View of the day clicked on.
         var reminderDate = day + " " + monthToString(month) + " " + year;
         var canvasreminder = 'canvas_1';
         
