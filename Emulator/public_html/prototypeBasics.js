@@ -90,13 +90,9 @@ function getReminderText() {
     // height and in the position from the bottom of the
     // canvas.
     //clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
-
     writeSomethingColour(reminderText, 25, cHeight / 4, 18, "#000000");
-
     //});
-
     reminders[currentKey].newReminder(reminderText);
-
 }
 
 /**
@@ -150,7 +146,7 @@ function displayDay() {
     var homeX = 115;
     var homeY = 295;
     //Home Button: Or back button instead? Just something.
-    drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
+    drawClickRect(homeX, homeY, 15, 25, returnToEmu, true);
     writeSomething("Home", pixelX, pixelY, 12);
 }
 
@@ -313,6 +309,7 @@ function addReminder(day) {
             //The "add new event" button
             var newEvent = function () {
                 newCanvas(320, 320, canvasreminder, true);
+                
                 var returnFunc = function () {
                     returnToCalendar(savedMonth, savedDay, savedYear);
                 };

@@ -34,7 +34,7 @@ var clock;
 // up the chain to the prototype.
 function getFormText() {
     var text = document.getElementById("words").value;
-    //console.log(text);
+    console.log(text);
     return text;
 }
 
