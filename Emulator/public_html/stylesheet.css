@@ -18,13 +18,25 @@ The stylesheet that we shall make it look pretty with!
 #reminder { 
     position: absolute; 
     left: 130px; 
-    bottom: 130px;  
+    bottom: 40px;  
     z-index: 1;
 }
 
 #words {
     position: absolute; 
     left: 90px; 
-    bottom: 155px;  
+    bottom: 65px;  
     z-index: 1;
+}
+
+p {
+    font-size: 15px;
+    font-family: serif;
+    color: black;
+    
+    margin-top: 2em;
+    margin-bottom: 2em;
+    margin-left: 0;
+    margin-right: .5em;
+    
 }
