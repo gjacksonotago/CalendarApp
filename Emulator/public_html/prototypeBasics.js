@@ -20,6 +20,7 @@ var stringMonth = "May";
 var startDay = 5;
 var months = 12;
 var year = 2015;
+var clock;
 
 var reminderCoords = {};//I think i love these things.
 var dayNo = [];
@@ -111,7 +112,7 @@ function protoInitialise() {
     initMonth();
     startDay = setDay();
     refreshInit(daysInMonth(month), startDay);
-    //pollTime();
+    clock = setInterval(writeTime, 1000);
 }
 
 /**
@@ -186,8 +187,8 @@ function displayMonth(daysformonth, startDay) {
         drawCalendar(daysformonth, startDay);
 
     });
-    requestTime();
-    writeTime();
+    //requestTime();
+    
     //Allow swipes to change month
     swipeMonth();
 }
@@ -460,21 +461,9 @@ function monthToInt(monthString) {
  * @returns {undefined}
  */
 function returnToEmu() {
+    clearInterval(clock);
     $.get("emulatorBasics.js", function () {
         emulatorInitialise();
-    });
-}
-
-/**
- * Function Wrapped JQuery Call to the Emulator
- * to grab the time - and set the prototype variable
- * string to hold the current time. 
- * 
- * @returns {undefined}
- */
-function requestTime() {
-    $.get("emulatorBasics.js", function () {
-        current = createTime();
     });
 }
 
@@ -490,6 +479,7 @@ function requestTime() {
 function writeTime() {
     $.get("emulatorBasics.js", function () {
         clearThis(cWidth - (cWidth / 4), 15, 125, 15);
+        current = createTime();
         writeSomethingColour(current.substring(0, 11), cWidth - (cWidth / 4), 25, 12, "#000000");
     });
 }
