@@ -22,30 +22,57 @@ function Reminder(day, month, year) {
     this.text = "";
     this.name = "";
 
+    /**
+     * Add a new reminder to reminders data field with default time to times data field
+     * @param {Reminder} reminder
+     */
     this.newReminder = function (reminder) {
         this.reminders.push(reminder);
         this.times.push(this.defaultTime);
     };
-
+    
+    /**
+     * Add a new time and new reminder to times and reminders respectively
+     * 
+     * @param {Reminder} reminder
+     * @param {String} time
+     */
     this.newReminderWithTime = function (reminder, time) {
         this.reminders.push(reminder);
         this.times.push(time);
     };
 
-    //The stupidest syntax ever. Called by "Reminder.print()"
+    /**
+     * Returns a representation of the reminder class as a string
+     *  
+     * @returns {String}
+     */
     this.print = function () {
         var s = this.day + "-" + this.month + "-" + this.year;
         return s;
     };
 
+    /**
+     * mutator to data field text
+     * 
+     * @param {String} string
+     */
     this.addText = function (string) {
         this.text = string;
     };
-
+    
+    /**
+     * mutator for name data field
+     * @param {String} string
+     */
     this.addName = function (string) {
         this.name = string;
     };
-
+    
+    /**
+     *  Accessor to Name data field
+     * @returns {String}
+     */
     this.returnName = function () {
         return this.name;
     };

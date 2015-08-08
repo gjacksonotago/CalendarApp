@@ -654,7 +654,6 @@ function drawPositionRect(xPos, yPos, xSize, ySize, actionToTake) {
  * @param {boolean} sglclick
  * @param {String} colour
  */
- 
 function drawColourRect(xPos, yPos, xSize, ySize, actionToTake, sglclick, colour) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
