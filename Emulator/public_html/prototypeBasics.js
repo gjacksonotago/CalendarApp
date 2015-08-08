@@ -167,7 +167,7 @@ function returnToCalendar(month_passed, startday, savetheyear) {
     changeMonth(month);
     startDay = startday;
     refreshInit(daysInMonth(month), startday);
-    console.log(reminders);
+    //console.error(reminders);
 }
 
 /**
@@ -191,13 +191,16 @@ function returnToCalendar(month_passed, startday, savetheyear) {
  */
 function getReminderText() {
     reminderText = getFormText();
-    console.log("remindertext: " + reminderText);
-    //This is assuming that the return button is a set
-    // height and in the position from the bottom of the
-    // canvas.
-    //clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
-    writeSomethingColour(reminderText, 25, cHeight / 4, 18, "#000000");
-    reminders[currentKey].newReminder(reminderText);
+    if (reminderText === "") {
+        //console.error("remindertext is empty string");
+    } else {
+        //This is assuming that the return button is a set
+        // height and in the position from the bottom of the
+        // canvas.
+        //clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
+        writeSomethingColour(reminderText, 25, cHeight / 4, 18, "#000000");
+        reminders[currentKey].newReminder(reminderText);
+    }
 }
 
 /**
@@ -212,7 +215,8 @@ function protoInitialise() {
     initMonth();
     startDay = setDay();
     refreshInit(daysInMonth(month), startDay);
-    clock = setInterval(writeTime, 1000);
+    //writeTime();//This initial call is so there is no 1 second delay to show the time on load.
+    //clock = setInterval(writeTime, 1000);
 }
 
 /**
@@ -346,7 +350,7 @@ function drawCalendar(daysInMonth, startDay) {
                 };
                 drawPositionRect(icoord, jcoord, 30, 30, func);
                 writeSomething(days, icoord + 5, jcoord + 10, 8);
-                //console.log(days + " " + month + " " + year);
+                //console.error(days + " " + month + " " + year);
                 if (hasReminder(days + "" + (month + 1) + "" + year)) {
                     //var remName = displayReminder(days, month, year);
                     //writeSomething(remName, icoord+5, jcoord+25, 8);
@@ -382,9 +386,9 @@ function addReminder(day) {
     if (!hasReminder(key)) {
         reminders[key] = new Reminder(day, month + 1, year);
         reminders[key].addName("reminder" + remNum++);
-        
+
         var reminderDate = reminders[key].print();
-    
+
         //Saving and restoring canvas context doesn't work
         // as we've not actually drawn anything there. It's
         // all javascript, so I just reinitialise the prototype
@@ -407,7 +411,7 @@ function addReminder(day) {
         //If there are reminders, show an Event View of the day clicked on.
         var reminderDate = day + " " + monthToString(month) + " " + year;
         var canvasreminder = 'canvas_1';
-        
+
         $.get("emulatorBasics.js", function () {
             newCanvas(320, 320, canvasreminder, false);
             saveState(month, startDay, year);
@@ -417,11 +421,11 @@ function addReminder(day) {
             };
             drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
             writeSomethingColour("Back", backXOffset, cHeight - 20, 12, "black");
-            
+
             //The "add new event" button
             var newEvent = function () {
                 newCanvas(320, 320, canvasreminder, true);
-                
+
                 var returnFunc = function () {
                     returnToCalendar(savedMonth, savedDay, savedYear);
                 };
@@ -429,21 +433,20 @@ function addReminder(day) {
                 writeSomethingColour("Back", 22, cHeight - 20, 12, "black");
                 writeSomethingColour("New Event for " + reminderDate, 25, 35, "20", "black");
             };
-            
-            drawColourRect(cWidth-50, cHeight - 30, 30, 15, newEvent, true, "#FFFFFF");
-            writeSomethingColour("New", cWidth-47, cHeight - 20, 12, "black");
+
+            drawColourRect(cWidth - 50, cHeight - 30, 30, 15, newEvent, true, "#FFFFFF");
+            writeSomethingColour("New", cWidth - 47, cHeight - 20, 12, "black");
             //What day is it?
             writeSomethingColour("Events for " + reminderDate, textXOffset, 35, "20", "black");
-            
+
             //Show all events on that day.
             var i;
             for (i = 0; i < reminders[key].reminders.length; i++) {
-                var savedReminders = reminders[key].reminders[i];
-                writeSomethingColour("" + savedReminders, textXOffset, 60+(i*25), "15", "black");
+                var savedReminders = reminders[key].reminders[i] + " - at: " + reminders[key].times[i];
+                writeSomethingColour(savedReminders, textXOffset, 60 + (i * 25), "15", "white");
             }
         });
     }
-
     //REMINDER COMPLETE!
 }
 
@@ -458,11 +461,11 @@ function hasReminder(key) {
 
     if (reminders[key] !== null && reminders[key] !== undefined) {
         if (reminders[key].reminders.length > 0) {
-            console.log("Key is: " + key + ", Length is: " + reminders[key].reminders.length);
-            console.log(reminders[key].reminders);
+            //console.error("Key is: " + key + ", Length is: " + reminders[key].reminders.length);
+            //console.error(reminders[key].reminders);
             return true;
         } else {
-            console.log("hasReminder() returning false! Key: " + key);
+            //console.error("hasReminder() returning false! Key: " + key);
             return false;
         }
     } else {
@@ -481,7 +484,7 @@ function hasReminder(key) {
  */
 function displayReminder(day, month, year) {
     var key = day + "" + (month + 1) + "" + year;
-    console.log("Key is: " + key + " day: " + day + " month: " + month);
+    //console.error("Key is: " + key + " day: " + day + " month: " + month);
     if (reminders[key] !== null && reminders[key] !== undefined) {
         return reminders[key].returnName();
     }
@@ -500,10 +503,10 @@ function daysInMonth(month, year) {
     } else if (month === 1) {
         return 28;
     } else if (month === 3 || month === 5 || month === 8 || month === 10) {
-        console.log("30 days this month" + month);
+        //console.error("30 days this month" + month);
         return 30;
     } else {
-        console.log("31 days this month" + month);
+        //console.error("31 days this month" + month);
         return 31;
     }
 }
@@ -534,7 +537,7 @@ function advanceMonth() {
  *
  */
 function reverseMonth() {
-    console.log("reversal: " + month + " " + startDay);
+    //console.error("reversal: " + month + " " + startDay);
     if (month > 0) {
         month--;
         changeMonth(month);
@@ -595,7 +598,7 @@ function monthToString(month) {
     if (month < 12 && month >= 0) {
         return stringMonths[month];
     } else {
-        console.log("Error: Month number out of range (0-11)");
+        console.error("Error: Month number out of range (0-11)");
     }
 }
 
@@ -623,7 +626,8 @@ function monthToInt(monthString) {
  *
  */
 function returnToEmu() {
-    clearInterval(clock);
+    //clearInterval(clock);//All clock references are for ticking time inside calendar, 
+                           //but would be so small on a real smartwatch it would just be silly!
     $.get("emulatorBasics.js", function () {
         emulatorInitialise();
     });
@@ -640,21 +644,8 @@ function writeTime() {
     $.get("emulatorBasics.js", function () {
         clearThis(cWidth - (cWidth / 4), 15, 125, 15);
         current = createTime();
-        writeSomethingColour(current.substring(0, 11), cWidth - (cWidth / 4), 25, 12, "#000000");
+        writeSomethingColour(current, cWidth - (cWidth / 4), 25, 12, "#000000");
     });
-}
-
-
-/**
- * Double call to first fetch the current
- * time and then write that time to the canvas
- * on a 1 second interval. (Hence the name
- * "Polling")
- *
- */
-function pollTime() {
-    setInterval(requestTime, 960);
-    setInterval(writeTime, 1000);
 }
 
 /**

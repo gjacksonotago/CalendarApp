@@ -36,7 +36,7 @@ var clock;
  */ 
 function getFormText() {
     var text = document.getElementById("words").value;
-    console.log(text);
+    console.error(text);
     return text;
 }
 
@@ -145,14 +145,12 @@ function emulatorInitialise() {
  */ 
 function updateTime() {
     clearThis(40, 180, 280, 100);
-    //var minutes = createTime().substring(0, 4);
-    //var ampm = createTime().substring(8, 10);
     var t = createTime();//Just a temp string so i can test the time.
     //This keeps the time central when it has more or less digits, i.e 9:00am and 10:00am.
     if(t.charAt(1) === ':') {
-        writeSomethingColour(t, 55, 250, 44, '#FFFFFF');
+        writeSomethingColour(t, 55, 250, 44, '#FFFFFF');//1 hour digit
     }else{
-        writeSomethingColour(t, 40, 250, 44, '#FFFFFF');
+        writeSomethingColour(t, 40, 250, 44, '#FFFFFF');//2 hour digits
     }
 }
 
@@ -289,7 +287,7 @@ function returnCanvas(canvasID) {
  * @param {Element} ctx
  */
 function restoreCtx(ctx) {
-    //console.log("cliiiicked!");
+    //console.error("cliiiicked!");
     ctx.restore();
 }
 
@@ -529,7 +527,7 @@ function swipeDirection(x1, y1, x2, y2) {
         dir = "down";
     else if (y2 < y1 && Math.abs(x2 - x1) < error)
         dir = "up";
-    //console.log(dir); //Screw this, we know it basically works. Except that invalid swipes happen A LOT.
+    //console.log(dir); 
     return dir;
 }
 
