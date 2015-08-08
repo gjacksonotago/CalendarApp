@@ -345,17 +345,30 @@ function addReminder(day) {
     //REMINDER COMPLETE!
 }
 
-
+/**
+ * Assuming the 'key' passed to this function is a valid string
+ * then this method checks the associative array of reminders and
+ * returns true if there is a reminder that matches the passed
+ * 'key' string.
+ * 
+ * If 'key' is not a valid string (it's either null or undefined
+ * this method returns false. Therefore a false result could either
+ * be there is no reminder stored there under that key, OR key was 
+ * not a valid input to this function.
+ * 
+ * @param {type} key
+ * @returns {Boolean}
+ */
 function hasReminder(key) {
     //var key = day + "" + (month + 1) + "" + year;
 
     if (reminders[key] !== null && reminders[key] !== undefined) {
         if (reminders[key].reminders.length > 0) {
-            console.log("Key is: " + key + ", Length is: " + reminders[key].reminders.length);
-            console.log(reminders[key].reminders);
+            //console.log("Key is: " + key + ", Length is: " + reminders[key].reminders.length);
+            //console.log(reminders[key].reminders);
             return true;
         } else {
-            console.log("hasReminder() returning false! Key: " + key);
+            //console.log("hasReminder() returning false! Key: " + key);
             return false;
         }
     } else {
