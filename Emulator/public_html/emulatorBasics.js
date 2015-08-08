@@ -254,10 +254,6 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
     canvas.addEventListener('mouseover', function (evt) {
 
         var mousePos = getMousePos(canvas, evt);
-        message = 'Mouse position: ' + mousePos.x + ', ' +
-                Math.round(mousePos.y);
-        sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' +
-                Math.round(mousePos.y);
 
         var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
         var yCalc = (canvasHeight + ySize + yPosition) - canvasHeight;
@@ -291,23 +287,6 @@ function restoreCtx(ctx) {
     ctx.restore();
 }
 
-function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
-    var canvas = document.getElementById('canvas_1');
-
-    //The mouseclick event listener.
-    canvas.addEventListener('mouseover', function (evt) {
-
-        var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
-        var yCalc = (canvasHeight + ySize + yPosition) - canvasHeight;
-
-        //If Mouse Clicked on the Black Square, new message!
-        if (mousePos.x <= xCalc && mousePos.y <= yCalc
-                && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
-            actionTaken();
-        }
-    }, false);
-}
-
 /**
  * Adds a MouseClick event listener across the given
  * co-ordinates - which it works out like the fillRectangle 
@@ -332,10 +311,6 @@ function singleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     canvas.addEventListener('click', function (evt) {
 
         var mousePos = getMousePos(canvas, evt);
-        message = 'Mouse position: ' + mousePos.x + ', ' +
-                Math.round(mousePos.y);
-        sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' +
-                Math.round(mousePos.y);
 
         var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
         var yCalc = (canvasHeight + ySize + yPosition) - canvasHeight;
@@ -373,10 +348,6 @@ function doubleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     canvas.addEventListener('dblclick', function (evt) {
 
         var mousePos = getMousePos(canvas, evt);
-        message = 'Mouse position: ' + mousePos.x + ', ' +
-                Math.round(mousePos.y);
-        sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' +
-                Math.round(mousePos.y);
 
         var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
         var yCalc = (canvasHeight + ySize + yPosition) - canvasHeight;
