@@ -291,6 +291,23 @@ function restoreCtx(ctx) {
     ctx.restore();
 }
 
+function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
+    var canvas = document.getElementById('canvas_1');
+
+    //The mouseclick event listener.
+    canvas.addEventListener('mouseover', function (evt) {
+
+        var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
+        var yCalc = (canvasHeight + ySize + yPosition) - canvasHeight;
+
+        //If Mouse Clicked on the Black Square, new message!
+        if (mousePos.x <= xCalc && mousePos.y <= yCalc
+                && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
+            actionTaken();
+        }
+    }, false);
+}
+
 /**
  * Adds a MouseClick event listener across the given
  * co-ordinates - which it works out like the fillRectangle 

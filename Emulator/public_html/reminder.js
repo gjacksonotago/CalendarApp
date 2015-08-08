@@ -74,7 +74,6 @@ function Reminder(day, month, year) {
 
     /**
      * Add a new time and new reminder to times and reminders respectively
-     * 
      * @param {String} reminder
      * @param {String} time
      */
@@ -88,11 +87,19 @@ function Reminder(day, month, year) {
             console.error("No more reminders may be added for " + this.print());
         }
     };
-
+    
+    /**
+     * Delete a reminder at the given index. Or complain if index is out of range.
+     * @param {int} index
+     */
     this.deleteReminder = function (index) {
-        
+        if(this.reminders.length < index) {
+            reminders.splice(index, 1);
+            times.splice(index, 1);
+        }else{
+            console.error("Reminder to be deleted does not exist! Index out of range.");
+        }
     };
-
 }
 
 

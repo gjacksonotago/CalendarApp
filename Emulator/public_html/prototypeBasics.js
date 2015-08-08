@@ -433,7 +433,7 @@ function addReminder(day) {
                 writeSomethingColour("Back", 22, cHeight - 20, 12, "black");
                 writeSomethingColour("New Event for " + reminderDate, 25, 35, "20", "black");
             };
-
+            
             drawColourRect(cWidth - 50, cHeight - 30, 30, 15, newEvent, true, "#FFFFFF");
             writeSomethingColour("New", cWidth - 47, cHeight - 20, 12, "black");
             //What day is it?
@@ -599,6 +599,7 @@ function monthToString(month) {
         return stringMonths[month];
     } else {
         console.error("Error: Month number out of range (0-11)");
+        return "Invalid month number";
     }
 }
 
