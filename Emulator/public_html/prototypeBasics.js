@@ -259,7 +259,7 @@ function displayDay() {
 }
 
 /**
- * Function to display the month with a range of days strating from a specific day
+ * Function to display the month with a range of days starting from a specific day
  * @param {int} daysformonth
  * @param {int} startDay
  *

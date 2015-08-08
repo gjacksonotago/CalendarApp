@@ -54,7 +54,7 @@ function writeMessage(canvas, message) {
 }
 
  /**
- * Function get the mouse poisition
+ * Function get the mouse position
  * @param {Element} canvas 
  * @param {event} evt 
  * @return {object} object with x and y data fields 
@@ -74,7 +74,7 @@ function getMousePos(canvas, evt) {
 function createTime() {
     var currentTime = new Date();
     var stringTime = currentTime.toLocaleTimeString();
-    return stringTime;
+    return stringTime.substring(0, 11);//Substring fixes Safari oddity of adding NZST after the time.
 }
 
 /**
@@ -118,7 +118,8 @@ function emulatorInitialise() {
     canvasWidth = c.width;
     canvasHeight = c.height;
     var offset = 60;
-
+    
+    updateTime();//Single call to updateTime() so that there is no delay on load
     clock = setInterval(updateTime, 1000);
 
     //Emulator full screen event listener(s)
@@ -146,7 +147,13 @@ function updateTime() {
     clearThis(40, 180, 280, 100);
     //var minutes = createTime().substring(0, 4);
     //var ampm = createTime().substring(8, 10);
-    writeSomethingColour(createTime(), 40, 250, 44, '#FFFFFF');
+    var t = createTime();//Just a temp string so i can test the time.
+    //This keeps the time central when it has more or less digits, i.e 9:00am and 10:00am.
+    if(t.charAt(1) === ':') {
+        writeSomethingColour(t, 55, 250, 44, '#FFFFFF');
+    }else{
+        writeSomethingColour(t, 40, 250, 44, '#FFFFFF');
+    }
 }
 
 /**
