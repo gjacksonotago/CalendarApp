@@ -1,4 +1,4 @@
-/* 
+/** 
  * emulatorBasics.js:
  * 
  * These functions grab the current Time and convert it to a string
@@ -12,14 +12,12 @@
  */
 
 /** 
- * I am not sure about it!
  * Global variables 
- * canvasHeight define the height of the canvas
- * message and sqMes string messages for debugging
- * oldCanvas and canvasString variables used to the canvas to a larger size
  */
 var canvasHeight, canvasHeight;
+//The Messages currently written for testing purposes.
 var message, sqMes;
+//These strings are used for modifying the canvas' HTML code.
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         + '" id="' + 'canvas_1">' +
         'Canvas Tag not Supported by your browser version!' +
@@ -33,7 +31,7 @@ var canvasString =
 var clock;
 
 /**
- * Function return the text value in the tag by id "words"
+ * Function return the text value from the HTML input field.
  * @return {string} 
  */ 
 function getFormText() {
@@ -80,7 +78,7 @@ function createTime() {
 }
 
 /**
- * Function return the current date of the system as a string
+ * Function return the current date as a string
  * @return {String}
  */ 
 function currentDate() {
@@ -99,7 +97,7 @@ function currentMonth() {
 }
 
 /**
- * Function return the current year from internet
+ * Function return the current year
  * @return {String}
  */ 
 function currentYear() {
@@ -142,7 +140,7 @@ function emulatorInitialise() {
 
 
 /**
- * Function updating the time keeping the clock ticking.
+ * Function updating the time keeping the clock ticking every second.
  */ 
 function updateTime() {
     clearThis(40, 180, 280, 100);

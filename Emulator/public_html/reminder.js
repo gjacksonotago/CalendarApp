@@ -1,4 +1,4 @@
-/* 
+/** 
  * This class defines a reminder "class" to store a reminder for each day as necessary.
  * 
  * @author Ben Ryan
@@ -6,7 +6,7 @@
 
 /**
  * 
- * @type @new;_L10
+ * @type @new; {Reminder}
  * 
  * @param {int} day (day, month, year)
  * @param {int} month 
@@ -24,7 +24,7 @@ function Reminder(day, month, year) {
 
     /**
      * Add a new reminder to reminders data field with default time to times data field
-     * @param {Reminder} reminder
+     * @param {String} reminder
      */
     this.newReminder = function (reminder) {
         this.reminders.push(reminder);
@@ -34,7 +34,7 @@ function Reminder(day, month, year) {
     /**
      * Add a new time and new reminder to times and reminders respectively
      * 
-     * @param {Reminder} reminder
+     * @param {String} reminder
      * @param {String} time
      */
     this.newReminderWithTime = function (reminder, time) {
@@ -53,7 +53,7 @@ function Reminder(day, month, year) {
     };
 
     /**
-     * mutator to data field text
+     * Mutator to data field 'text'
      * 
      * @param {String} string
      */
@@ -62,7 +62,7 @@ function Reminder(day, month, year) {
     };
     
     /**
-     * mutator for name data field
+     * Mutator for name data field
      * @param {String} string
      */
     this.addName = function (string) {
@@ -70,7 +70,7 @@ function Reminder(day, month, year) {
     };
     
     /**
-     *  Accessor to Name data field
+     * Accessor to Name data field
      * @returns {String}
      */
     this.returnName = function () {
