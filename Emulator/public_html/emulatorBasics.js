@@ -11,11 +11,15 @@
  * Date Created: 24/04/2015
  */
 
-//Global variables
+/** 
+ * I am not sure about it!
+ * Global variables 
+ * canvasHeight define the height of the canvas
+ * message and sqMes string messages for debugging
+ * oldCanvas and canvasString variables used to the canvas to a larger size
+ */
 var canvasHeight, canvasHeight;
-//The String Messages currently written for testing
 var message, sqMes;
-//These string are used for rewriting the canvas to a larger size
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         + '" id="' + 'canvas_1">' +
         'Canvas Tag not Supported by your browser version!' +
@@ -28,17 +32,21 @@ var canvasString =
 
 var clock;
 
-//assuming a single string is passed to this function
-// a global variable is assigned that string value.
-// primarily envisioned to handle HTML form input to hand
-// up the chain to the prototype.
+/**
+ * Function return the text value in the tag by id "words"
+ * @return {string} 
+ */ 
 function getFormText() {
     var text = document.getElementById("words").value;
     console.log(text);
     return text;
 }
 
-//Write a message to the canvas. --->An outdate method now, I think. (Ben)
+/**
+ * Function writing a message to canvas
+ * @param {Element} canvas 
+ * @param {String} message 
+ */ 
 function writeMessage(canvas, message) {
     var context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -47,9 +55,12 @@ function writeMessage(canvas, message) {
     context.fillText(message, 10, 100);
 }
 
-/*
- * This function is used for the mouse cordinates
- */
+ /**
+ * Function get the mouse poisition
+ * @param {Element} canvas 
+ * @param {event} evt 
+ * @return {object} object with x and y data fields 
+ */ 
 function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
     return {
@@ -58,41 +69,49 @@ function getMousePos(canvas, evt) {
     };
 }
 
-//============================================================//
-
-//Gets and returns the Current Time as a String
+/**
+ * Function return the current time as a string
+ * @return {String} 
+ */ 
 function createTime() {
-    //Grab the Time and make it a String
     var currentTime = new Date();
     var stringTime = currentTime.toLocaleTimeString();
     return stringTime;
 }
 
-//Gets and Returns the Current Date as a String
+/**
+ * Function return the current date of the system as a string
+ * @return {String}
+ */ 
 function currentDate() {
     var currentDate = new Date();
     var stringDate = currentDate.toLocaleDateString();
     return stringDate;
 }
 
-//Returns an integer!
+/**
+ * Function return the current month as an integer
+ * @return {int}
+ */ 
 function currentMonth() {
     var month = new Date();
     return month.getMonth();
 }
 
-//Returns the current year, from the internet, may not be needed.
+/**
+ * Function return the current year from internet
+ * @return {String}
+ */ 
 function currentYear() {
     var year = new Date();
     var yearString = year.toDateString().subString(10, 15);
     return yearString;
 }
 
-/* Function called to 'begin' the emulator:
+/** 
+ * Function called to 'begin' the emulator:
  * Simulates an OS starting up by showing the apps lined
  * up to click.
- * 
- * @returns Nothing is Returned.
  */
 function emulatorInitialise() {
     //Create the Canvas stuff
@@ -121,8 +140,10 @@ function emulatorInitialise() {
     }
 }
 
-//Keeps the clock ticking, not the way to go, but a start. Goes back to home screen from calendar
-//Will find a way to not do that, until then, nevermind.
+
+/**
+ * Function updating the time keeping the clock ticking.
+ */ 
 function updateTime() {
     clearThis(40, 180, 280, 100);
     //var minutes = createTime().substring(0, 4);
@@ -130,24 +151,29 @@ function updateTime() {
     writeSomethingColour(createTime(), 40, 250, 44, '#FFFFFF');
 }
 
+/**
+ * Function clearing the rectangle specified by x and y location and with and height.
+ * @param  {int} xPos top left corner x
+ * @param  {int} yPos top left corner y
+ * @param  {int} xSize width
+ * @param  {int} ySize height
+ */ 
 function clearThis(xPos, yPos, xSize, ySize) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
     ctx.clearRect(xPos, yPos, xSize, ySize);
 }
 
-/*
+/**
  * Creates an instance of the Prototype application
  * when called, at position (xPos, yPos) on the canvas
  * and of size xSize * ySize, with the name written in
  * "Calendar App".
  * 
- * @param {type} xPos
- * @param {type} yPos
- * @param {type} xSize
- * @param {type} ySize
- * @param {type} actionTaken
- * @returns {undefined}
+ * @param {int} xPos
+ * @param {int} yPos
+ * @param {int} xSize
+ * @param {int} ySize
  */
 function createPrototype(xPos, yPos, xSize, ySize) {
     var c = document.getElementById("canvas_1");
@@ -165,8 +191,6 @@ function createPrototype(xPos, yPos, xSize, ySize) {
  * Wraps a JQuery Call to the Prototype Initialistion
  * so that it can be passed as an argument (without immediate 
  * evaluation) into the MouseDown function to add it as a listener.
- * 
- * @returns {undefined}
  */
 function protoClick() {
     var init = $.get("prototypeBasics.js", function () {
@@ -176,7 +200,14 @@ function protoClick() {
     init;
 }
 
-//Write text at specified location with chosen fontsize the the canvas
+/**
+ * Function writes a specified text at specified location (x,y) with specified fontsize
+ * 
+ * @param {String} message  
+ * @param {int} x 
+ * @param {int} y 
+ * @param {int} fontSize
+ */
 function writeSomething(message, x, y, fontSize) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
@@ -185,7 +216,16 @@ function writeSomething(message, x, y, fontSize) {
     ctx.fillText(message, x, y);
 }
 
-//same as above but with the colour option. --->probably only need this one? (Ben)
+
+/**
+ * Function writes a specified text at specified location (x,y) with specified fontsize and specified colour
+ * 
+ * @param {String} message  
+ * @param {int} x 
+ * @param {int} y 
+ * @param {int} fontSize
+ * @param {String} colour
+ */
 function writeSomethingColour(message, x, y, fontSize, colour) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
@@ -194,7 +234,7 @@ function writeSomethingColour(message, x, y, fontSize, colour) {
     ctx.fillText(message, x, y);
 }
 
-/* 
+/** 
  * Creates a mouseover listener at the specified location
  * (worked out using an (x, y) origin point and the width/height
  * passed as variables) to execute 'actionTaken' on mouseover.
@@ -204,7 +244,6 @@ function writeSomethingColour(message, x, y, fontSize, colour) {
  * @param {int} xSize
  * @param {int} ySize
  * @param {function} actionTaken
- * @returns {undefined}
  */
 function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
     var canvas = document.getElementById('canvas_1');
@@ -228,10 +267,10 @@ function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
     }, false);
 }
 
-/**
+/** Return the canvas the the id specified as input
  * 
  * @param {String} canvasID
- * @returns {Element} The canvas identified by canvasID
+ * @returns {Element} 
  */
 function returnCanvas(canvasID) {
     var canvas = document.getElementById(canvasID);
@@ -242,15 +281,14 @@ function returnCanvas(canvasID) {
  * Assuming you pass an HTML canvas context object, this
  * will restore any saved state from the draw stack.
  * 
- * @param {type} ctx
- * @returns {undefined}
+ * @param {Element} ctx
  */
 function restoreCtx(ctx) {
     //console.log("cliiiicked!");
     ctx.restore();
 }
 
-/*
+/**
  * Adds a MouseClick event listener across the given
  * co-ordinates - which it works out like the fillRectangle 
  * method does, from a given (x, y) origin point and the size
@@ -266,7 +304,6 @@ function restoreCtx(ctx) {
  * @param {int} xSize
  * @param {int} ySize
  * @param {function} actionTaken
- * @returns {undefined}
  */
 function singleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     var canvas = document.getElementById('canvas_1');
@@ -291,7 +328,8 @@ function singleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     }, false);
 }
 
-/*
+
+/**
  * Adds a MouseClick event listener across the given
  * co-ordinates - which it works out like the fillRectangle 
  * method does, from a given (x, y) origin point and the size
@@ -307,7 +345,6 @@ function singleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
  * @param {int} xSize
  * @param {int} ySize
  * @param {function} actionTaken
- * @returns {undefined}
  */
 function doubleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     var canvas = document.getElementById('canvas_1');
@@ -332,7 +369,23 @@ function doubleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     }, false);
 }
 
-//So we can save reminders using the position of the box
+/**
+ * Adds a PositionClick event listener across the given
+ * co-ordinates - which it works out like the fillRectangle 
+ * method does, from a given (x, y) origin point and the size
+ * of the area to make interactive.
+ * 
+ * Utilises the canvas size properties to work the area out.
+ * 
+ * The event listener executes the function 'actionTaken'
+ * upon a double mouseclick.
+ * 
+ * @param {int} xPosition
+ * @param {int} yPosition
+ * @param {int} xSize
+ * @param {int} ySize
+ * @param {function} actionTaken
+ */
 function positionClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     var canvas = document.getElementById('canvas_1');
 
@@ -356,7 +409,18 @@ function positionClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     }, false);
 }
 
-//Assumes a swipe is a click, mouse held down, then released
+/**
+ * Adds a swipe and call the function related to the event
+ * the swipe is define as a click on mouse held down then released at different position
+ * it could be left right up or down
+ * could be diagonal ?
+ * 
+ * @param {boolean} actionLeft
+ * @param {boolean} actionRight
+ * @param {boolean} actionUp
+ * @param {boolean} actionDown
+ * @returns {String}
+ */
 function swipe(actionLeft, actionRight, actionUp, actionDown) {
     var x1, x2, y1, y2;
     var canvas = document.getElementById('canvas_1');
@@ -389,6 +453,20 @@ function swipe(actionLeft, actionRight, actionUp, actionDown) {
 }
 
 //Assumes a swipe is a click, mouse held down, then released
+
+/**
+ * Function returns the direction of swiping in the swiping area of the mouse
+ * 
+ * @param {boolean} actionLeft
+ * @param {boolean} actionRight
+ * @param {boolean} actionUp
+ * @param {boolean} actionDown
+ * @param {int} areaX
+ * @param {int} areaY
+ * @param {int} lenX
+ * @param {int} lenY 
+ * @returns {String}
+ */
 function swipeArea(actionLeft, actionRight, actionUp, actionDown, areaX,
         areaY, lenX, lenY) {
     var x1, x2, y1, y2;
@@ -426,8 +504,15 @@ function swipeArea(actionLeft, actionRight, actionUp, actionDown, areaX,
     }
 }
 
-//Finds the direction of a swipe based on two coordinates
-//returns string  up/down left/right     
+/*
+ * define the swipe direction could be 4 outputs only ( left right
+ * up and down ) no diagonal. the direction is defined between two 2D points  
+ * @param {int} x1
+ * @param {int} y1
+ * @param {int} x2
+ * @param {int} y2
+ * @returns {String}
+ */     
 function swipeDirection(x1, y1, x2, y2) {
     var dir = "Invalid swipe";
     var error = 50;//how far the mouse can sway in the other axis to main direction
@@ -443,10 +528,18 @@ function swipeDirection(x1, y1, x2, y2) {
     return dir;
 }
 
+/**
+ * Print the position at the 'divshow' tag
+ */
 function printPosition() {
     document.getElementById("divShow").innerHTML = sqMes;
 }
 
+
+/**
+ * Print the message passed as input at the 'divshow' tag
+ * @param {String} message
+ */
 function printMessage(message) {
     document.getElementById("divShow").innerHTML = message;
 }
@@ -455,8 +548,7 @@ function printMessage(message) {
  * Pass a String that creates a blank canvas element
  * here, from the prototype, to clear the canvas.
  * 
- * @param {type} string
- * @returns {undefined}
+ * @param {String} string
  */
 function resetCanvas(string) {
     document.getElementById("canvasDiv").innerHTML = string;
@@ -468,10 +560,9 @@ function resetCanvas(string) {
  * Ideally this is to be used to help create reminders, and
  * maybe needs to save the previous context....
  * 
- * @param {type} width
- * @param {type} height
- * @param {type} idNo
- * @returns {undefined}
+ * @param {int} width
+ * @param {int} height
+ * @param {int} idNo
  */
 function newCanvas(width, height, idNo, button) {
     if (button) {
@@ -493,8 +584,14 @@ function newCanvas(width, height, idNo, button) {
     }
 }
 
-//Draws non clickable rectangle, because they don't all need clicking
-//And can take a colour, should be passed in quotes
+/**
+ * Fill rectangle defined by x y location and width and height with a specified colour
+ * @param {int} xPos 
+ * @param {int} yPos  
+ * @param {int} xSize 
+ * @param {int} ySise 
+ * @param {String} colour  
+ */
 function drawRect(xPos, yPos, xSize, ySize, colour) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
@@ -503,8 +600,16 @@ function drawRect(xPos, yPos, xSize, ySize, colour) {
     ctx.fillRect(xPos, yPos, xSize, ySize);
 }
 
-//Creates a black rectangle on the canvas with a singleMouseClick listener
-// which listens for 'actionToTake'
+/**
+ *  Creates a black rectangle on the canvas with a singleMouseClick listener
+ *  which listens for 'actionToTake'
+ * @param {int} xPos 
+ * @param {int} yPos 
+ * @param {int} xSize
+ * @param {int} ySise 
+ * @param {function} actionToTake
+ * @param {boolean} sglclick 
+ */
 function drawClickRect(xPos, yPos, xSize, ySize, actionToTake, sglclick) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
@@ -519,9 +624,14 @@ function drawClickRect(xPos, yPos, xSize, ySize, actionToTake, sglclick) {
     }
 }
 
-/*For reminder storing! */
-//Creates a black rectangle on the canvas with a singleMouseClick listener
-// which listens for 'actionToTake'
+/**
+ * Fill rectangle clickable defined by x y location and width and height  with an 'actiontotake'
+ * @param {int} xPos 
+ * @param {int} yPos  
+ * @param {int} xSize 
+ * @param {int} ySise 
+ * @param {function} actionToTake  
+ */
 function drawPositionRect(xPos, yPos, xSize, ySize, actionToTake) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
@@ -532,6 +642,19 @@ function drawPositionRect(xPos, yPos, xSize, ySize, actionToTake) {
     positionClick(xPos, yPos, xSize, ySize, actionToTake);
 }
 
+
+/**
+ *  Fill rectangle clickable either single click or double click defined by x y location and width and height
+ *   with an action to take with a specified colour
+ * @param {int} xPos 
+ * @param {int} yPos  
+ * @param {int} xSize 
+ * @param {int} ySise 
+ * @param {function} actionToTake  
+ * @param {boolean} sglclick
+ * @param {String} colour
+ */
+ 
 function drawColourRect(xPos, yPos, xSize, ySize, actionToTake, sglclick, colour) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
