@@ -12,8 +12,7 @@ The stylesheet that we shall make it look pretty with!
 }
 
 #canvasDiv {
-    margin-right: 930px;  
-    overflow: scroll;
+    margin-right: 930px;
 }
 
 #reminder { 
