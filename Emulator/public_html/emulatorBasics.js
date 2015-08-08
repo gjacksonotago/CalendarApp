@@ -15,8 +15,7 @@
  * Global variables 
  */
 var canvasHeight, canvasHeight;
-//The Messages currently written for testing purposes.
-var message, sqMes;
+
 //These strings are used for modifying the canvas' HTML code.
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         + '" id="' + 'canvas_1">' +
@@ -33,7 +32,7 @@ var clock;
 /**
  * Function return the text value from the HTML input field.
  * @return {string} 
- */ 
+ */
 function getFormText() {
     var text = document.getElementById("words").value;
     console.error(text);
@@ -44,7 +43,7 @@ function getFormText() {
  * Function writing a message to canvas
  * @param {Element} canvas 
  * @param {String} message 
- */ 
+ */
 function writeMessage(canvas, message) {
     var context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -53,12 +52,12 @@ function writeMessage(canvas, message) {
     context.fillText(message, 10, 100);
 }
 
- /**
+/**
  * Function get the mouse position
  * @param {Element} canvas 
  * @param {event} evt 
  * @return {object} object with x and y data fields 
- */ 
+ */
 function getMousePos(canvas, evt) {
     var rect = canvas.getBoundingClientRect();
     return {
@@ -70,7 +69,7 @@ function getMousePos(canvas, evt) {
 /**
  * Function return the current time as a string
  * @return {String} 
- */ 
+ */
 function createTime() {
     var currentTime = new Date();
     var stringTime = currentTime.toLocaleTimeString();
@@ -80,7 +79,7 @@ function createTime() {
 /**
  * Function return the current date as a string
  * @return {String}
- */ 
+ */
 function currentDate() {
     var currentDate = new Date();
     var stringDate = currentDate.toLocaleDateString();
@@ -90,7 +89,7 @@ function currentDate() {
 /**
  * Function return the current month as an integer
  * @return {int}
- */ 
+ */
 function currentMonth() {
     var month = new Date();
     return month.getMonth();
@@ -99,7 +98,7 @@ function currentMonth() {
 /**
  * Function return the current year
  * @return {String}
- */ 
+ */
 function currentYear() {
     var year = new Date();
     var yearString = year.toDateString().subString(10, 15);
@@ -118,7 +117,7 @@ function emulatorInitialise() {
     canvasWidth = c.width;
     canvasHeight = c.height;
     var offset = 60;
-    
+
     updateTime();//Single call to updateTime() so that there is no delay on load
     clock = setInterval(updateTime, 1000);
 
@@ -142,14 +141,14 @@ function emulatorInitialise() {
 
 /**
  * Function updating the time keeping the clock ticking every second.
- */ 
+ */
 function updateTime() {
     clearThis(40, 180, 280, 100);
     var t = createTime();//Just a temp string so i can test the time.
     //This keeps the time central when it has more or less digits, i.e 9:00am and 10:00am.
-    if(t.charAt(1) === ':') {
+    if (t.charAt(1) === ':') {
         writeSomethingColour(t, 55, 250, 44, '#FFFFFF');//1 hour digit
-    }else{
+    } else {
         writeSomethingColour(t, 40, 250, 44, '#FFFFFF');//2 hour digits
     }
 }
@@ -160,7 +159,7 @@ function updateTime() {
  * @param  {int} yPos top left corner y
  * @param  {int} xSize width
  * @param  {int} ySize height
- */ 
+ */
 function clearThis(xPos, yPos, xSize, ySize) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
@@ -235,35 +234,6 @@ function writeSomethingColour(message, x, y, fontSize, colour) {
     ctx.fillStyle = colour;
     ctx.font = fontSize + "px Sans Serif";
     ctx.fillText(message, x, y);
-}
-
-/** 
- * Creates a mouseover listener at the specified location
- * (worked out using an (x, y) origin point and the width/height
- * passed as variables) to execute 'actionTaken' on mouseover.
- * 
- * @param {int} xPosition
- * @param {int} yPosition
- * @param {int} xSize
- * @param {int} ySize
- * @param {function} actionTaken
- */
-function mouseOver(xPosition, yPosition, xSize, ySize, actionTaken) {
-    var canvas = document.getElementById('canvas_1');
-
-    canvas.addEventListener('mouseover', function (evt) {
-
-        var mousePos = getMousePos(canvas, evt);
-
-        var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
-        var yCalc = (canvasHeight + ySize + yPosition) - canvasHeight;
-
-        //If Mouse Clicked on the Black Square, new message!
-        if (mousePos.x <= xCalc && mousePos.y <= yCalc
-                && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
-            actionTaken();
-        }
-    }, false);
 }
 
 /** Return the canvas the the id specified as input
@@ -369,7 +339,8 @@ function doubleMouseClick(xPosition, yPosition, xSize, ySize, actionTaken) {
  * Utilises the canvas size properties to work the area out.
  * 
  * The event listener executes the function 'actionTaken'
- * upon a double mouseclick.
+ * upon a double mouseclick, passing it the position variables 
+ * which other methods do not do.
  * 
  * @param {int} xPosition
  * @param {int} yPosition
@@ -384,10 +355,6 @@ function positionClick(xPosition, yPosition, xSize, ySize, actionTaken) {
     canvas.addEventListener('dblclick', function (evt) {
 
         var mousePos = getMousePos(canvas, evt);
-        message = 'Mouse position: ' + mousePos.x + ', ' +
-                Math.round(mousePos.y);
-        sqMes = 'SQUARE CLICKED: ' + mousePos.x + ', ' +
-                Math.round(mousePos.y);
 
         var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
         var yCalc = (canvasHeight + ySize + yPosition) - canvasHeight;
@@ -396,6 +363,35 @@ function positionClick(xPosition, yPosition, xSize, ySize, actionTaken) {
         if (mousePos.x <= xCalc && mousePos.y <= yCalc
                 && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
             actionTaken(xPosition, yPosition);
+        }
+    }, false);
+}
+
+/** 
+ * Creates a mouseover listener at the specified location
+ * (worked out using an (x, y) origin point and the width/height
+ * passed as variables) to execute 'actionTaken' on mouseover.
+ * 
+ * @param {int} xPosition
+ * @param {int} yPosition
+ * @param {int} xSize
+ * @param {int} ySize
+ * 
+ */
+function mouseDown(xPosition, yPosition, xSize, ySize, actionTaken, day) {
+    var canvas = document.getElementById('canvas_1');
+
+    canvas.addEventListener('mousedown', function (evt) {
+
+        var mousePos = getMousePos(canvas, evt);
+
+        var xCalc = (canvasWidth + xSize + xPosition) - canvasWidth;
+        var yCalc = (canvasHeight + ySize + yPosition) - canvasHeight;
+
+        if (mousePos.x <= xCalc && mousePos.y <= yCalc
+                && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
+            //console.error("Yes!");
+            actionTaken(xPosition, yPosition, day);
         }
     }, false);
 }
@@ -503,7 +499,7 @@ function swipeArea(actionLeft, actionRight, actionUp, actionDown, areaX,
  * @param {int} x2
  * @param {int} y2
  * @returns {String}
- */     
+ */
 function swipeDirection(x1, y1, x2, y2) {
     var dir = "Invalid swipe";
     var error = 50;//how far the mouse can sway in the other axis to main direction
@@ -605,6 +601,7 @@ function drawClickRect(xPos, yPos, xSize, ySize, actionToTake, sglclick) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
     ctx.fillStyle = "#000000";
+
     //Create the rectangle
     ctx.fillRect(xPos, yPos, xSize, ySize);
     //Add the clickable listener
@@ -616,21 +613,26 @@ function drawClickRect(xPos, yPos, xSize, ySize, actionToTake, sglclick) {
 }
 
 /**
- * Fill rectangle clickable defined by x y location and width and height  with an 'actiontotake'
+ * Fill rectangle clickable defined by x y location and width and height  with an 'actiontotake' function
+ * This passes its position parameters to positionClick so that when click the locations can be stored.
+ * 
  * @param {int} xPos 
  * @param {int} yPos  
  * @param {int} xSize 
  * @param {int} ySise 
  * @param {function} actionToTake  
  */
-function drawPositionRect(xPos, yPos, xSize, ySize, actionToTake) {
+function drawPositionRect(xPos, yPos, xSize, ySize, clickAction, downAction, day) {
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
     ctx.fillStyle = "#000000";
+    //Add mouseDown listener
+    mouseDown(xPos, yPos, xSize, ySize, downAction, day);
+
     //Create the rectangle
     ctx.fillRect(xPos, yPos, xSize, ySize);
     //Add the clickable listener
-    positionClick(xPos, yPos, xSize, ySize, actionToTake);
+    positionClick(xPos, yPos, xSize, ySize, clickAction);
 }
 
 
@@ -649,6 +651,7 @@ function drawColourRect(xPos, yPos, xSize, ySize, actionToTake, sglclick, colour
     var c = document.getElementById("canvas_1");
     var ctx = c.getContext("2d");
     ctx.fillStyle = colour;
+
     //Create the rectangle
     ctx.fillRect(xPos, yPos, xSize, ySize);
     //Add the clickable listener

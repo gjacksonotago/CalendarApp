@@ -344,11 +344,19 @@ function drawCalendar(daysInMonth, startDay) {
 
                 //Function wrapped to prevent evaluation on passing as function.
                 //Please don't make this a "new function" ever.
-                var func = function (x, y) {
+                var addRem = function (x, y) {
                     var r = x + "" + y;
                     addReminder(reminderCoords[r]);
                 };
-                drawPositionRect(icoord, jcoord, 30, 30, func);
+                //Enlarges the date when mouse pressed down over it
+                var enlarge = function (x, y, day) {
+                    drawRect(x - 15, y - 15, 60, 60, "black");
+                    writeSomething(day, x - 5, y + 10, 22);
+                    if (hasReminder(day + "" + (month + 1) + "" + year)) {
+                        drawRect(x + 18, y + 18, 24, 24, "red");
+                    }
+                };
+                drawPositionRect(icoord, jcoord, 30, 30, addRem, enlarge, days);
                 writeSomething(days, icoord + 5, jcoord + 10, 8);
                 //console.error(days + " " + month + " " + year);
                 if (hasReminder(days + "" + (month + 1) + "" + year)) {
@@ -433,7 +441,7 @@ function addReminder(day) {
                 writeSomethingColour("Back", 22, cHeight - 20, 12, "black");
                 writeSomethingColour("New Event for " + reminderDate, 25, 35, "20", "black");
             };
-            
+
             drawColourRect(cWidth - 50, cHeight - 30, 30, 15, newEvent, true, "#FFFFFF");
             writeSomethingColour("New", cWidth - 47, cHeight - 20, 12, "black");
             //What day is it?
@@ -628,7 +636,7 @@ function monthToInt(monthString) {
  */
 function returnToEmu() {
     //clearInterval(clock);//All clock references are for ticking time inside calendar, 
-                           //but would be so small on a real smartwatch it would just be silly!
+    //but would be so small on a real smartwatch it would just be silly!
     $.get("emulatorBasics.js", function () {
         emulatorInitialise();
     });

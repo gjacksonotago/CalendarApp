@@ -8,7 +8,7 @@
  * 
  * @type @new; {Reminder}
  * 
- * @param {int} day (day, month, year)
+ * @param {int} day
  * @param {int} month 
  * @param {int} year
  */
