@@ -1,4 +1,5 @@
 /** 
+ * reminder.js
  * This class defines a reminder "class" to store a reminder for each day as necessary.
  * 
  * @author Ben Ryan

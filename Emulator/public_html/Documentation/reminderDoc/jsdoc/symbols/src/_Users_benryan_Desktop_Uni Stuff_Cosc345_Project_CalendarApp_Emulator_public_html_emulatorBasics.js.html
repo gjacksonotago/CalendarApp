@@ -1,0 +1,729 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/** 
+<span class='line'>  2</span>  * @module emulatorBasics.js:
+<span class='line'>  3</span>  * 
+<span class='line'>  4</span>  * These functions grab the current Time and convert it to a string
+<span class='line'>  5</span>  * and from there, colour a canvas, and write the Time as a Text element
+<span class='line'>  6</span>  * to the Canvas.
+<span class='line'>  7</span>  * They also now provide some basic smart watch like functions such as a basic swipe
+<span class='line'>  8</span>  * function and starting the calendar app.
+<span class='line'>  9</span>  * 
+<span class='line'> 10</span>  * Authors: George Jackson, Ben Ryan, Mohammed Tarabishi
+<span class='line'> 11</span>  * Date Created: 24/04/2015
+<span class='line'> 12</span>  */</span><span class="WHIT">
+<span class='line'> 13</span> 
+<span class='line'> 14</span> </span><span class="COMM">/** 
+<span class='line'> 15</span>  * Global variables 
+<span class='line'> 16</span>  */</span><span class="WHIT">
+<span class='line'> 17</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">canvasHeight</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">canvasHeight</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 18</span> 
+<span class='line'> 19</span> </span><span class="COMM">//These strings are used for modifying the canvas' HTML code.</span><span class="WHIT">
+<span class='line'> 20</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">oldCanvas</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'&lt;canvas width="'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">320</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'" height="'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">320</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="WHIT">        </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'" id="'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'canvas_1">'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">        </span><span class="STRN">'Canvas Tag not Supported by your browser version!'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="WHIT">        </span><span class="STRN">'&lt;/canvas>'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">canvasString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">        </span><span class="STRN">'&lt;canvas width="'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">canvasHeight</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">20</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'" height="'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">canvasHeight</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">20</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">        </span><span class="STRN">'" id="'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'canvas_1">'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">        </span><span class="STRN">'Canvas Tag not Supported by your browser version!'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT">        </span><span class="STRN">'&lt;/canvas>'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 29</span> 
+<span class='line'> 30</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">clock</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 31</span> 
+<span class='line'> 32</span> </span><span class="COMM">/**
+<span class='line'> 33</span>  * Function return the text value from the HTML input field.
+<span class='line'> 34</span>  * @return {string} 
+<span class='line'> 35</span>  */</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">getFormText</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">text</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"words"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">value</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 38</span> </span><span class="WHIT">    </span><span class="NAME">console.error</span><span class="PUNC">(</span><span class="NAME">text</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">text</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 41</span> 
+<span class='line'> 42</span> </span><span class="COMM">/**
+<span class='line'> 43</span>  * Function writing a message to canvas
+<span class='line'> 44</span>  * @param {Element} canvas 
+<span class='line'> 45</span>  * @param {String} message 
+<span class='line'> 46</span>  */</span><span class="WHIT">
+<span class='line'> 47</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">writeMessage</span><span class="PUNC">(</span><span class="NAME">canvas</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">message</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 48</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">context</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">canvas.getContext</span><span class="PUNC">(</span><span class="STRN">'2d'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 49</span> </span><span class="WHIT">    </span><span class="NAME">context.clearRect</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">canvas.width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">canvas.height</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="WHIT">    </span><span class="NAME">context.font</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'18pt Calibri'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="WHIT">    </span><span class="NAME">context.fillStyle</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'black'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="WHIT">    </span><span class="NAME">context.fillText</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">100</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 53</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 54</span> 
+<span class='line'> 55</span> </span><span class="COMM">/**
+<span class='line'> 56</span>  * Function get the mouse position
+<span class='line'> 57</span>  * @param {Element} canvas 
+<span class='line'> 58</span>  * @param {event} evt 
+<span class='line'> 59</span>  * @return {object} object with x and y data fields 
+<span class='line'> 60</span>  */</span><span class="WHIT">
+<span class='line'> 61</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">getMousePos</span><span class="PUNC">(</span><span class="NAME">canvas</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">evt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 62</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">rect</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">canvas.getBoundingClientRect</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 64</span> </span><span class="WHIT">        </span><span class="NAME">x</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">evt.clientX</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">rect.left</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="WHIT">        </span><span class="NAME">y</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">evt.clientY</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">rect.top</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 68</span> 
+<span class='line'> 69</span> </span><span class="COMM">/**
+<span class='line'> 70</span>  * Function return the current time as a string
+<span class='line'> 71</span>  * @return {String} 
+<span class='line'> 72</span>  */</span><span class="WHIT">
+<span class='line'> 73</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">createTime</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">currentTime</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 75</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">stringTime</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">currentTime.toLocaleTimeString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 76</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">stringTime.substring</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">11</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="COMM">//Substring fixes Safari oddity of adding NZST after the time.</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 78</span> 
+<span class='line'> 79</span> </span><span class="COMM">/**
+<span class='line'> 80</span>  * Function return the current date as a string
+<span class='line'> 81</span>  * @return {String}
+<span class='line'> 82</span>  */</span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">currentDate</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">currentDate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 85</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">stringDate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">currentDate.toLocaleDateString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 86</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">stringDate</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 87</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 88</span> 
+<span class='line'> 89</span> </span><span class="COMM">/**
+<span class='line'> 90</span>  * Function return the current month as an integer
+<span class='line'> 91</span>  * @return {int}
+<span class='line'> 92</span>  */</span><span class="WHIT">
+<span class='line'> 93</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">currentMonth</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">month</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">month.getMonth</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 96</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 97</span> 
+<span class='line'> 98</span> </span><span class="COMM">/**
+<span class='line'> 99</span>  * Function return the current year
+<span class='line'>100</span>  * @return {String}
+<span class='line'>101</span>  */</span><span class="WHIT">
+<span class='line'>102</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">currentYear</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>103</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">year</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Date</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>104</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">yearString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">year.toDateString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">subString</span><span class="PUNC">(</span><span class="NUMB">10</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">15</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>105</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">yearString</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>106</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>107</span> 
+<span class='line'>108</span> </span><span class="COMM">/** 
+<span class='line'>109</span>  * Function called to 'begin' the emulator:
+<span class='line'>110</span>  * Simulates an OS starting up by showing the apps lined
+<span class='line'>111</span>  * up to click.
+<span class='line'>112</span>  */</span><span class="WHIT">
+<span class='line'>113</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">emulatorInitialise</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>114</span> </span><span class="WHIT">    </span><span class="COMM">//Create the Canvas stuff</span><span class="WHIT">
+<span class='line'>115</span> </span><span class="WHIT">    </span><span class="NAME">resetCanvas</span><span class="PUNC">(</span><span class="NAME">oldCanvas</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>116</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"canvas_1"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>117</span> </span><span class="WHIT">    </span><span class="NAME">canvasWidth</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">c.width</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>118</span> </span><span class="WHIT">    </span><span class="NAME">canvasHeight</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">c.height</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>119</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">offset</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">60</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>120</span> 
+<span class='line'>121</span> </span><span class="WHIT">    </span><span class="NAME">updateTime</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="COMM">//Single call to updateTime() so that there is no delay on load</span><span class="WHIT">
+<span class='line'>122</span> </span><span class="WHIT">    </span><span class="NAME">clock</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">setInterval</span><span class="PUNC">(</span><span class="NAME">updateTime</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>123</span> 
+<span class='line'>124</span> </span><span class="WHIT">    </span><span class="COMM">//Emulator full screen event listener(s)</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="WHIT">    </span><span class="NAME">swipe</span><span class="PUNC">(</span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>126</span> 
+<span class='line'>127</span> </span><span class="WHIT">    </span><span class="COMM">//Populates the 'screen' with clickable 'app' icons --->Now only prints the one we need.</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">j</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">j</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">5</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">j</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>129</span> </span><span class="WHIT">        </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NUMB">5</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="NAME">i</span><span class="PUNC">++</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>130</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NUMB">2</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">j</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">                </span><span class="NAME">createPrototype</span><span class="PUNC">(</span><span class="NUMB">10</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">offset</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">j</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="NAME">offset</span><span class="PUNC">)</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>132</span> </span><span class="WHIT">                        </span><span class="NUMB">50</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">50</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="COMM">//else {</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="WHIT">            </span><span class="COMM">//  drawClickRect(10 + (i * offset), 10 + (j * offset),</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="WHIT">            </span><span class="COMM">//          50, 50, printPosition, true);</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">            </span><span class="COMM">//}</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>140</span> 
+<span class='line'>141</span> 
+<span class='line'>142</span> </span><span class="COMM">/**
+<span class='line'>143</span>  * Function updating the time keeping the clock ticking every second.
+<span class='line'>144</span>  */</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">updateTime</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="WHIT">    </span><span class="NAME">clearThis</span><span class="PUNC">(</span><span class="NUMB">40</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">180</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">280</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">100</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">t</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">createTime</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="COMM">//Just a temp string so i can test the time.</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="WHIT">    </span><span class="COMM">//This keeps the time central when it has more or less digits, i.e 9:00am and 10:00am.</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">t.charAt</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">':'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>150</span> </span><span class="WHIT">        </span><span class="NAME">writeSomethingColour</span><span class="PUNC">(</span><span class="NAME">t</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">55</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">250</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">44</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'#FFFFFF'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="COMM">//1 hour digit</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="WHIT">        </span><span class="NAME">writeSomethingColour</span><span class="PUNC">(</span><span class="NAME">t</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">40</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">250</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">44</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'#FFFFFF'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="COMM">//2 hour digits</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>155</span> 
+<span class='line'>156</span> </span><span class="COMM">/**
+<span class='line'>157</span>  * Function clearing the rectangle specified by x and y location and with and height.
+<span class='line'>158</span>  * @param  {int} xPos top left corner x
+<span class='line'>159</span>  * @param  {int} yPos top left corner y
+<span class='line'>160</span>  * @param  {int} xSize width
+<span class='line'>161</span>  * @param  {int} ySize height
+<span class='line'>162</span>  */</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">clearThis</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"canvas_1"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ctx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">c.getContext</span><span class="PUNC">(</span><span class="STRN">"2d"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="WHIT">    </span><span class="NAME">ctx.clearRect</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>167</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>168</span> 
+<span class='line'>169</span> </span><span class="COMM">/**
+<span class='line'>170</span>  * Creates an instance of the Prototype application
+<span class='line'>171</span>  * when called, at position (xPos, yPos) on the canvas
+<span class='line'>172</span>  * and of size xSize * ySize, with the name written in
+<span class='line'>173</span>  * "Calendar App".
+<span class='line'>174</span>  * 
+<span class='line'>175</span>  * @param {int} xPos
+<span class='line'>176</span>  * @param {int} yPos
+<span class='line'>177</span>  * @param {int} xSize
+<span class='line'>178</span>  * @param {int} ySize
+<span class='line'>179</span>  */</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">createPrototype</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"canvas_1"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ctx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">c.getContext</span><span class="PUNC">(</span><span class="STRN">"2d"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>183</span> </span><span class="WHIT">    </span><span class="COMM">//Create the app "icon".</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="WHIT">    </span><span class="NAME">drawClickRect</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">protoClick</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>185</span> </span><span class="WHIT">    </span><span class="COMM">//Write the app "name" to the icon.</span><span class="WHIT">
+<span class='line'>186</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillStyle</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"#FFFFFF"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>187</span> </span><span class="WHIT">    </span><span class="NAME">ctx.font</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"12px Sans Serif"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>188</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillText</span><span class="PUNC">(</span><span class="STRN">"Calendar"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xPos</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">5</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">yPos</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">15</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>189</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillText</span><span class="PUNC">(</span><span class="STRN">"App"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">xSize</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">ySize</span><span class="WHIT"> </span><span class="PUNC">/</span><span class="WHIT"> </span><span class="NUMB">3</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">yPos</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NUMB">15</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>190</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>191</span> 
+<span class='line'>192</span> </span><span class="COMM">/**
+<span class='line'>193</span>  * Wraps a JQuery Call to the Prototype Initialistion
+<span class='line'>194</span>  * so that it can be passed as an argument (without immediate 
+<span class='line'>195</span>  * evaluation) into the MouseDown function to add it as a listener.
+<span class='line'>196</span>  */</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">protoClick</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">init</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$.get</span><span class="PUNC">(</span><span class="STRN">"prototypeBasics.js"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="WHIT">        </span><span class="NAME">protoInitialise</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>200</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>201</span> </span><span class="WHIT">    </span><span class="NAME">clearInterval</span><span class="PUNC">(</span><span class="NAME">clock</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="WHIT">    </span><span class="NAME">init</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>204</span> 
+<span class='line'>205</span> </span><span class="COMM">/**
+<span class='line'>206</span>  * Function writes a specified text at specified location (x,y) with specified fontsize
+<span class='line'>207</span>  * 
+<span class='line'>208</span>  * @param {String} message  
+<span class='line'>209</span>  * @param {int} x 
+<span class='line'>210</span>  * @param {int} y 
+<span class='line'>211</span>  * @param {int} fontSize
+<span class='line'>212</span>  */</span><span class="WHIT">
+<span class='line'>213</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">writeSomething</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">fontSize</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>214</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"canvas_1"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ctx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">c.getContext</span><span class="PUNC">(</span><span class="STRN">"2d"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillStyle</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"#FFFFFF"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="WHIT">    </span><span class="NAME">ctx.font</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">fontSize</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"px Sans Serif"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillText</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>219</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>220</span> 
+<span class='line'>221</span> 
+<span class='line'>222</span> </span><span class="COMM">/**
+<span class='line'>223</span>  * Function writes a specified text at specified location (x,y) with specified fontsize and specified colour
+<span class='line'>224</span>  * 
+<span class='line'>225</span>  * @param {String} message  
+<span class='line'>226</span>  * @param {int} x 
+<span class='line'>227</span>  * @param {int} y 
+<span class='line'>228</span>  * @param {int} fontSize
+<span class='line'>229</span>  * @param {String} colour
+<span class='line'>230</span>  */</span><span class="WHIT">
+<span class='line'>231</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">writeSomethingColour</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">fontSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">colour</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>232</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"canvas_1"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>233</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ctx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">c.getContext</span><span class="PUNC">(</span><span class="STRN">"2d"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>234</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillStyle</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">colour</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>235</span> </span><span class="WHIT">    </span><span class="NAME">ctx.font</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">fontSize</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">"px Sans Serif"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>236</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillText</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>237</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>238</span> 
+<span class='line'>239</span> </span><span class="COMM">/** Return the canvas the the id specified as input
+<span class='line'>240</span>  * 
+<span class='line'>241</span>  * @param {String} canvasID
+<span class='line'>242</span>  * @returns {Element} 
+<span class='line'>243</span>  */</span><span class="WHIT">
+<span class='line'>244</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">returnCanvas</span><span class="PUNC">(</span><span class="NAME">canvasID</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>245</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">canvas</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="NAME">canvasID</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>246</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">canvas</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>247</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>248</span> 
+<span class='line'>249</span> </span><span class="COMM">/**
+<span class='line'>250</span>  * Assuming you pass an HTML canvas context object, this
+<span class='line'>251</span>  * will restore any saved state from the draw stack.
+<span class='line'>252</span>  * 
+<span class='line'>253</span>  * @param {Element} ctx
+<span class='line'>254</span>  */</span><span class="WHIT">
+<span class='line'>255</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">restoreCtx</span><span class="PUNC">(</span><span class="NAME">ctx</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="WHIT">    </span><span class="COMM">//console.error("cliiiicked!");</span><span class="WHIT">
+<span class='line'>257</span> </span><span class="WHIT">    </span><span class="NAME">ctx.restore</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>258</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>259</span> 
+<span class='line'>260</span> </span><span class="COMM">/**
+<span class='line'>261</span>  * Adds a MouseClick event listener across the given
+<span class='line'>262</span>  * co-ordinates - which it works out like the fillRectangle 
+<span class='line'>263</span>  * method does, from a given (x, y) origin point and the size
+<span class='line'>264</span>  * of the area to make interactive.
+<span class='line'>265</span>  * 
+<span class='line'>266</span>  * Utilises the canvas size properties to work the area out.
+<span class='line'>267</span>  * 
+<span class='line'>268</span>  * The event listener executes the function 'actionTaken'
+<span class='line'>269</span>  * upon a mouseclick.
+<span class='line'>270</span>  * 
+<span class='line'>271</span>  * @param {int} xPosition
+<span class='line'>272</span>  * @param {int} yPosition
+<span class='line'>273</span>  * @param {int} xSize
+<span class='line'>274</span>  * @param {int} ySize
+<span class='line'>275</span>  * @param {function} actionTaken
+<span class='line'>276</span>  */</span><span class="WHIT">
+<span class='line'>277</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">singleMouseClick</span><span class="PUNC">(</span><span class="NAME">xPosition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPosition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionTaken</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>278</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">canvas</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">'canvas_1'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>279</span> 
+<span class='line'>280</span> </span><span class="WHIT">    </span><span class="COMM">//The mouseclick event listener.</span><span class="WHIT">
+<span class='line'>281</span> </span><span class="WHIT">    </span><span class="NAME">canvas.addEventListener</span><span class="PUNC">(</span><span class="STRN">'click'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">evt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>282</span> 
+<span class='line'>283</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mousePos</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">getMousePos</span><span class="PUNC">(</span><span class="NAME">canvas</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">evt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>284</span> 
+<span class='line'>285</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">xCalc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">canvasWidth</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">xPosition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">canvasWidth</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>286</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">yCalc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">canvasHeight</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">yPosition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">canvasHeight</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>287</span> 
+<span class='line'>288</span> </span><span class="WHIT">        </span><span class="COMM">//If Mouse Clicked on the Black Square, new message!</span><span class="WHIT">
+<span class='line'>289</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">mousePos.x</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">xCalc</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">mousePos.y</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">yCalc</span><span class="WHIT">
+<span class='line'>290</span> </span><span class="WHIT">                </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">mousePos.x</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">xPosition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">mousePos.y</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">yPosition</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>291</span> </span><span class="WHIT">            </span><span class="NAME">actionTaken</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>292</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>293</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>294</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>295</span> 
+<span class='line'>296</span> 
+<span class='line'>297</span> </span><span class="COMM">/**
+<span class='line'>298</span>  * Adds a MouseClick event listener across the given
+<span class='line'>299</span>  * co-ordinates - which it works out like the fillRectangle 
+<span class='line'>300</span>  * method does, from a given (x, y) origin point and the size
+<span class='line'>301</span>  * of the area to make interactive.
+<span class='line'>302</span>  * 
+<span class='line'>303</span>  * Utilises the canvas size properties to work the area out.
+<span class='line'>304</span>  * 
+<span class='line'>305</span>  * The event listener executes the function 'actionTaken'
+<span class='line'>306</span>  * upon a double mouseclick.
+<span class='line'>307</span>  * 
+<span class='line'>308</span>  * @param {int} xPosition
+<span class='line'>309</span>  * @param {int} yPosition
+<span class='line'>310</span>  * @param {int} xSize
+<span class='line'>311</span>  * @param {int} ySize
+<span class='line'>312</span>  * @param {function} actionTaken
+<span class='line'>313</span>  */</span><span class="WHIT">
+<span class='line'>314</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">doubleMouseClick</span><span class="PUNC">(</span><span class="NAME">xPosition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPosition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionTaken</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>315</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">canvas</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">'canvas_1'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>316</span> 
+<span class='line'>317</span> </span><span class="WHIT">    </span><span class="COMM">//The mouseclick event listener.</span><span class="WHIT">
+<span class='line'>318</span> </span><span class="WHIT">    </span><span class="NAME">canvas.addEventListener</span><span class="PUNC">(</span><span class="STRN">'dblclick'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">evt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>319</span> 
+<span class='line'>320</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mousePos</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">getMousePos</span><span class="PUNC">(</span><span class="NAME">canvas</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">evt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>321</span> 
+<span class='line'>322</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">xCalc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">canvasWidth</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">xPosition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">canvasWidth</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>323</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">yCalc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">canvasHeight</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">yPosition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">canvasHeight</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>324</span> 
+<span class='line'>325</span> </span><span class="WHIT">        </span><span class="COMM">//If Mouse Clicked on the Black Square, new message!</span><span class="WHIT">
+<span class='line'>326</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">mousePos.x</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">xCalc</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">mousePos.y</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">yCalc</span><span class="WHIT">
+<span class='line'>327</span> </span><span class="WHIT">                </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">mousePos.x</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">xPosition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">mousePos.y</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">yPosition</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>328</span> </span><span class="WHIT">            </span><span class="NAME">actionTaken</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>329</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>330</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>331</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>332</span> 
+<span class='line'>333</span> </span><span class="COMM">/**
+<span class='line'>334</span>  * Adds a PositionClick event listener across the given
+<span class='line'>335</span>  * co-ordinates - which it works out like the fillRectangle 
+<span class='line'>336</span>  * method does, from a given (x, y) origin point and the size
+<span class='line'>337</span>  * of the area to make interactive.
+<span class='line'>338</span>  * 
+<span class='line'>339</span>  * Utilises the canvas size properties to work the area out.
+<span class='line'>340</span>  * 
+<span class='line'>341</span>  * The event listener executes the function 'actionTaken'
+<span class='line'>342</span>  * upon a double mouseclick, passing it the position variables 
+<span class='line'>343</span>  * which other methods do not do.
+<span class='line'>344</span>  * 
+<span class='line'>345</span>  * @param {int} xPosition
+<span class='line'>346</span>  * @param {int} yPosition
+<span class='line'>347</span>  * @param {int} xSize
+<span class='line'>348</span>  * @param {int} ySize
+<span class='line'>349</span>  * @param {function} actionTaken
+<span class='line'>350</span>  */</span><span class="WHIT">
+<span class='line'>351</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">positionClick</span><span class="PUNC">(</span><span class="NAME">xPosition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPosition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionTaken</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>352</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">canvas</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">'canvas_1'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>353</span> 
+<span class='line'>354</span> </span><span class="WHIT">    </span><span class="COMM">//The mouseclick event listener.</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="WHIT">    </span><span class="NAME">canvas.addEventListener</span><span class="PUNC">(</span><span class="STRN">'dblclick'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">evt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>356</span> 
+<span class='line'>357</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mousePos</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">getMousePos</span><span class="PUNC">(</span><span class="NAME">canvas</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">evt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>358</span> 
+<span class='line'>359</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">xCalc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">canvasWidth</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">xPosition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">canvasWidth</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>360</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">yCalc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">canvasHeight</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">yPosition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">canvasHeight</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>361</span> 
+<span class='line'>362</span> </span><span class="WHIT">        </span><span class="COMM">//If Mouse Clicked on the Black Square, new message!</span><span class="WHIT">
+<span class='line'>363</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">mousePos.x</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">xCalc</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">mousePos.y</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">yCalc</span><span class="WHIT">
+<span class='line'>364</span> </span><span class="WHIT">                </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">mousePos.x</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">xPosition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">mousePos.y</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">yPosition</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>365</span> </span><span class="WHIT">            </span><span class="NAME">actionTaken</span><span class="PUNC">(</span><span class="NAME">xPosition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPosition</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>366</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>367</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>368</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>369</span> 
+<span class='line'>370</span> </span><span class="COMM">/** 
+<span class='line'>371</span>  * Creates a mouseover listener at the specified location
+<span class='line'>372</span>  * (worked out using an (x, y) origin point and the width/height
+<span class='line'>373</span>  * passed as variables) to execute 'actionTaken' on mouseover.
+<span class='line'>374</span>  * 
+<span class='line'>375</span>  * @param {int} xPosition
+<span class='line'>376</span>  * @param {int} yPosition
+<span class='line'>377</span>  * @param {int} xSize
+<span class='line'>378</span>  * @param {int} ySize
+<span class='line'>379</span>  * 
+<span class='line'>380</span>  */</span><span class="WHIT">
+<span class='line'>381</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">mouseDown</span><span class="PUNC">(</span><span class="NAME">xPosition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPosition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionTaken</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">day</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>382</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">canvas</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">'canvas_1'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>383</span> 
+<span class='line'>384</span> </span><span class="WHIT">    </span><span class="NAME">canvas.addEventListener</span><span class="PUNC">(</span><span class="STRN">'mousedown'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">evt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>385</span> 
+<span class='line'>386</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mousePos</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">getMousePos</span><span class="PUNC">(</span><span class="NAME">canvas</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">evt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>387</span> 
+<span class='line'>388</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">xCalc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">canvasWidth</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">xPosition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">canvasWidth</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>389</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">yCalc</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">canvasHeight</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">yPosition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">canvasHeight</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>390</span> 
+<span class='line'>391</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">mousePos.x</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">xCalc</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">mousePos.y</span><span class="WHIT"> </span><span class="PUNC">&lt;=</span><span class="WHIT"> </span><span class="NAME">yCalc</span><span class="WHIT">
+<span class='line'>392</span> </span><span class="WHIT">                </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">mousePos.x</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">xPosition</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">mousePos.y</span><span class="WHIT"> </span><span class="PUNC">>=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">yPosition</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>393</span> </span><span class="WHIT">            </span><span class="COMM">//console.error("Yes!");</span><span class="WHIT">
+<span class='line'>394</span> </span><span class="WHIT">            </span><span class="NAME">actionTaken</span><span class="PUNC">(</span><span class="NAME">xPosition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPosition</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">day</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>395</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>396</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>397</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>398</span> 
+<span class='line'>399</span> </span><span class="COMM">/**
+<span class='line'>400</span>  * Adds a swipe and call the function related to the event
+<span class='line'>401</span>  * the swipe is define as a click on mouse held down then released at different position
+<span class='line'>402</span>  * it could be left right up or down
+<span class='line'>403</span>  * could be diagonal ?
+<span class='line'>404</span>  * 
+<span class='line'>405</span>  * @param {boolean} actionLeft
+<span class='line'>406</span>  * @param {boolean} actionRight
+<span class='line'>407</span>  * @param {boolean} actionUp
+<span class='line'>408</span>  * @param {boolean} actionDown
+<span class='line'>409</span>  * @returns {String}
+<span class='line'>410</span>  */</span><span class="WHIT">
+<span class='line'>411</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">swipe</span><span class="PUNC">(</span><span class="NAME">actionLeft</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionRight</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionUp</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionDown</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>412</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">x2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y2</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>413</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">canvas</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">'canvas_1'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>414</span> </span><span class="WHIT">    </span><span class="COMM">//The mousedown event listener.</span><span class="WHIT">
+<span class='line'>415</span> </span><span class="WHIT">    </span><span class="NAME">canvas.addEventListener</span><span class="PUNC">(</span><span class="STRN">'mousedown'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">evt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>416</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mousePos1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">getMousePos</span><span class="PUNC">(</span><span class="NAME">canvas</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">evt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>417</span> </span><span class="WHIT">        </span><span class="NAME">x1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">mousePos1.x</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>418</span> </span><span class="WHIT">        </span><span class="NAME">y1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">mousePos1.y</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>419</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>420</span> </span><span class="WHIT">    </span><span class="COMM">//The mouseup event listener.</span><span class="WHIT">
+<span class='line'>421</span> </span><span class="WHIT">    </span><span class="NAME">canvas.addEventListener</span><span class="PUNC">(</span><span class="STRN">'mouseup'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">evt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>422</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mousePos2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">getMousePos</span><span class="PUNC">(</span><span class="NAME">canvas</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">evt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>423</span> </span><span class="WHIT">        </span><span class="NAME">x2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">mousePos2.x</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>424</span> </span><span class="WHIT">        </span><span class="NAME">y2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">mousePos2.y</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>425</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">swipeDirection</span><span class="PUNC">(</span><span class="NAME">x1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">x2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>426</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">actionLeft</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"left"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>427</span> </span><span class="WHIT">            </span><span class="NAME">actionLeft</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>428</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>429</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">actionRight</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"right"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>430</span> </span><span class="WHIT">            </span><span class="NAME">actionRight</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>431</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>432</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">actionUp</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"up"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>433</span> </span><span class="WHIT">            </span><span class="NAME">actionUp</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>434</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>435</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">actionDown</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"down"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>436</span> </span><span class="WHIT">            </span><span class="NAME">actionDown</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>437</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>438</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>439</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>440</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>441</span> 
+<span class='line'>442</span> </span><span class="COMM">//Assumes a swipe is a click, mouse held down, then released</span><span class="WHIT">
+<span class='line'>443</span> 
+<span class='line'>444</span> </span><span class="COMM">/**
+<span class='line'>445</span>  * Function returns the direction of swiping in the swiping area of the mouse
+<span class='line'>446</span>  * 
+<span class='line'>447</span>  * @param {boolean} actionLeft
+<span class='line'>448</span>  * @param {boolean} actionRight
+<span class='line'>449</span>  * @param {boolean} actionUp
+<span class='line'>450</span>  * @param {boolean} actionDown
+<span class='line'>451</span>  * @param {int} areaX
+<span class='line'>452</span>  * @param {int} areaY
+<span class='line'>453</span>  * @param {int} lenX
+<span class='line'>454</span>  * @param {int} lenY 
+<span class='line'>455</span>  * @returns {String}
+<span class='line'>456</span>  */</span><span class="WHIT">
+<span class='line'>457</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">swipeArea</span><span class="PUNC">(</span><span class="NAME">actionLeft</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionRight</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionUp</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionDown</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">areaX</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>458</span> </span><span class="WHIT">        </span><span class="NAME">areaY</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">lenX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">lenY</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>459</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">x1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">x2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y2</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>460</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">canvas</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">'canvas_1'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>461</span> </span><span class="WHIT">    </span><span class="COMM">//The mousedown event listener.</span><span class="WHIT">
+<span class='line'>462</span> 
+<span class='line'>463</span> </span><span class="WHIT">    </span><span class="NAME">canvas.addEventListener</span><span class="PUNC">(</span><span class="STRN">'mousedown'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">evt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>464</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mousePos1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">getMousePos</span><span class="PUNC">(</span><span class="NAME">canvas</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">evt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>465</span> </span><span class="WHIT">        </span><span class="NAME">x1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">mousePos1.x</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>466</span> </span><span class="WHIT">        </span><span class="NAME">y1</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">mousePos1.y</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>467</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>468</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">x1</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">areaX</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">x1</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">areaX</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">lenX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y1</span><span class="WHIT"> </span><span class="PUNC">></span><span class="WHIT"> </span><span class="NAME">areaY</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT">
+<span class='line'>469</span> </span><span class="WHIT">            </span><span class="NAME">y1</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">areaY</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">lenY</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>470</span> </span><span class="WHIT">        </span><span class="COMM">//The mouseup event listener.</span><span class="WHIT">
+<span class='line'>471</span> </span><span class="WHIT">        </span><span class="NAME">canvas.addEventListener</span><span class="PUNC">(</span><span class="STRN">'mouseup'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">evt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>472</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">mousePos2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">getMousePos</span><span class="PUNC">(</span><span class="NAME">canvas</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">evt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>473</span> </span><span class="WHIT">            </span><span class="NAME">x2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">mousePos2.x</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>474</span> </span><span class="WHIT">            </span><span class="NAME">y2</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">mousePos2.y</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>475</span> 
+<span class='line'>476</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">swipeDirection</span><span class="PUNC">(</span><span class="NAME">x1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">x2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y2</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>477</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">actionLeft</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"left"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>478</span> </span><span class="WHIT">                </span><span class="NAME">actionLeft</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>479</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>480</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">actionRight</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"right"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>481</span> </span><span class="WHIT">                </span><span class="NAME">actionRight</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>482</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>483</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">actionUp</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"up"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>484</span> </span><span class="WHIT">                </span><span class="NAME">actionUp</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>485</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>486</span> </span><span class="WHIT">            </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">actionDown</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">"down"</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>487</span> </span><span class="WHIT">                </span><span class="NAME">actionDown</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>488</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>489</span> </span><span class="WHIT">            </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>490</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>491</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>492</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>493</span> 
+<span class='line'>494</span> </span><span class="COMM">/*
+<span class='line'>495</span>  * define the swipe direction could be 4 outputs only ( left right
+<span class='line'>496</span>  * up and down ) no diagonal. the direction is defined between two 2D points  
+<span class='line'>497</span>  * @param {int} x1
+<span class='line'>498</span>  * @param {int} y1
+<span class='line'>499</span>  * @param {int} x2
+<span class='line'>500</span>  * @param {int} y2
+<span class='line'>501</span>  * @returns {String}
+<span class='line'>502</span>  */</span><span class="WHIT">
+<span class='line'>503</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">swipeDirection</span><span class="PUNC">(</span><span class="NAME">x1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">x2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">y2</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>504</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"Invalid swipe"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>505</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">error</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">50</span><span class="PUNC">;</span><span class="COMM">//how far the mouse can sway in the other axis to main direction</span><span class="WHIT">
+<span class='line'>506</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">x1</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">x2</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">Math.abs</span><span class="PUNC">(</span><span class="NAME">y2</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">y1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">error</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>507</span> </span><span class="WHIT">        </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"right"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>508</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">x2</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">x1</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">Math.abs</span><span class="PUNC">(</span><span class="NAME">y2</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">y1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">error</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>509</span> </span><span class="WHIT">        </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"left"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>510</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">y1</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">y2</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">Math.abs</span><span class="PUNC">(</span><span class="NAME">x2</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">x1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">error</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>511</span> </span><span class="WHIT">        </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"down"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>512</span> </span><span class="WHIT">    </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">y2</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">y1</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">Math.abs</span><span class="PUNC">(</span><span class="NAME">x2</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">x1</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&lt;</span><span class="WHIT"> </span><span class="NAME">error</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>513</span> </span><span class="WHIT">        </span><span class="NAME">dir</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"up"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>514</span> </span><span class="WHIT">    </span><span class="COMM">//console.log(dir); </span><span class="WHIT">
+<span class='line'>515</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">dir</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>516</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>517</span> 
+<span class='line'>518</span> </span><span class="COMM">/**
+<span class='line'>519</span>  * Print the position at the 'divshow' tag
+<span class='line'>520</span>  */</span><span class="WHIT">
+<span class='line'>521</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">printPosition</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>522</span> </span><span class="WHIT">    </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"divShow"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">innerHTML</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sqMes</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>523</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>524</span> 
+<span class='line'>525</span> 
+<span class='line'>526</span> </span><span class="COMM">/**
+<span class='line'>527</span>  * Print the message passed as input at the 'divshow' tag
+<span class='line'>528</span>  * @param {String} message
+<span class='line'>529</span>  */</span><span class="WHIT">
+<span class='line'>530</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">printMessage</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>531</span> </span><span class="WHIT">    </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"divShow"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">innerHTML</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">message</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>532</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>533</span> 
+<span class='line'>534</span> </span><span class="COMM">/**
+<span class='line'>535</span>  * Pass a String that creates a blank canvas element
+<span class='line'>536</span>  * here, from the prototype, to clear the canvas.
+<span class='line'>537</span>  * 
+<span class='line'>538</span>  * @param {String} string
+<span class='line'>539</span>  */</span><span class="WHIT">
+<span class='line'>540</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">resetCanvas</span><span class="PUNC">(</span><span class="NAME">string</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>541</span> </span><span class="WHIT">    </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"canvasDiv"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">innerHTML</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">string</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>542</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>543</span> 
+<span class='line'>544</span> </span><span class="COMM">/**
+<span class='line'>545</span>  * Creates a new Canvas to be used.
+<span class='line'>546</span>  * 
+<span class='line'>547</span>  * Ideally this is to be used to help create reminders, and
+<span class='line'>548</span>  * maybe needs to save the previous context....
+<span class='line'>549</span>  * 
+<span class='line'>550</span>  * @param {int} width
+<span class='line'>551</span>  * @param {int} height
+<span class='line'>552</span>  * @param {int} idNo
+<span class='line'>553</span>  */</span><span class="WHIT">
+<span class='line'>554</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">newCanvas</span><span class="PUNC">(</span><span class="NAME">width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">height</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">idNo</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">button</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>555</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">button</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>556</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">newCanvasString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'&lt;canvas width="'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">width</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'" height="'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">height</span><span class="WHIT">
+<span class='line'>557</span> </span><span class="WHIT">                </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'" id="'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">idNo</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'">'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>558</span> </span><span class="WHIT">                </span><span class="STRN">'Canvas Tag not Supported by your browser version!'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>559</span> </span><span class="WHIT">                </span><span class="STRN">'&lt;/canvas>'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'&lt;div style="position: relative;">&lt;input id='</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>560</span> </span><span class="WHIT">                </span><span class="STRN">'"words" type="text;">'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>561</span> </span><span class="WHIT">                </span><span class="STRN">'&lt;button id="reminder" onclick="myfunc()">Enter&lt;/button>&lt;/div>'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>562</span> </span><span class="WHIT">        </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"canvasDiv"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">innerHTML</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newCanvasString</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>563</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>564</span> </span><span class="WHIT">        </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">newCanvasString</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'&lt;canvas width="'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">width</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'" height="'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">height</span><span class="WHIT">
+<span class='line'>565</span> </span><span class="WHIT">                </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'" id="'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">idNo</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'">'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>566</span> </span><span class="WHIT">                </span><span class="STRN">'Canvas Tag not Supported by your browser version!'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>567</span> </span><span class="WHIT">                </span><span class="STRN">'&lt;/canvas>'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="STRN">'&lt;div style="position: relative;">&lt;input hidden id='</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>568</span> </span><span class="WHIT">                </span><span class="STRN">'"words" type="text;">'</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT">
+<span class='line'>569</span> </span><span class="WHIT">                </span><span class="STRN">'&lt;button hidden id="reminder" onclick="myfunc()">Enter&lt;/button>&lt;/div>'</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>570</span> </span><span class="WHIT">        </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"canvasDiv"</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">innerHTML</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newCanvasString</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>571</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>572</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>573</span> 
+<span class='line'>574</span> </span><span class="COMM">/**
+<span class='line'>575</span>  * Fill rectangle defined by x y location and width and height with a specified colour
+<span class='line'>576</span>  * @param {int} xPos 
+<span class='line'>577</span>  * @param {int} yPos  
+<span class='line'>578</span>  * @param {int} xSize 
+<span class='line'>579</span>  * @param {int} ySise 
+<span class='line'>580</span>  * @param {String} colour  
+<span class='line'>581</span>  */</span><span class="WHIT">
+<span class='line'>582</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">drawRect</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">colour</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>583</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"canvas_1"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>584</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ctx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">c.getContext</span><span class="PUNC">(</span><span class="STRN">"2d"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>585</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillStyle</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">colour</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>586</span> </span><span class="WHIT">    </span><span class="COMM">//Create the rectangle</span><span class="WHIT">
+<span class='line'>587</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillRect</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>588</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>589</span> 
+<span class='line'>590</span> </span><span class="COMM">/**
+<span class='line'>591</span>  *  Creates a black rectangle on the canvas with a singleMouseClick listener
+<span class='line'>592</span>  *  which listens for 'actionToTake'
+<span class='line'>593</span>  * @param {int} xPos 
+<span class='line'>594</span>  * @param {int} yPos 
+<span class='line'>595</span>  * @param {int} xSize
+<span class='line'>596</span>  * @param {int} ySise 
+<span class='line'>597</span>  * @param {function} actionToTake
+<span class='line'>598</span>  * @param {boolean} sglclick 
+<span class='line'>599</span>  */</span><span class="WHIT">
+<span class='line'>600</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">drawClickRect</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionToTake</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sglclick</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>601</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"canvas_1"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>602</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ctx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">c.getContext</span><span class="PUNC">(</span><span class="STRN">"2d"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>603</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillStyle</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"#000000"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>604</span> 
+<span class='line'>605</span> </span><span class="WHIT">    </span><span class="COMM">//Create the rectangle</span><span class="WHIT">
+<span class='line'>606</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillRect</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>607</span> </span><span class="WHIT">    </span><span class="COMM">//Add the clickable listener</span><span class="WHIT">
+<span class='line'>608</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">sglclick</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>609</span> </span><span class="WHIT">        </span><span class="NAME">singleMouseClick</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionToTake</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>610</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>611</span> </span><span class="WHIT">        </span><span class="NAME">doubleMouseClick</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionToTake</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>612</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>613</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>614</span> 
+<span class='line'>615</span> </span><span class="COMM">/**
+<span class='line'>616</span>  * Fill rectangle clickable defined by x y location and width and height  with an 'actiontotake' function
+<span class='line'>617</span>  * This passes its position parameters to positionClick so that when click the locations can be stored.
+<span class='line'>618</span>  * 
+<span class='line'>619</span>  * @param {int} xPos 
+<span class='line'>620</span>  * @param {int} yPos  
+<span class='line'>621</span>  * @param {int} xSize 
+<span class='line'>622</span>  * @param {int} ySise 
+<span class='line'>623</span>  * @param {function} actionToTake  
+<span class='line'>624</span>  */</span><span class="WHIT">
+<span class='line'>625</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">drawPositionRect</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">clickAction</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">downAction</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">day</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>626</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"canvas_1"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>627</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ctx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">c.getContext</span><span class="PUNC">(</span><span class="STRN">"2d"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>628</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillStyle</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"#000000"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>629</span> </span><span class="WHIT">    </span><span class="COMM">//Add mouseDown listener</span><span class="WHIT">
+<span class='line'>630</span> </span><span class="WHIT">    </span><span class="NAME">mouseDown</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">downAction</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">day</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>631</span> 
+<span class='line'>632</span> </span><span class="WHIT">    </span><span class="COMM">//Create the rectangle</span><span class="WHIT">
+<span class='line'>633</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillRect</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>634</span> </span><span class="WHIT">    </span><span class="COMM">//Add the clickable listener</span><span class="WHIT">
+<span class='line'>635</span> </span><span class="WHIT">    </span><span class="NAME">positionClick</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">clickAction</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>636</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>637</span> 
+<span class='line'>638</span> 
+<span class='line'>639</span> </span><span class="COMM">/**
+<span class='line'>640</span>  *  Fill rectangle clickable either single click or double click defined by x y location and width and height
+<span class='line'>641</span>  *   with an action to take with a specified colour
+<span class='line'>642</span>  * @param {int} xPos 
+<span class='line'>643</span>  * @param {int} yPos  
+<span class='line'>644</span>  * @param {int} xSize 
+<span class='line'>645</span>  * @param {int} ySise 
+<span class='line'>646</span>  * @param {function} actionToTake  
+<span class='line'>647</span>  * @param {boolean} sglclick
+<span class='line'>648</span>  * @param {String} colour
+<span class='line'>649</span>  */</span><span class="WHIT">
+<span class='line'>650</span> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="NAME">drawColourRect</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionToTake</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sglclick</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">colour</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>651</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">c</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">document.getElementById</span><span class="PUNC">(</span><span class="STRN">"canvas_1"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>652</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">ctx</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">c.getContext</span><span class="PUNC">(</span><span class="STRN">"2d"</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>653</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillStyle</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">colour</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>654</span> 
+<span class='line'>655</span> </span><span class="WHIT">    </span><span class="COMM">//Create the rectangle</span><span class="WHIT">
+<span class='line'>656</span> </span><span class="WHIT">    </span><span class="NAME">ctx.fillRect</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>657</span> </span><span class="WHIT">    </span><span class="COMM">//Add the clickable listener</span><span class="WHIT">
+<span class='line'>658</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">sglclick</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>659</span> </span><span class="WHIT">        </span><span class="NAME">singleMouseClick</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionToTake</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>660</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>661</span> </span><span class="WHIT">        </span><span class="NAME">doubleMouseClick</span><span class="PUNC">(</span><span class="NAME">xPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">yPos</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">xSize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ySize</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">actionToTake</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>662</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>663</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>664</span> 
+<span class='line'>665</span> 
+<span class='line'>666</span> </span><span class="COMM">//===============================================================/</span><span class="WHIT">
+<span class='line'>667</span> </span><span class="COMM">/*
+<span class='line'>668</span>  * 
+<span class='line'>669</span>  * Old functions: Some may still be useful in the future, e.g vibrate
+<span class='line'>670</span>  */</span><span class="WHIT">
+<span class='line'>671</span> 
+<span class='line'>672</span> 
+<span class='line'>673</span> </span><span class="COMM">//Draws to the canvas - currently a red rectangle and</span><span class="WHIT">
+<span class='line'>674</span> </span><span class="COMM">// both the current date and time as retrieved by</span><span class="WHIT">
+<span class='line'>675</span> </span><span class="COMM">// the functions above.</span><span class="WHIT">
+<span class='line'>676</span> </span><span class="COMM">//function drawToCanvas() {</span><span class="WHIT">
+<span class='line'>677</span> </span><span class="COMM">//    var stringTime = createTime();</span><span class="WHIT">
+<span class='line'>678</span> </span><span class="COMM">//    var stringDate = currentDate();</span><span class="WHIT">
+<span class='line'>679</span> </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'>680</span> </span><span class="COMM">//    //Create the Canvas stuff</span><span class="WHIT">
+<span class='line'>681</span> </span><span class="COMM">//    var c = document.getElementById("canvas_1");</span><span class="WHIT">
+<span class='line'>682</span> </span><span class="COMM">//    var ctx = c.getContext("2d");</span><span class="WHIT">
+<span class='line'>683</span> </span><span class="COMM">//    canvasWidth = c.width;</span><span class="WHIT">
+<span class='line'>684</span> </span><span class="COMM">//    canvasHeight = c.height;</span><span class="WHIT">
+<span class='line'>685</span> </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'>686</span> </span><span class="COMM">//    //Changes colour of the Canvas Element</span><span class="WHIT">
+<span class='line'>687</span> </span><span class="COMM">//    ctx.fillStyle = "#FF0000";</span><span class="WHIT">
+<span class='line'>688</span> </span><span class="COMM">//    ctx.fillRect(0, 0, canvasWidth, canvasHeight);</span><span class="WHIT">
+<span class='line'>689</span> </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'>690</span> </span><span class="COMM">//    //Writes Time as a String to the Canvas</span><span class="WHIT">
+<span class='line'>691</span> </span><span class="COMM">//    ctx.fillStyle = "#000000";</span><span class="WHIT">
+<span class='line'>692</span> </span><span class="COMM">//    ctx.font = "48px Sans Serif";</span><span class="WHIT">
+<span class='line'>693</span> </span><span class="COMM">//    ctx.fillText(stringTime, 10, (canvasHeight / 10) + 20);</span><span class="WHIT">
+<span class='line'>694</span> </span><span class="COMM">//    ctx.fillText(stringDate, 10, (canvasHeight - 20));</span><span class="WHIT">
+<span class='line'>695</span> </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'>696</span> </span><span class="COMM">//    //creates the black rectangle in the middle</span><span class="WHIT">
+<span class='line'>697</span> </span><span class="COMM">//    drawClickRect();</span><span class="WHIT">
+<span class='line'>698</span> </span><span class="COMM">//}</span><span class="WHIT">
+<span class='line'>699</span> </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'>700</span> </span><span class="COMM">///*</span><span class="WHIT">
+<span class='line'>701</span> </span><span class="COMM">// * This function enlarges the current canvas and </span><span class="WHIT">
+<span class='line'>702</span> </span><span class="COMM">// * then shrinks it after a preset interval.</span><span class="WHIT">
+<span class='line'>703</span> </span><span class="COMM">// * </span><span class="WHIT">
+<span class='line'>704</span> </span><span class="COMM">// * This emulates a "vibration" function.</span><span class="WHIT">
+<span class='line'>705</span> </span><span class="COMM">// */</span><span class="WHIT">
+<span class='line'>706</span> </span><span class="COMM">//function emulateVibrate() {</span><span class="WHIT">
+<span class='line'>707</span> </span><span class="COMM">//    document.getElementById("canvasDiv").innerHTML = canvasString;</span><span class="WHIT">
+<span class='line'>708</span> </span><span class="COMM">//    drawToCanvas();</span><span class="WHIT">
+<span class='line'>709</span> </span><span class="COMM">//    //set a short time interval</span><span class="WHIT">
+<span class='line'>710</span> </span><span class="COMM">//    setTimeout("reDrawOriginal()", 60);</span><span class="WHIT">
+<span class='line'>711</span> </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'>712</span> </span><span class="COMM">//}</span><span class="WHIT">
+<span class='line'>713</span> </span><span class="COMM">//</span><span class="WHIT">
+<span class='line'>714</span> </span><span class="COMM">///*</span><span class="WHIT">
+<span class='line'>715</span> </span><span class="COMM">// * Redraws the canvas at it's original size.</span><span class="WHIT">
+<span class='line'>716</span> </span><span class="COMM">// */</span><span class="WHIT">
+<span class='line'>717</span> </span><span class="COMM">//function reDrawOriginal() {</span><span class="WHIT">
+<span class='line'>718</span> </span><span class="COMM">//    document.getElementById("canvasDiv").innerHTML = oldCanvas;</span><span class="WHIT">
+<span class='line'>719</span> </span><span class="COMM">//    drawToCanvas();</span><span class="WHIT">
+<span class='line'>720</span> </span><span class="COMM">//    //listeners();</span><span class="WHIT">
+<span class='line'>721</span> </span><span class="COMM">//}</span><span class="WHIT">
+<span class='line'>722</span> </span></pre></body></html>

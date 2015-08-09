@@ -1,5 +1,5 @@
 /*
- * PrototypeBasics.js:
+ * prototypeBasics.js:
  *
  * This file will contain the basics of the Prototype
  * Smartwatch Application we're developing.
