@@ -146,7 +146,7 @@ function updateTime() {
     clearThis(40, 180, 280, 100);
     //var minutes = createTime().substring(0, 4);
     //var ampm = createTime().substring(8, 10);
-    writeSomethingColour(createTime(), 40, 250, 44, '#FFFFFF');
+    writeSomethingColour(createTime(), 40, 250, 25 , '#FFFFFF');
 }
 
 /**
