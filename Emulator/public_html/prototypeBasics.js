@@ -471,12 +471,13 @@ function addReminder(day) {
     //REMINDER COMPLETE!
 }
 
-function monthEventView(dayOffset) {
+function monthEventView(theDayOffset, moreThanOnePage, oldJ) {
     var backXOffset = 22;
     var textXOffset = 25;
     //If there are reminders, show an Event View of the day clicked on.
     var reminderDate = monthToString(month) + " " + year;
     var canvasreminder = 'canvas_1';
+    var dayOffset = theDayOffset;
 
     $.get("emulatorBasics.js", function () {
         newCanvas(320, 320, canvasreminder, false);
@@ -489,11 +490,34 @@ function monthEventView(dayOffset) {
         writeSomethingColour("Back", backXOffset, cHeight - 20, 12, "black");
         //What month is it?
         writeSomethingColour("Events for " + reminderDate, textXOffset, 35, "20", "black");
-
+        
         var j = 1;
         var savedJ;
         var i = 0;
         var offsetNo = 0;
+
+        //This is the code for the 'previous' button:
+        if (moreThanOnePage) {
+            var prevEventsPage = function () {
+                newCanvas(320, 320, canvasreminder, false);
+                var returnFunc = function () {
+                    returnToCalendar(savedMonth, savedDay, savedYear);
+                };
+                drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
+                writeSomethingColour("Back", 22, cHeight - 20, 12, "black");
+                //What month is it?
+                writeSomethingColour("Events for " + reminderDate, textXOffset, 35, "20", "black");
+                if (oldJ === 1) {
+                    monthEventView(oldJ, false, 1);
+                } else {
+                    monthEventView(oldJ, true, 1);
+                }
+            };
+            //Previous Button
+            drawColourRect(70, cHeight - 30, 30, 15, prevEventsPage, true, "#FFFFFF");
+            writeSomethingColour("Prev", 72, cHeight - 20, 12, "black");
+        }
+
         //J here is the day in the month, for the key.
         if (offsetNo < 10) {
             for (j = dayOffset; j < daysInMonth(month, year); j++) {
@@ -509,14 +533,12 @@ function monthEventView(dayOffset) {
                             writeSomethingColour(savedReminders, textXOffset + 10, 60 + (((i + 1) + offsetNo) * 25), "15", "white");
                         }
                         offsetNo += ((i + 1));
-                        console.log(offsetNo);
                     }
                 }
             }
             if (offsetNo >= 10) {
-                console.log("J is: " + savedJ);
                 var nextLot = function () {
-                    nextMonthPage(canvasreminder, savedJ, reminderDate, textXOffset);
+                    nextMonthPage(canvasreminder, savedJ, reminderDate, textXOffset, dayOffset);
                 };
                 drawColourRect(cWidth - 50, cHeight - 30, 30, 15, nextLot, true, "#FFFFFF");
                 writeSomethingColour("Next", cWidth - 47, cHeight - 20, 12, "black");
@@ -525,8 +547,9 @@ function monthEventView(dayOffset) {
     });
 }
 
-function nextMonthPage(canvasreminder, savedJ, reminderDate, xOffset) {
+function nextMonthPage(canvasreminder, savedJ, reminderDate, xOffset, dayOffset) {
     textXOffset = xOffset;
+    var theOldJ = dayOffset;
     newCanvas(320, 320, canvasreminder, false);
     offsetNo = 0;
     var returnFunc = function () {
@@ -534,13 +557,9 @@ function nextMonthPage(canvasreminder, savedJ, reminderDate, xOffset) {
     };
     drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
     writeSomethingColour("Back", 22, cHeight - 20, 12, "black");
-    //Previous Button
-    drawColourRect(70, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
-    writeSomethingColour("Prev", 72, cHeight - 20, 12, "black");
     //What month is it?
     writeSomethingColour("Events for " + reminderDate, textXOffset, 35, "20", "black");
-    
-    //monthEventView(savedJ);
+    monthEventView(savedJ, true, theOldJ);
 }
 
 /**
@@ -659,7 +678,7 @@ function reverseMonth() {
  */
 function swipeMonth() {
     var monthEvents = function () {
-        monthEventView(1);
+        monthEventView(1, false, 1);
     };
     $.get("emulatorBasics.js", function () {
         //Returns undefined because there's no swipe on initialisation.
