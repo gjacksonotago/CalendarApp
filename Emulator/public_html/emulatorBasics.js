@@ -1,5 +1,5 @@
 /** 
- * emulatorBasics.js:
+ * @module emulatorBasics.js:
  * 
  * These functions grab the current Time and convert it to a string
  * and from there, colour a canvas, and write the Time as a Text element
