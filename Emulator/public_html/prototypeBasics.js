@@ -82,29 +82,6 @@ var reminders = {};//Associative array! e.g reminders['31052015'] = reminder;
  */
 var currentKey;//The current key so we can store a reminder in the correct place
 
-//Fake enums for display type settings becuase javascript does not enum properly
-/**
- *
- * @type Number
- */
-var TODAY = 1000;//arbitrary values (can we make these final/immutable somehow?
-/**
- *
- * @type Number
- */
-var WEEK = 1001;
-/**
- *
- * @type Number
- */
-var MONTH = 1002;
-/**
- *
- * @type Number
- */
-var displayType = MONTH;//Determines which display we want for the calendar (month, day, week)
-//defaults to TODAY.
-
 /**
  *
  * @type Number
@@ -249,25 +226,7 @@ function setDay() {
  *
  */
 function refreshInit() {
-    if (displayType === MONTH) {
-        displayMonth(daysInMonth(month), startDay);
-    } else if (displayType === TODAY) {
-        //call day drawing method
-    } else if (displayType === WEEK) {
-        //call week method
-    }
-}
-
-/**
- * Function to display the day
- *
- */
-function displayDay() {
-    var homeX = 115;
-    var homeY = 295;
-    //Home Button: Or back button instead? Just something.
-    drawClickRect(homeX, homeY, 15, 25, returnToEmu, true);
-    writeSomething("Home", pixelX, pixelY, 12);
+    displayMonth(daysInMonth(month), startDay);
 }
 
 /**
@@ -307,11 +266,11 @@ function displayMonth(daysformonth, startDay) {
     swipeMonth();
 }
 
-/*
+/**
  * Draws the calendar dates to the canvas from inside the calendar app
  * Takes number of days in the month and the day to start on
  *
- * @param {int} daysInmonth
+ * @param {int} daysInMonth
  * @param {int} startDay
  */
 function drawCalendar(daysInMonth, startDay) {
@@ -398,7 +357,6 @@ function drawCalendar(daysInMonth, startDay) {
  * @param {int} day
  */
 function addReminder(day) {
-    //ADDING A REMINDER!
     var key = day + "" + (month + 1) + "" + year;
     //Store current key in global variable so we know where to store reminder text
     currentKey = key;
@@ -483,9 +441,22 @@ function addReminder(day) {
             }
         });
     }
-    //REMINDER COMPLETE!
 }
 
+/**
+ * Function to initiate the Month Event view.
+ * 
+ * Assumes that theDayOffset is passed as an integer
+ * greater than or equal to 0.
+ * Assumes that moreThanOnePage is a boolean that is passed to it,
+ * and oldJ is an integer greater than or equal to 0.
+ * 
+ * 
+ * @param {type} theDayOffset
+ * @param {type} moreThanOnePage
+ * @param {type} oldJ
+ * @returns {undefined}
+ */
 function monthEventView(theDayOffset, moreThanOnePage, oldJ) {
     var backXOffset = 22;
     var textXOffset = 25;
@@ -562,6 +533,22 @@ function monthEventView(theDayOffset, moreThanOnePage, oldJ) {
     });
 }
 
+/**
+ * Wrapper for a the button to head to a new page
+ * of events in the Month Event View.
+ * 
+ * Assumes that each of the variables passed is correct:
+ * (canvasreminder is a string, savedJ is an int greater than 0,
+ * reminderDate is a string, xOffset is an integer that's greater than
+ * 0, dayOffset is an integer greater than 0).
+ * 
+ * @param {type} canvasreminder
+ * @param {type} savedJ
+ * @param {type} reminderDate
+ * @param {type} xOffset
+ * @param {type} dayOffset
+ * @returns {undefined}
+ */
 function nextMonthPage(canvasreminder, savedJ, reminderDate, xOffset, dayOffset) {
     textXOffset = xOffset;
     var theOldJ = dayOffset;
