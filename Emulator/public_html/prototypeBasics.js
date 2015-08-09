@@ -9,12 +9,12 @@
  */
 
 /**
- * 
+ *
  * @type String
  */
 var current = "";
 /**
- * 
+ *
  * @type String
  */
 var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
@@ -22,111 +22,111 @@ var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
         'Canvas Tag not Supported by your browser version!' +
         '</canvas>';
 /**
- * 
+ *
  * @type Number
  */
 var cWidth = 320;
 /**
- * 
+ *
  * @type Number
  */
 var cHeight = 320;
 /**
- * 
+ *
  * @type Number
  */
 var month = 4;
 /**
- * 
+ *
  * @type String
  */
 var stringMonth = "June";
 /**
- * 
+ *
  * @type Number
  */
 var startDay = 5;
 /**
- * 
+ *
  * @type Number
  */
 var months = 12;
 /**
- * 
+ *
  * @type Number
  */
 var year = 2015;
 /**
- * 
+ *
  * @type Number
  */
 var clock;
 /**
- * 
+ *
  * @type days
  */
 var reminderCoords = {};
 /**
- * 
+ *
  * @type Array
  */
 var dayNo = [];
 /**
- * 
+ *
  * @type Reminder
  */
 var reminders = {};//Associative array! e.g reminders['31052015'] = reminder;
 /**
- * 
+ *
  * @type key
  */
 var currentKey;//The current key so we can store a reminder in the correct place
 
 //Fake enums for display type settings becuase javascript does not enum properly
 /**
- * 
+ *
  * @type Number
  */
 var TODAY = 1000;//arbitrary values (can we make these final/immutable somehow?
 /**
- * 
+ *
  * @type Number
  */
 var WEEK = 1001;
 /**
- * 
+ *
  * @type Number
  */
 var MONTH = 1002;
 /**
- * 
+ *
  * @type Number
  */
 var displayType = MONTH;//Determines which display we want for the calendar (month, day, week)
 //defaults to TODAY.
 
 /**
- * 
+ *
  * @type Number
  */
 var savedMonth = month;
 /**
- * 
+ *
  * @type Number
  */
 var savedDay = startDay;
 /**
- * 
+ *
  * @type Number
  */
 var savedYear = year;
 /**
- * 
+ *
  * @type String
  */
 var reminderText = "";
 /**
- * 
+ *
  * @type Number
  */
 var remNum = 1;
@@ -153,7 +153,7 @@ function getDate() {
  * variables updates are: savedMonth, savedDay and savedYear
  * @param {int} month
  * @param {int} startday
- * @param {int} savetheyear 
+ * @param {int} savetheyear
  */
 function saveState(month, startday, savetheyear) {
     savedMonth = month;
@@ -166,7 +166,7 @@ function saveState(month, startday, savetheyear) {
  * Updates the calendar with the month and start day and the year passed in parameters
  * @param {int} month_passed
  * @param {int} startday
- * @param {int} savetheyear 
+ * @param {int} savetheyear
  */
 function returnToCalendar(month_passed, startday, savetheyear) {
     month = month_passed;
@@ -207,6 +207,7 @@ function getReminderText() {
         //clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
         writeSomethingColour(reminderText, 25, cHeight / 4, 18, "#000000");
         reminders[currentKey].newReminder(reminderText);
+
     }
 }
 
@@ -245,7 +246,7 @@ function setDay() {
 /**
  * Function that sets up the Prototype, starting with
  * a "home" button - but hopefully more will be added.
- * 
+ *
  */
 function refreshInit() {
     if (displayType === MONTH) {
@@ -258,8 +259,8 @@ function refreshInit() {
 }
 
 /**
- * Function to display the day  
- * 
+ * Function to display the day
+ *
  */
 function displayDay() {
     var homeX = 115;
@@ -309,7 +310,7 @@ function displayMonth(daysformonth, startDay) {
 /*
  * Draws the calendar dates to the canvas from inside the calendar app
  * Takes number of days in the month and the day to start on
- * 
+ *
  * @param {int} daysInmonth
  * @param {int} startDay
  */
@@ -393,8 +394,8 @@ function drawCalendar(daysInMonth, startDay) {
  * The input parameter is the Day that was clicked on. Used to
  * automatically add a reminder to an associative
  * array.
- * 
- * @param {int} day 
+ *
+ * @param {int} day
  */
 function addReminder(day) {
     //ADDING A REMINDER!
@@ -444,18 +445,18 @@ function addReminder(day) {
             };
             drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
             writeSomethingColour("Back", backXOffset, cHeight - 20, 12, "black");
-            
+
             /**
-             * Creates an "Add New Event" Button on the Event List 
+             * Creates an "Add New Event" Button on the Event List
              * for that day. (Function wrapped to pass as an argument
              * later - noted here as my memory of javascript might
              * fail or be faulty later on.)
-             * 
+             *
              * Can't use the variable wrapped positioning offsets,
              * so I've hardcoded them in here, be well aware of this
              * if changing offsets for the text and anything currently
              * left aligned manually.
-             * 
+             *
              * @returns {undefined}
              */
             var newEvent = function () {
@@ -485,17 +486,108 @@ function addReminder(day) {
     //REMINDER COMPLETE!
 }
 
+function monthEventView(theDayOffset, moreThanOnePage, oldJ) {
+    var backXOffset = 22;
+    var textXOffset = 25;
+    //If there are reminders, show an Event View of the day clicked on.
+    var reminderDate = monthToString(month) + " " + year;
+    var canvasreminder = 'canvas_1';
+    var dayOffset = theDayOffset;
+
+    $.get("emulatorBasics.js", function () {
+        newCanvas(320, 320, canvasreminder, false);
+        saveState(month, startDay, year);
+        //Return Button
+        var returnFunc = function () {
+            returnToCalendar(savedMonth, savedDay, savedYear);
+        };
+        drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
+        writeSomethingColour("Back", backXOffset, cHeight - 20, 12, "black");
+        //What month is it?
+        writeSomethingColour("Events for " + reminderDate, textXOffset, 35, "20", "black");
+        
+        var j = 1;
+        var savedJ;
+        var i = 0;
+        var offsetNo = 0;
+
+        //This is the code for the 'previous' button:
+        if (moreThanOnePage) {
+            var prevEventsPage = function () {
+                newCanvas(320, 320, canvasreminder, false);
+                var returnFunc = function () {
+                    returnToCalendar(savedMonth, savedDay, savedYear);
+                };
+                drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
+                writeSomethingColour("Back", 22, cHeight - 20, 12, "black");
+                //What month is it?
+                writeSomethingColour("Events for " + reminderDate, textXOffset, 35, "20", "black");
+                if (oldJ === 1) {
+                    monthEventView(oldJ, false, 1);
+                } else {
+                    monthEventView(oldJ, true, 1);
+                }
+            };
+            //Previous Button
+            drawColourRect(70, cHeight - 30, 30, 15, prevEventsPage, true, "#FFFFFF");
+            writeSomethingColour("Prev", 72, cHeight - 20, 12, "black");
+        }
+
+        //J here is the day in the month, for the key.
+        if (offsetNo < 10) {
+            for (j = dayOffset; j < daysInMonth(month, year); j++) {
+                //If there's an event on that day:
+                var key = j + "" + (month + 1) + "" + year;
+                if (offsetNo < 10) {
+                    if (reminders[key] !== undefined && reminders[key] !== null) {
+                        savedJ = j + 1;
+                        writeSomethingColour(j + " " + monthToString(month) + ": ", textXOffset, 60 + (offsetNo * 25), "15", "white");
+                        //Print each event and time for that day:
+                        for (i = 0; i < reminders[key].reminders.length; i++) {
+                            var savedReminders = reminders[key].reminders[i] + " - at: " + reminders[key].times[i];
+                            writeSomethingColour(savedReminders, textXOffset + 10, 60 + (((i + 1) + offsetNo) * 25), "15", "white");
+                        }
+                        offsetNo += ((i + 1));
+                    }
+                }
+            }
+            if (offsetNo >= 10) {
+                var nextLot = function () {
+                    nextMonthPage(canvasreminder, savedJ, reminderDate, textXOffset, dayOffset);
+                };
+                drawColourRect(cWidth - 50, cHeight - 30, 30, 15, nextLot, true, "#FFFFFF");
+                writeSomethingColour("Next", cWidth - 47, cHeight - 20, 12, "black");
+            }
+        }
+    });
+}
+
+function nextMonthPage(canvasreminder, savedJ, reminderDate, xOffset, dayOffset) {
+    textXOffset = xOffset;
+    var theOldJ = dayOffset;
+    newCanvas(320, 320, canvasreminder, false);
+    offsetNo = 0;
+    var returnFunc = function () {
+        returnToCalendar(savedMonth, savedDay, savedYear);
+    };
+    drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
+    writeSomethingColour("Back", 22, cHeight - 20, 12, "black");
+    //What month is it?
+    writeSomethingColour("Events for " + reminderDate, textXOffset, 35, "20", "black");
+    monthEventView(savedJ, true, theOldJ);
+}
+
 /**
  * Assuming the 'key' passed to this function is a valid string
  * then this method checks the associative array of reminders and
  * returns true if there is a reminder that matches the passed
  * 'key' string.
- * 
+ *
  * If 'key' is not a valid string (it's either null or undefined
  * this method returns false. Therefore a false result could either
- * be there is no reminder stored there under that key, OR key was 
+ * be there is no reminder stored there under that key, OR key was
  * not a valid input to this function.
- * 
+ *
  * @param {type} key
  * @returns {Boolean}
  */
@@ -519,7 +611,7 @@ function hasReminder(key) {
 
 /**
  * Function to display the string in reminders specified by day month and year
- * 
+ *
  * @param {int} day
  * @param {int} month
  * @param {int} year
@@ -535,7 +627,7 @@ function displayReminder(day, month, year) {
 
 /**
  * Find how many days in the month, given month and year.
- * 
+ *
  * @param {int} month
  * @param {int} year
  * @returns {int}
@@ -600,9 +692,12 @@ function reverseMonth() {
  * Enables swiping screen to change the month back and forth.
  */
 function swipeMonth() {
+    var monthEvents = function () {
+        monthEventView(1, false, 1);
+    };
     $.get("emulatorBasics.js", function () {
         //Returns undefined because there's no swipe on initialisation.
-        swipe(reverseMonth, advanceMonth, false, false);
+        swipe(reverseMonth, advanceMonth, false, monthEvents);
     });
 }
 
@@ -670,7 +765,7 @@ function monthToInt(monthString) {
  *
  */
 function returnToEmu() {
-    //clearInterval(clock);//All clock references are for ticking time inside calendar, 
+    //clearInterval(clock);//All clock references are for ticking time inside calendar,
     //but would be so small on a real smartwatch it would just be silly!
     $.get("emulatorBasics.js", function () {
         emulatorInitialise();

@@ -624,7 +624,7 @@ function drawClickRect(xPos, yPos, xSize, ySize, actionToTake, sglclick) {
  * @param {int} xPos 
  * @param {int} yPos  
  * @param {int} xSize 
- * @param {int} ySise 
+ * @param {int} ySize 
  * @param {function} actionToTake  
  */
 function drawPositionRect(xPos, yPos, xSize, ySize, clickAction, downAction, day) {
@@ -647,7 +647,7 @@ function drawPositionRect(xPos, yPos, xSize, ySize, clickAction, downAction, day
  * @param {int} xPos 
  * @param {int} yPos  
  * @param {int} xSize 
- * @param {int} ySise 
+ * @param {int} ySize 
  * @param {function} actionToTake  
  * @param {boolean} sglclick
  * @param {String} colour
