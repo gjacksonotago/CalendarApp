@@ -21,6 +21,13 @@ test('monthToInt', function () {
     equal(monthToInt('Decembeard'), undefined, "Decembeard is not a month, why does it think it's a month?");
 });//Yes not necessary, not doing this much for other such basic methods
 
+test('monthToString', function () {
+    equal(monthToString(0), 'January', 'January is the 0th month');
+    equal(monthToString(8), 'September', '8 should give September');
+    equal(monthToString(-6), 'Invalid month number', 'The number is -ve, invalid.');
+    equal(monthToString(78), 'Invalid month number', 'The number is over 11, invalid.');
+});
+
 test('daysInMonth', function () {
     equal(daysInMonth(0, 2015), 31, 'There is always 31 days in January');
     equal(daysInMonth(11, 2017), 31, 'There is always 31 days in December');
@@ -40,6 +47,10 @@ test('daysInMonth', function () {
 //
 test('swipeDirection', function () {
     equal(swipeDirection(160, 160, 0, 200), "left", 'Should be left'); 
+    equal(swipeDirection(0, 200, 40, 200), "right", 'Should be right');
+    equal(swipeDirection(0, 200, 40, 300), "down", 'Should be down.'); 
+    equal(swipeDirection(0, 200, 40, 0), "up", 'Should be up.'); 
+    equal(swipeDirection(200, 100, 100, 151), "Invalid swipe", 'Should be invalid.');
 });
 
 
