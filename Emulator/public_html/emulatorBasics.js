@@ -368,14 +368,19 @@ function positionClick(xPosition, yPosition, xSize, ySize, actionTaken) {
 }
 
 /** 
- * Creates a mouseover listener at the specified location
+ * Creates a mousedown listener at the specified location
  * (worked out using an (x, y) origin point and the width/height
  * passed as variables) to execute 'actionTaken' on mouseover.
+ * 
+ * This is used sepcifically to enlarge the days on the calendar,
+ * it needs the day to draw to be passed in.
  * 
  * @param {int} xPosition
  * @param {int} yPosition
  * @param {int} xSize
  * @param {int} ySize
+ * @param {function(x, y)} actionTaken A function that takes the two position coordinates.
+ * @param {int} day 
  * 
  */
 function mouseDown(xPosition, yPosition, xSize, ySize, actionTaken, day) {
@@ -390,7 +395,7 @@ function mouseDown(xPosition, yPosition, xSize, ySize, actionTaken, day) {
 
         if (mousePos.x <= xCalc && mousePos.y <= yCalc
                 && mousePos.x >= (xPosition) && mousePos.y >= (yPosition)) {
-            //console.error("Yes!");
+            //console.error("Mouse event worked!");
             actionTaken(xPosition, yPosition, day);
         }
     }, false);

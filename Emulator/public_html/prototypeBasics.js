@@ -1,5 +1,5 @@
 /*
- * PrototypeBasics.js:
+ * prototypeBasics.js:
  *
  * This file will contain the basics of the Prototype
  * Smartwatch Application we're developing.
@@ -131,7 +131,14 @@ var reminderText = "";
  */
 var remNum = 1;
 
-//var sizeParam = 1;//probably not going to be used. For changing size of icons relative to canvas size
+/**
+ * 
+ * @type boolean
+ * 
+ * This becomes true if we do want the prototype 
+ * to reset after enlarging a date in the calendar.
+ */
+var enlargeReset = false;
 
 /**
  * Function returns the current date
@@ -346,6 +353,7 @@ function drawCalendar(daysInMonth, startDay) {
                 //Function wrapped to prevent evaluation on passing as function.
                 //Please don't make this a "new function" ever.
                 var addRem = function (x, y) {
+                    enlargeReset = false;//Do not reinitialise the canvas after enlarge called.
                     var r = x + "" + y;
                     addReminder(reminderCoords[r]);
                 };
@@ -356,6 +364,13 @@ function drawCalendar(daysInMonth, startDay) {
                     if (hasReminder(day + "" + (month + 1) + "" + year)) {
                         drawRect(x + 18, y + 18, 24, 24, "red");
                     }
+                    //Not the best way to reset the size but can't find another way that works.
+                    enlargeReset = true;
+                    setTimeout(function () {
+                        if (enlargeReset) {
+                            protoInitialise();
+                        }
+                    }, 2000);
                 };
                 drawPositionRect(icoord, jcoord, 30, 30, addRem, enlarge, days);
                 writeSomething(days, icoord + 5, jcoord + 10, 8);
