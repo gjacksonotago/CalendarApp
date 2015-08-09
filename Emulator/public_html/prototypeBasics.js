@@ -429,8 +429,20 @@ function addReminder(day) {
             };
             drawColourRect(20, cHeight - 30, 30, 15, returnFunc, true, "#FFFFFF");
             writeSomethingColour("Back", backXOffset, cHeight - 20, 12, "black");
-
-            //The "add new event" button
+            
+            /**
+             * Creates an "Add New Event" Button on the Event List 
+             * for that day. (Function wrapped to pass as an argument
+             * later - noted here as my memory of javascript might
+             * fail or be faulty later on.)
+             * 
+             * Can't use the variable wrapped positioning offsets,
+             * so I've hardcoded them in here, be well aware of this
+             * if changing offsets for the text and anything currently
+             * left aligned manually.
+             * 
+             * @returns {undefined}
+             */
             var newEvent = function () {
                 newCanvas(320, 320, canvasreminder, true);
 
@@ -459,9 +471,17 @@ function addReminder(day) {
 }
 
 /**
- * Function takes a position in the reminder array and returns true if left
+ * Assuming the 'key' passed to this function is a valid string
+ * then this method checks the associative array of reminders and
+ * returns true if there is a reminder that matches the passed
+ * 'key' string.
  * 
- * @param {String} key
+ * If 'key' is not a valid string (it's either null or undefined
+ * this method returns false. Therefore a false result could either
+ * be there is no reminder stored there under that key, OR key was 
+ * not a valid input to this function.
+ * 
+ * @param {type} key
  * @returns {Boolean}
  */
 function hasReminder(key) {
