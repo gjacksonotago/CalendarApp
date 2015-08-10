@@ -229,7 +229,7 @@ var prototype = (function () {
         $.get("emulatorBasics.js", function () {
             resetCanvas(oldCanvas);
             //Home button
-            drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, true);
+            drawClickRect(homeX, homeY, buttonX, 25, returnToEmu, false);
             writeSomething("Home", pixelX, pixelY, 12);
             //Month display rectangle
             drawRect(20, 10, buttonX + 10, 25, "#FF0000");

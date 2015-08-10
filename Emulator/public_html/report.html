@@ -34,7 +34,8 @@ Cosc345 Assignment 3 Report 2015: SWAD (Ben Ryan and George Jackson and Mohammed
             </li>
             <li>
                 <p>Now you can see a month view of a calendar for the current month. Each day of the month
-                    is clickable via a double click which will take you to a new page which contains the reminders for that day and the place
+                    is clickable via a double click which will take you to a new page which contains the reminders for that day (if there are any there already; if
+                    there are not, it will take you straight to a page to enter a new reminder) and the place
                     to enter new reminders. A single click (or just a mouse down action to be more specific) on a day will enlarge the square so you can 
                     see it better which you will notice happens when you double click just before the canvas reloads. When the squares are enlarged they
                     will automatically reset after 2 seconds from when the first one was clicked.
@@ -44,8 +45,9 @@ Cosc345 Assignment 3 Report 2015: SWAD (Ben Ryan and George Jackson and Mohammed
                 <p>In the calendar month view you can change the month by either: single clicking the '<' and '>' buttons for going back and forwards
                     respectively, or 'swiping' by holding down the left mouse button and then moving left(back) or right(forward), then releasing.
                     Be careful with swiping, as a slight movement in a click may be registered as a swipe, which can cause you to enter a day different
-                    to the one you intended (we did try to fix this but only caused much worse problems. To the best of our knowledge the days for each
-                    month in any given year will be correct.
+                    to the one you intended (we did try to fix this but only caused many more problems, that were significantly worse and/or harder to deal with).
+                    To the best of our knowledge the days for each month in any given year will be correct (we have unit tests that test our inner calculation methods
+                    for the months picked at random).
                 </p>
             </li>
             <li>
@@ -67,11 +69,11 @@ Cosc345 Assignment 3 Report 2015: SWAD (Ben Ryan and George Jackson and Mohammed
                 </p>
             </li>
             <li>
-                <p>In the month view you can do a downwards swipe, best to do it all the way from top to bottom of the canvas (minor bug issues). This will bring up a view of all the 
+                <p>In the month view you can do a downwards swipe, best to do it all the way from top to bottom of the canvas (to avoid clicking on a day on release). This will bring up a view of all the 
                     reminders saved for that month and the days they are on. If the reminders are more than can fit on the screen there will be a next 
                     button which will take you to a new screen with rest of the reminders, this will happen over and over until all reminders have been displayed. 
-                    There is still a very much known bug with this where a reminder that has had more than nine reminders added will print the full message 
-                    down the bottom of the screen under the buttons, but alas coding time is over.
+                    There is still a very well known bug with this where the screen cutoff does not evaluate during printing events for a day, which means that if there
+                    are 4 days each with one event, and the 5th day has two events, both events on the 5th day will print, and write over the button.
                 </p>
             </li>
         </ul>
