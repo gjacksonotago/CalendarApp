@@ -1,26 +1,22 @@
-/** 
+/**
  * emulatorBasics.js:
- * 
+ *
  * These functions grab the current Time and convert it to a string
  * and from there, colour a canvas, and write the Time as a Text element
  * to the Canvas.
  * They also now provide some basic smart watch like functions such as a basic swipe
  * function and starting the calendar app.
- * 
+ *
  * Authors: George Jackson, Ben Ryan, Mohammed Tarabishi
  * Date Created: 24/04/2015
- */
-
-/** 
- * Global variables 
  */
 
 var emulator = (function () {
     "use strict";
 
-    var pub = {};
-    
-    var canvasHeight, canvasHeight;
+    var pub2 = {};
+
+    var canvasHeight, canvasWidth;
 
 //These strings are used for modifying the canvas' HTML code.
     var oldCanvas = '<canvas width="' + 320 + '" height="' + 320
@@ -31,20 +27,19 @@ var emulator = (function () {
 
     /**
      * Function return the text value from the HTML input field.
-     * @return {string} 
+     * @return {string}
      */
-    pub.getFormText = function() {
+    pub2.getFormText = function () {
         var text = document.getElementById("words").value;
-        console.error(text);
         return text;
     };
 
     /**
      * Function writing a message to canvas
-     * @param {Element} canvas 
-     * @param {String} message 
+     * @param {Element} canvas
+     * @param {String} message
      */
-    pub.writeMessage = function(canvas, message) {
+    pub2.writeMessage = function (canvas, message) {
         var context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.font = '18pt Calibri';
@@ -54,9 +49,9 @@ var emulator = (function () {
 
     /**
      * Function get the mouse position
-     * @param {Element} canvas 
-     * @param {event} evt 
-     * @return {object} object with x and y data fields 
+     * @param {Element} canvas
+     * @param {event} evt
+     * @return {object} object with x and y data fields
      */
     function getMousePos(canvas, evt) {
         var rect = canvas.getBoundingClientRect();
@@ -68,21 +63,21 @@ var emulator = (function () {
 
     /**
      * Function return the current time as a string
-     * @return {String} 
+     * @return {String}
      */
-    function createTime() {
+    pub2.createTime = function () {
         var currentTime = new Date();
         var stringTime = currentTime.toLocaleTimeString();
         return stringTime.substring(0, 11);//Substring fixes Safari oddity of adding NZST after the time.
-    }
+    };
 
     /**
      * Function return the current date as a string
      * @return {String}
      */
     function currentDate() {
-        var currentDate = new Date();
-        var stringDate = currentDate.toLocaleDateString();
+        var currentDateRetrieved = new Date();
+        var stringDate = currentDateRetrieved.toLocaleDateString();
         return stringDate;
     }
 
@@ -105,28 +100,29 @@ var emulator = (function () {
         return yearString;
     }
 
-    /** 
+    /**
      * Function called to 'begin' the emulator:
      * Simulates an OS starting up by showing the apps lined
      * up to click.
      */
-    function emulatorInitialise() {
+    pub2.emulatorInitialise = function () {
         //Create the Canvas stuff
-        resetCanvas(oldCanvas);
+        emulator.resetCanvas(oldCanvas);
         var c = document.getElementById("canvas_1");
         canvasWidth = c.width;
         canvasHeight = c.height;
         var offset = 60;
+        var i, j;
 
-        updateTime();//Single call to updateTime() so that there is no delay on load
+        emulator.updateTime();//Single call to updateTime() so that there is no delay on load
         clock = setInterval(updateTime, 1000);
 
         //Emulator full screen event listener(s)
-        swipe(false, false, false, false);
+        emulator.swipe(false, false, false, false);
 
         //Populates the 'screen' with clickable 'app' icons --->Now only prints the one we need.
-        for (j = 0; j < 5; j++) {
-            for (i = 0; i < 5; i++) {
+        for (j = 0; j < 5; j += 1) {
+            for (i = 0; i < 5; i += 1) {
                 if (i === 2 && j === 0) {
                     createPrototype(10 + (i * offset), 10 + (j * offset),
                             50, 50);
@@ -136,20 +132,19 @@ var emulator = (function () {
                 //}
             }
         }
-    }
-
+    };
 
     /**
      * Function updating the time keeping the clock ticking every second.
      */
     function updateTime() {
-        clearThis(40, 180, 280, 100);
-        var t = createTime();//Just a temp string so i can test the time.
+        emulator.clearThis(40, 180, 280, 100);
+        var t = emulator.createTime();//Just a temp string so i can test the time.
         //This keeps the time central when it has more or less digits, i.e 9:00am and 10:00am.
         if (t.charAt(1) === ':') {
-            writeSomethingColour(t, 55, 250, 44, '#FFFFFF');//1 hour digit
+            emulator.writeSomethingColour(t, 55, 250, 44, '#FFFFFF');//1 hour digit
         } else {
-            writeSomethingColour(t, 40, 250, 44, '#FFFFFF');//2 hour digits
+            emulator.writeSomethingColour(t, 40, 250, 44, '#FFFFFF');//2 hour digits
         }
     }
 
@@ -160,7 +155,7 @@ var emulator = (function () {
      * @param  {int} xSize width
      * @param  {int} ySize height
      */
-    pub.clearThis = function (xPos, yPos, xSize, ySize) {
+    pub2.clearThis = function (xPos, yPos, xSize, ySize) {
         var c = document.getElementById("canvas_1");
         var ctx = c.getContext("2d");
         ctx.clearRect(xPos, yPos, xSize, ySize);
@@ -171,7 +166,7 @@ var emulator = (function () {
      * when called, at position (xPos, yPos) on the canvas
      * and of size xSize * ySize, with the name written in
      * "Calendar App".
-     * 
+     *
      * @param {int} xPos
      * @param {int} yPos
      * @param {int} xSize
@@ -181,7 +176,7 @@ var emulator = (function () {
         var c = document.getElementById("canvas_1");
         var ctx = c.getContext("2d");
         //Create the app "icon".
-        drawClickRect(xPos, yPos, xSize, ySize, protoClick, true);
+        emulator.drawClickRect(xPos, yPos, xSize, ySize, protoClick, true);
         //Write the app "name" to the icon.
         ctx.fillStyle = "#FFFFFF";
         ctx.font = "12px Sans Serif";
@@ -191,26 +186,26 @@ var emulator = (function () {
 
     /**
      * Wraps a JQuery Call to the Prototype Initialistion
-     * so that it can be passed as an argument (without immediate 
+     * so that it can be passed as an argument (without immediate
      * evaluation) into the MouseDown function to add it as a listener.
      */
     function protoClick() {
-        var init = $.get("prototypeBasics.js", function () {
+        $.get("prototypeBasics.js", function () {
             prototype.protoInitialise();
         });
         clearInterval(clock);
-        init;
+        
     }
 
     /**
      * Function writes a specified text at specified location (x,y) with specified fontsize
-     * 
-     * @param {String} message  
-     * @param {int} x 
-     * @param {int} y 
+     *
+     * @param {String} message
+     * @param {int} x
+     * @param {int} y
      * @param {int} fontSize
      */
-    pub.writeSomething = function (message, x, y, fontSize) {
+    pub2.writeSomething = function (message, x, y, fontSize) {
         var c = document.getElementById("canvas_1");
         var ctx = c.getContext("2d");
         ctx.fillStyle = "#FFFFFF";
@@ -220,14 +215,14 @@ var emulator = (function () {
 
     /**
      * Function writes a specified text at specified location (x,y) with specified fontsize and specified colour
-     * 
-     * @param {String} message  
-     * @param {int} x 
-     * @param {int} y 
+     *
+     * @param {String} message
+     * @param {int} x
+     * @param {int} y
      * @param {int} fontSize
      * @param {String} colour
      */
-    pub.writeSomethingColour = function (message, x, y, fontSize, colour) {
+    pub2.writeSomethingColour = function (message, x, y, fontSize, colour) {
         var c = document.getElementById("canvas_1");
         var ctx = c.getContext("2d");
         ctx.fillStyle = colour;
@@ -236,26 +231,26 @@ var emulator = (function () {
     };
 
     /** Return the canvas the the id specified as input
-     * 
+     *
      * @param {String} canvasID
-     * @returns {Element} 
+     * @returns {Element}
      */
-    pub.returnCanvas = function(canvasID) {
+    pub2.returnCanvas = function (canvasID) {
         var canvas = document.getElementById(canvasID);
         return canvas;
     };
 
     /**
      * Adds a MouseClick event listener across the given
-     * co-ordinates - which it works out like the fillRectangle 
+     * co-ordinates - which it works out like the fillRectangle
      * method does, from a given (x, y) origin point and the size
      * of the area to make interactive.
-     * 
+     *
      * Utilises the canvas size properties to work the area out.
-     * 
+     *
      * The event listener executes the function 'actionTaken'
      * upon a mouseclick.
-     * 
+     *
      * @param {int} xPosition
      * @param {int} yPosition
      * @param {int} xSize
@@ -284,15 +279,15 @@ var emulator = (function () {
 
     /**
      * Adds a MouseClick event listener across the given
-     * co-ordinates - which it works out like the fillRectangle 
+     * co-ordinates - which it works out like the fillRectangle
      * method does, from a given (x, y) origin point and the size
      * of the area to make interactive.
-     * 
+     *
      * Utilises the canvas size properties to work the area out.
-     * 
+     *
      * The event listener executes the function 'actionTaken'
      * upon a double mouseclick.
-     * 
+     *
      * @param {int} xPosition
      * @param {int} yPosition
      * @param {int} xSize
@@ -320,16 +315,16 @@ var emulator = (function () {
 
     /**
      * Adds a PositionClick event listener across the given
-     * co-ordinates - which it works out like the fillRectangle 
+     * co-ordinates - which it works out like the fillRectangle
      * method does, from a given (x, y) origin point and the size
      * of the area to make interactive.
-     * 
+     *
      * Utilises the canvas size properties to work the area out.
-     * 
+     *
      * The event listener executes the function 'actionTaken'
-     * upon a double mouseclick, passing it the position variables 
+     * upon a double mouseclick, passing it the position variables
      * which other methods do not do.
-     * 
+     *
      * @param {int} xPosition
      * @param {int} yPosition
      * @param {int} xSize
@@ -355,21 +350,21 @@ var emulator = (function () {
         }, false);
     }
 
-    /** 
+    /**
      * Creates a mousedown listener at the specified location
      * (worked out using an (x, y) origin point and the width/height
      * passed as variables) to execute 'actionTaken' on mouseover.
-     * 
+     *
      * This is used sepcifically to enlarge the days on the calendar,
      * it needs the day to draw to be passed in.
-     * 
+     *
      * @param {int} xPosition
      * @param {int} yPosition
      * @param {int} xSize
      * @param {int} ySize
      * @param {function(x, y)} actionTaken A function that takes the two position coordinates.
-     * @param {int} day 
-     * 
+     * @param {int} day
+     *
      */
     function mouseDown(xPosition, yPosition, xSize, ySize, actionTaken, day) {
         var canvas = document.getElementById('canvas_1');
@@ -394,14 +389,14 @@ var emulator = (function () {
      * the swipe is define as a click on mouse held down then released at different position
      * it could be left right up or down
      * could be diagonal ?
-     * 
+     *
      * @param {boolean} actionLeft
      * @param {boolean} actionRight
      * @param {boolean} actionUp
      * @param {boolean} actionDown
      * @returns {String}
      */
-    pub.swipe = function(actionLeft, actionRight, actionUp, actionDown) {
+    pub2.swipe = function (actionLeft, actionRight, actionUp, actionDown) {
         var x1, x2, y1, y2;
         var canvas = document.getElementById('canvas_1');
         //The mousedown event listener.
@@ -432,13 +427,11 @@ var emulator = (function () {
         });
     };
 
-//Assumes a swipe is a click, mouse held down, then released
-
- 
+    //Assumes a swipe is a click, mouse held down, then released
 
     /*
      * define the swipe direction could be 4 outputs only ( left right
-     * up and down ) no diagonal. the direction is defined between two 2D points  
+     * up and down ) no diagonal. the direction is defined between two 2D points
      * @param {int} x1
      * @param {int} y1
      * @param {int} x2
@@ -448,41 +441,43 @@ var emulator = (function () {
     function swipeDirection(x1, y1, x2, y2) {
         var dir = "Invalid swipe";
         var error = 50;//how far the mouse can sway in the other axis to main direction
-        if (x1 < x2 && Math.abs(y2 - y1) < error)
+        if (x1 < x2 && Math.abs(y2 - y1) < error) {
             dir = "right";
-        else if (x2 < x1 && Math.abs(y2 - y1) < error)
+        } else if (x2 < x1 && Math.abs(y2 - y1) < error) {
             dir = "left";
-        else if (y1 < y2 && Math.abs(x2 - x1) < error)
+        } else if (y1 < y2 && Math.abs(x2 - x1) < error) {
             dir = "down";
-        else if (y2 < y1 && Math.abs(x2 - x1) < error)
+        } else if (y2 < y1 && Math.abs(x2 - x1) < error) {
             dir = "up";
-        //console.log(dir); 
+            //console.log(dir);
+        }
         return dir;
     }
 
     /**
      * Pass a String that creates a blank canvas element
      * here, from the prototype, to clear the canvas.
-     * 
+     *
      * @param {String} string
      */
-    function resetCanvas(string) {
+    pub2.resetCanvas = function (string) {
         document.getElementById("canvasDiv").innerHTML = string;
-    }
+    };
 
     /**
      * Creates a new Canvas to be used.
-     * 
+     *
      * Ideally this is to be used to help create reminders, and
      * maybe needs to save the previous context....
-     * 
+     *
      * @param {int} width
      * @param {int} height
      * @param {int} idNo
      */
-    pub.newCanvas = function (width, height, idNo, button) {
+    pub2.newCanvas = function (width, height, idNo, button) {
+        var newCanvasString;
         if (button) {
-            var newCanvasString = '<canvas width="' + width + '" height="' + height
+            newCanvasString = '<canvas width="' + width + '" height="' + height
                     + '" id="' + idNo + '">' +
                     'Canvas Tag not Supported by your browser version!' +
                     '</canvas>' + '<div style="position: relative;"><input id=' +
@@ -490,7 +485,7 @@ var emulator = (function () {
                     '<button id="reminder" onclick="myfunc()">Enter</button></div>';
             document.getElementById("canvasDiv").innerHTML = newCanvasString;
         } else {
-            var newCanvasString = '<canvas width="' + width + '" height="' + height
+           newCanvasString = '<canvas width="' + width + '" height="' + height
                     + '" id="' + idNo + '">' +
                     'Canvas Tag not Supported by your browser version!' +
                     '</canvas>' + '<div style="position: relative;"><input hidden id=' +
@@ -502,13 +497,13 @@ var emulator = (function () {
 
     /**
      * Fill rectangle defined by x y location and width and height with a specified colour
-     * @param {int} xPos 
-     * @param {int} yPos  
-     * @param {int} xSize 
-     * @param {int} ySize 
-     * @param {String} colour  
+     * @param {int} xPos
+     * @param {int} yPos
+     * @param {int} xSize
+     * @param {int} ySize
+     * @param {String} colour
      */
-    pub.drawRect = function(xPos, yPos, xSize, ySize, colour) {
+    pub2.drawRect = function (xPos, yPos, xSize, ySize, colour) {
         var c = document.getElementById("canvas_1");
         var ctx = c.getContext("2d");
         ctx.fillStyle = colour;
@@ -519,14 +514,14 @@ var emulator = (function () {
     /**
      *  Creates a black rectangle on the canvas with a singleMouseClick listener
      *  which listens for 'actionToTake'
-     * @param {int} xPos 
-     * @param {int} yPos 
+     * @param {int} xPos
+     * @param {int} yPos
      * @param {int} xSize
-     * @param {int} ySise 
+     * @param {int} ySize
      * @param {function} actionToTake
-     * @param {boolean} sglclick 
+     * @param {boolean} sglclick
      */
-    pub.drawClickRect = function(xPos, yPos, xSize, ySize, actionToTake, sglclick) {
+    pub2.drawClickRect = function (xPos, yPos, xSize, ySize, actionToTake, sglclick) {
         var c = document.getElementById("canvas_1");
         var ctx = c.getContext("2d");
         ctx.fillStyle = "#000000";
@@ -544,14 +539,14 @@ var emulator = (function () {
     /**
      * Fill rectangle clickable defined by x y location and width and height  with an 'actiontotake' function
      * This passes its position parameters to positionClick so that when click the locations can be stored.
-     * 
-     * @param {int} xPos 
-     * @param {int} yPos  
-     * @param {int} xSize 
-     * @param {int} ySize 
-     * @param {function} actionToTake  
+     *
+     * @param {int} xPos
+     * @param {int} yPos
+     * @param {int} xSize
+     * @param {int} ySize
+     * @param {function} actionToTake
      */
-    pub.drawPositionRect = function (xPos, yPos, xSize, ySize, clickAction, downAction, day) {
+    pub2.drawPositionRect = function (xPos, yPos, xSize, ySize, clickAction, downAction, day) {
         var c = document.getElementById("canvas_1");
         var ctx = c.getContext("2d");
         ctx.fillStyle = "#000000";
@@ -567,15 +562,15 @@ var emulator = (function () {
     /**
      *  Fill rectangle clickable either single click or double click defined by x y location and width and height
      *   with an action to take with a specified colour
-     * @param {int} xPos 
-     * @param {int} yPos  
-     * @param {int} xSize 
-     * @param {int} ySize 
-     * @param {function} actionToTake  
+     * @param {int} xPos
+     * @param {int} yPos
+     * @param {int} xSize
+     * @param {int} ySize
+     * @param {function} actionToTake
      * @param {boolean} sglclick
      * @param {String} colour
      */
-    pub.drawColourRect = function (xPos, yPos, xSize, ySize, actionToTake, sglclick, colour) {
+    pub2.drawColourRect = function (xPos, yPos, xSize, ySize, actionToTake, sglclick, colour) {
         var c = document.getElementById("canvas_1");
         var ctx = c.getContext("2d");
         ctx.fillStyle = colour;
@@ -589,6 +584,6 @@ var emulator = (function () {
             doubleMouseClick(xPos, yPos, xSize, ySize, actionToTake);
         }
     };
-    
-    return pub;
+
+    return pub2;
 }());
