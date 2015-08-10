@@ -47,7 +47,9 @@ is where we will host the Emulator and prototype.
         divShow division. Updates time on mouseover on the canvas! 
         -->
         <script>
-            emulatorInitialise();
+            $.get("emulatorBasics.js", function() {
+                emu.emulatorInitialise();
+            });
             
             /* Assumes the prototype is loaded into the scripts on
              * this page so that it can call a particular function on
@@ -55,7 +57,7 @@ is where we will host the Emulator and prototype.
              */
             function myfunc() {
                 $("prototypeBasics.js", function () {
-                    getReminderText();
+                    prototype.getReminderText();
                 });
             }
         </script>

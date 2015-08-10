@@ -13,7 +13,10 @@
  * @param {int} month 
  * @param {int} year
  */
+
 function Reminder(day, month, year) {
+    "use strict";
+    
     this.year = year;
     this.month = month;
     this.day = day;
@@ -68,9 +71,9 @@ function Reminder(day, month, year) {
             this.times.push(this.defaultTime);
         } else if (this.reminders.length === 9) {
             this.reminders.push('Reminder limit for this date reached.');
-        } else {
+        } /*else {
             console.error("No more reminders may be added for" + this.print());
-        }
+        } */
     };
 
     /**
@@ -84,9 +87,9 @@ function Reminder(day, month, year) {
             this.times.push(time);
         } else if (this.reminders.length === 9) {
             this.reminders.push('Reminder limit for this date reached.');
-        } else {
+        } /*else {
             console.error("No more reminders may be added for " + this.print());
-        }
+        }*/
     };
     
     /**
@@ -95,11 +98,11 @@ function Reminder(day, month, year) {
      */
     this.deleteReminder = function (index) {
         if(this.reminders.length < index) {
-            reminders.splice(index, 1);
-            times.splice(index, 1);
-        }else{
-            console.error("Reminder to be deleted does not exist! Index out of range.");
-        }
+            this.reminders.splice(index, 1);
+            this.times.splice(index, 1);
+        } //else{
+          //  console.error("Reminder to be deleted does not exist! Index out of range.");
+        //}
     };
 }
 

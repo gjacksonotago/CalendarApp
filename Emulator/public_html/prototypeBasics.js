@@ -119,6 +119,7 @@ var prototype = (function () {
      * @param {int} savetheyear
      */
     function saveState(month, startday, savetheyear) {
+
         savedMonth = month;
         savedDay = startday;
         savedYear = savetheyear;
@@ -158,7 +159,7 @@ var prototype = (function () {
      * Author: George Jackson
      *
      */
-    function getReminderText() {
+    pub.getReminderText = function () {
         reminderText = getFormText();
         if (reminderText !== "") {
             //This is assuming that the return button is a set
@@ -168,7 +169,7 @@ var prototype = (function () {
             writeSomethingColour(reminderText, 25, cHeight / 4, 18, "#000000");
             reminders[currentKey].newReminder(reminderText);
         }
-    }
+    };
 
     /**
      * Initialises the Prototype
@@ -272,6 +273,7 @@ var prototype = (function () {
         };
         //Enlarges the date when mouse pressed down over it
         var enlarge = function (x, y, day) {
+            saveState(month, startDay, year);
             drawRect(x - 15, y - 15, 60, 60, "black");
             writeSomething(day, x - 5, y + 10, 22);
             if (hasReminder(day + "" + (month + 1) + "" + year)) {
@@ -281,7 +283,7 @@ var prototype = (function () {
             enlargeReset = true;
             setTimeout(function () {
                 if (enlargeReset) {
-                    protoInitialise();
+                    returnToCalendar(savedMonth, savedDay, savedYear);
                 }
             }, 2000);
         };
@@ -368,7 +370,6 @@ var prototype = (function () {
         } else if (hasReminder(key)) {
             //If there are reminders, show an Event View of the day clicked on.
 
-
             $.get("emulatorBasics.js", function () {
                 newCanvas(320, 320, canvasreminder, false);
                 saveState(month, startDay, year);
@@ -401,7 +402,8 @@ var prototype = (function () {
                 writeSomethingColour("Events for " + reminderDate, textXOffset, 35, "20", "black");
 
                 //Show all events on that day.
-                var i, savedReminders;
+                var i;
+                var savedReminders;
                 for (i = 0; i < reminders[key].reminders.length; i += 1) {
                     savedReminders = reminders[key].reminders[i] + " - at: " + reminders[key].times[i];
                     writeSomethingColour(savedReminders, textXOffset, 60 + (i * 25), "15", "white");
@@ -467,12 +469,12 @@ var prototype = (function () {
                 drawColourRect(70, cHeight - 30, 30, 15, prevEventsPage, true, "#FFFFFF");
                 writeSomethingColour("Prev", 72, cHeight - 20, 12, "black");
             }
-
+            var key, savedReminders;
             //J here is the day in the month, for the key.
             if (offsetNo < 10) {
                 for (j = dayOffset; j < daysInMonth(month, year); j += 1) {
                     //If there's an event on that day:
-                    var key = j + "" + (month + 1) + "" + year;
+                    key = j + "" + (month + 1) + "" + year;
                     if (offsetNo < 10) {
                         if (reminders[key] !== undefined && reminders[key] !== null) {
                             savedJ = j + 1;
@@ -670,7 +672,7 @@ var prototype = (function () {
         if (month < 12 && month >= 0) {
             return stringMonths[month];
         } else {
-            console.error("Error: Month number out of range (0-11)");
+            //console.error("Error: Month number out of range (0-11)");
             return "Invalid month number";
         }
     }
@@ -703,6 +705,6 @@ var prototype = (function () {
             writeSomethingColour(current, cWidth - (cWidth / 4), 25, 12, "#000000");
         });
     }
-    
+
     return pub;
 }());
