@@ -203,10 +203,14 @@ function getReminderText() {
         var rTime = reminderText.substring(reminderText.length - 5, reminderText.length);
         var rText = reminderText.substring(0, reminderText.length - 5);
         reminders[currentKey].newReminderWithTime(rText, rTime);
-        
+
         clearThis(15, (cHeight / 4) - 20, cWidth, cHeight - 160);
-        writeSomethingColour(rText + " - at " + rTime, 25, cHeight / 4, 18, "#000000");
-    }else{
+        if (rTime !== undefined) {
+            writeSomethingColour(rText + " - at " + rTime, 25, cHeight / 4, 18, "#000000");
+        }else{
+            writeSomethingColour(rText, 25, cHeight / 4, 18, "#000000");
+        }
+    } else {
         reminders[currentKey].newReminder(reminderText);
         clearThis(15, (cHeight / 4) - 20, cWidth, cHeight - 160);
         writeSomethingColour(reminderText + " - at 08:00", 25, cHeight / 4, 18, "#000000");

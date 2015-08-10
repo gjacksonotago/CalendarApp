@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <!--
-Cosc345 Assignment 2 Report 2015: SWAD (Ben Ryan and George Jackson and Mohammed Tarabishi)
+Cosc345 Assignment 3 Report 2015: SWAD (Ben Ryan and George Jackson and Mohammed Tarabishi)
 -->
 <html>
     <head>
-        <title>SWAD - Cosc345 Assignment 2 Report</title>
+        <title>SWAD - Cosc345 Assignment 3 Report</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
@@ -12,81 +12,69 @@ Cosc345 Assignment 2 Report 2015: SWAD (Ben Ryan and George Jackson and Mohammed
         <h1>The SWAD Report:</h1>
         <p>Ben Ryan - 3633356</p>
         <p>George Jackson - 1697309</p>
-            <h3>Our Experiences:</h3>
-            <p>At this point in the process of building our emulator and prototype calendar, the majority of our time is spent 
-            finding out how to do everything in the new languages. Not knowing them well means
-            having to look up just about everything. This makes writing the code rather slow, sometimes agonisingly so.
-            Hopefully as time goes on we will learn enough such that all we have to think about is how to write the
-            code for each part and not have to google every function we need to use for it.
-            </p>
-            <p>We have been incrementally adding small bits to the calendar application, just to get it to do something.
-            After each new addition we then think well, what does it need next? The focus so far has been on the functionality 
-            and basic visualisation of the calendar and emulator home screen. At the moment we are just thinking about how to
-            actually enter reminders into the dates.
-            </p>
-            <p>Using GitHub has been, suffice to say, interesting. Luckily most of the mistakes were made early on when it wasn't too much
-            of a big deal. These were mistakes such as using only the master branch and then having multiple commits at the same
-            time causing lost code. Although perhaps this could have been sorted out by merge conflicts, but at the time we did not
-            know how to use it. Branches as it turns out are very useful and important if you do not like losing hours of work, which
-            in this case was not a huge amount of code as fortune has it. Now we know how to use it sufficiently, it is extremely useful.
-            </p>
-            <p>At the moment there is only a small amount of unit testing, but it has already turned out to be handy, as expected.
-            So far one function has been shown to have very odd behaviour which would have been less easy to see without writing a
-            simple test function for it. It is difficult though to add any more tests right now because most of our functions
-            do not have simple testable return values; although there should be a way to do it, we have not found out how yet.
-            Further to this is that most of the testing has involved single or multiple instances of console print statements to test
-            very specific sections of the code, instead of running a unit test to test the function as a whole.
-            </p>
-            <p>Although most of the time it's okay, Javascript's lack of typing is not desirable. To change now might be counterproductive (or maybe not)
-            but looking back it would have been great to use a type-checked variant instead. We had to learn the hard way, but we learned.</p>
-        
-        <h3>Revised Estimates:</h3>
-        <p>We'll aim for creation and display of reminders on the calendar and build up on top of that functionality. This has been designed so that
-        if we run out of time, we at least have the ability to create the bare bones of a reminder to display and the rest is capable of being cut out.
+        <p>Mohammed Tarabishi</p>
+        <h3>Introduction:</h3>
+        <p>The first thing to say is that our expectations of what the prototype was going to be were very optimistic.
+            The reminder application has turned out not how we intended, but lives up to its name; it is a calendar
+            application. Our estimates of how long each part would take were all well under what actually happened.
+            We never got actual alerts going, so as it stands the prototype can store reminders for each day with a time
+            and print that to the screen when the day is clicked on. It functions like a physical calendar where
+            you can write a note for a given day but it is up to you to check each day. Also like a paper calendar
+            you cannot remove a reminder once it is added–ignoring the existence of pencils–except by reloading the page and thus 
+            resetting the whole thing. There is functionality to delete a reminder but it did not get implemented in the user 
+            interface before we ran out of time.
         </p>
-        
+        <h3>User Interface:</h3>
         <ul>
-            <li>Basic reminder functionality (saving reminders, displaying on calendar for each day) by the end of June, ideally the 23rd. - George</li>
-            <li>Alerts for set reminders by the 11th July. - Ben</li>
-            <li>Events list, shows all events scheduled in calendar, chronologically ordered, also by the 11 July. - George</li>
-            <li>Weekly view, by the 24th of July. - Ben</li>
-            <li>Reminder repetitions, by the 24th July. - George</li>
-            <li>Saving data between runs, by the 14th August. - George</li>
-            <li>Search for dates, by the 14th of August. - Ben</li>
-            <li>Make it pretty, we'll try to do this as we go along. But also Ben will work on it more if necessary/if time permits.</li>
+            <li>
+                <p>When the page is loaded you will see a 320x320 canvas displaying a nice wee frog picture with a black square that has
+                    "Calendar App" written over it, as well as the time below. At this point the only thing you can do is click the button
+                    and this will start the application.
+                </p>
+            </li>
+            <li>
+                <p>Now you can see a month view of a calendar for the current month. Each day of the month
+                    is clickable via a double click which will take you to a new page which contains the reminders for that day and the place
+                    to enter new reminders. A single click (or just a mouse down action to be more specific) on a day will enlarge the square so you can 
+                    see it better which you will notice happens when you double click just before the canvas reloads. When the squares are enlarged they
+                    will automatically reset after 2 seconds from when the first one was clicked.
+                </p>
+            </li>
+            <li>
+                <p>In the calendar month view you can change the month by either: single clicking the '<' and '>' buttons for going back and forwards
+                    respectively, or 'swiping' by holding down the left mouse button and then moving left(back) or right(forward), then releasing.
+                    Be careful with swiping, as a slight movement in a click may be registered as a swipe, which can cause you to enter a day different
+                    to the one you intended (we did try to fix this but only caused much worse problems. To the best of our knowledge the days for each
+                    month in any given year will be correct.
+                </p>
+            </li>
+            <li>
+                <p>Once inside a certain day, on the first entry to that day there will be a text box and a button saying "Enter". Using
+                    the keyboard you can enter text into the box after clicking on it. This text will be your reminder, once you press enter
+                    it will be stored and printed out to the screen under the date. You can add up to 9 reminders on one day (limited by screen space).
+                    Each reminder will automatically be associated with a time of 08:00 in 24 hour format if you do not specify one. You can specify the
+                    time by adding it to the end of the reminder in the text box. It MUST be in this '00:00' or this '0:00' format and be at the end of the entered text.
+                    Technically you do not have to use 24 hour time but using am and pm will not work. When reminders are printed to the screen they will have an
+                    " - at: (time)" after the reminder.
+                </p>
+            </li>
+            <li>
+                <p>When you press the "back" button down in the left hand corner of the day view it will return to the month. Now there will be a red square in
+                    the bottom right corner of the day indicating that there is a reminder stored for that day (if you entered one). When you go back
+                    to the day with a reminder in it all the stored reminders will be printed to the screen. There will now also be a "New" button in the
+                    bottom right corner, you click this if you wish to add another reminder to that day and it will take you to the original add reminder
+                    screen as before.
+                </p>
+            </li>
+            <li>
+                <p>In the month view you can do a downwards swipe, best to do it all the way from top to bottom of the canvas (minor bug issues). This will bring up a view of all the 
+                    reminders saved for that month and the days they are on. If the reminders are more than can fit on the screen there will be a next 
+                    button which will take you to a new screen with rest of the reminders, this will happen over and over until all reminders have been displayed. 
+                    There is still a very much known bug with this where a reminder that has had more than nine reminders added will print the full message 
+                    down the bottom of the screen under the buttons, but alas coding time is over.
+                </p>
+            </li>
         </ul>
-        
-        <p>Stuff we could put in, but probably won't have time for:</p>
-        <ul>
-            <li>Touch scrolling.</li> 
-            <li>Multi-touch registering.</li> 
-            <li>Cloud integration.</li> 
-            <li>A today button (though that might make it's way into the event list or the day view).</li> 
-            <li>Ticking time.</li> 
-            <li>Alarm tones.</li> 
-            <li>Vibration emulation.</li> 
-            <li>GPS based alerts.</li> 
-            <li>GPS based time-zone detection.</li>
-        </ul>
-        
-        <h3>Potential Design Changes:</h3>
-        <p>Saving Data between runs of the emulator is going to have to be a feature worked on last because of the
-        difficulty that we've encountered doing the simplest functions - such as simply displaying a calendar month and shifting
-        between them. We're allocating more time to setting reminders by splitting functional parts into modules to be done at different
-        times - like alerts will be dealt with separately to creation of reminders.
-        </p>
-        
-        <p>We probably will have a larger focus on CSS and HTML - as at the moment everything is written in pure Javascript, and this might
-        not be the best way to go about it. We currently have a little CSS functionality but we could certainly do with a lot more, and definitely do 
-        more with HTML as well.
-        </p>
-        
-        <p>We'll also focus on designing our prototype and emulator displays to operate and look more like an actual smartwatch, because so far we've
-        only focused on functionality over aesthetics.
-        </p>
-        
-        <p>Far more test cases, because we're finally at the stage where we have something substantial to test that doesn't just involve logging straight
-        to the console.
-        </p>
+       
     </body>
 </html>
