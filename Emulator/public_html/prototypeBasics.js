@@ -136,7 +136,7 @@ var prototype = (function () {
         year = savetheyear;
         changeMonth(month);
         startDay = startday;
-        refreshInit(daysInMonth(month), startday);
+        refreshInit(prototype.daysInMonth(month, year), startday);
         //console.error(reminders);
     }
 
@@ -192,7 +192,7 @@ var prototype = (function () {
     pub.protoInitialise = function () {
         initMonth();
         startDay = setDay();
-        refreshInit(daysInMonth(month), startDay);
+        refreshInit(prototype.daysInMonth(month), startDay);
         //writeTime();//This initial call is so there is no 1 second delay to show the time on load.
         //clock = setInterval(writeTime, 1000);
     };
@@ -219,7 +219,7 @@ var prototype = (function () {
      *
      */
     function refreshInit() {
-        displayMonth(daysInMonth(month), startDay);
+        displayMonth(prototype.daysInMonth(month), startDay);
     }
 
     /**
@@ -344,7 +344,7 @@ var prototype = (function () {
      */
     function addReminder(day) {
         var key = day + "" + (month + 1) + "" + year;
-        var reminderDate = day + " " + monthToString(month) + " " + year;
+        var reminderDate = day + " " + prototype.monthToString(month) + " " + year;
         //Store current key in global variable so we know where to store reminder text
         currentKey = key;
         //Offset "Magic Numbers" - note the NewEvent call can't use these
@@ -441,7 +441,7 @@ var prototype = (function () {
         var backXOffset = 22;
         var textXOffset = 25;
         //If there are reminders, show an Event View of the day clicked on.
-        var reminderDate = monthToString(month) + " " + year;
+        var reminderDate = prototype.monthToString(month) + " " + year;
         var canvasreminder = 'canvas_1';
         var dayOffset = theDayOffset;
 
@@ -483,13 +483,13 @@ var prototype = (function () {
             var key, savedReminders;
             //J here is the day in the month, for the key.
             if (offsetNo < 10) {
-                for (j = dayOffset; j < daysInMonth(month, year); j += 1) {
+                for (j = dayOffset; j < prototype.daysInMonth(month, year); j += 1) {
                     //If there's an event on that day:
                     key = j + "" + (month + 1) + "" + year;
                     if (offsetNo < 10) {
                         if (reminders[key] !== undefined && reminders[key] !== null) {
                             savedJ = j + 1;
-                            writeSomethingColour(j + " " + monthToString(month) + ": ", textXOffset, 60 + (offsetNo * 25), "15", "white");
+                            writeSomethingColour(j + " " + prototype.monthToString(month) + ": ", textXOffset, 60 + (offsetNo * 25), "15", "white");
                             //Print each event and time for that day:
                             for (i = 0; i < reminders[key].reminders.length; i += 1) {
                                 savedReminders = reminders[key].reminders[i] + " - at: " + reminders[key].times[i];
@@ -579,7 +579,7 @@ var prototype = (function () {
      * @param {int} year
      * @returns {int}
      */
-    function daysInMonth(month, year) {
+    pub.daysInMonth = function (month, year) {
         if (month === 1 && (year % 4 === 0) && ((year % 100 !== 0) || (year % 400 === 0))) {
             return 29;
         } else if (month === 1) {
@@ -591,7 +591,7 @@ var prototype = (function () {
             //console.error("31 days this month" + month);
             return 31;
         }
-    }
+    };
 
     /**
      * This is the function used by clicking the
@@ -600,7 +600,7 @@ var prototype = (function () {
      *
      */
     function advanceMonth() {
-        startDay = (startDay + daysInMonth(month, year)) % 7;
+        startDay = (startDay + prototype.daysInMonth(month, year)) % 7;
         if (month < 11) {
             month += 1;
             changeMonth(month);
@@ -609,7 +609,7 @@ var prototype = (function () {
             changeMonth(month);
             year += 1;
         }
-        var newDays = daysInMonth(month, year);
+        var newDays = prototype.daysInMonth(month, year);
         refreshInit(newDays, startDay);
     }
 
@@ -628,7 +628,7 @@ var prototype = (function () {
             changeMonth(month);
             year -= 1;
         }
-        var newDays = daysInMonth(month, year);
+        var newDays = prototype.daysInMonth(month, year);
         var tmp = startDay - newDays;
         startDay = (((tmp % 7) + 7) % 7); //Sneaky negative modulo trick!
         refreshInit(newDays, startDay);
@@ -655,7 +655,7 @@ var prototype = (function () {
      */
     function initMonth() {
         $.get("emulatorBasics.js", function () {
-            stringMonth = monthToString(currentMonth());
+            stringMonth = prototype.monthToString(currentMonth());
             month = currentMonth();
         });
     }
@@ -667,7 +667,7 @@ var prototype = (function () {
      * @param {int} month
      */
     function changeMonth(month) {
-        stringMonth = monthToString(month);
+        stringMonth = prototype.monthToString(month);
     }
 
     /**
@@ -676,7 +676,7 @@ var prototype = (function () {
      * @param {int} month
      * @returns {String}
      */
-    function monthToString(month) {
+    pub.monthToString = function(month) {
         var stringMonths = ["January", "February", "March", "April", "May",
             "June", "July", "August", "September", "October", "November",
             "December"];
@@ -686,7 +686,7 @@ var prototype = (function () {
             //console.error("Error: Month number out of range (0-11)");
             return "Invalid month number";
         }
-    }
+    };
 
     /**
      * Function Wrapped-JQuery Call to the emulator

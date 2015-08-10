@@ -76,12 +76,14 @@ Cosc345 Assignment 3 Report 2015: SWAD (Ben Ryan and George Jackson and Mohammed
                     are 4 days each with one event, and the 5th day has two events, both events on the 5th day will print, and write over the button.
                 </p>
             </li>
+            <li><p>Lastly the "Home" button in the monthly calendar view returns to the original emulator screen upon a double click. When this is done all the reminders 
+                    are lost. We did not get round to fixing this bug and just wanted it to be known that we are aware of this problem.</p></li>
         </ul>
 
         <h3>Structure:</h3>
-        <p>The reminder additions required a separate javascript file (to act as a module) which is accessed by the prototype file only.
+        <p>The reminder additions required a separate Javascript file (to act as a module) which is accessed by the prototype file only.
             The emulator are separate for coupling and decoupling reasons - the emulator has one call to the prototype (to initialise it), and the
-            prototype calls the emulator whenever it needs something done to the canvas/html.</p>
+            prototype calls the emulator whenever it needs something done to the canvas/HTML.</p>
 
         <h3>Tools:</h3>
         <ul>
@@ -96,7 +98,7 @@ Cosc345 Assignment 3 Report 2015: SWAD (Ben Ryan and George Jackson and Mohammed
         <h4>Tool Evaluation - JSLint</h4>
         <p>For Javascript validation, we tried creating a closure for the emulator, but that prevented it from being called in the prototype at all, because
             it was unable to find the emulator variable in the prototype despite being called through jQuery. We gave up, and better allocated our time towards finishing the
-            other functions and the report. So there are a fair few warnings. This could also have used an option to examine multiple files that are linked at once.</p>
+            other functions and the report. So there are a fair few warnings. This could have used an option to easily examine multiple files that are linked at once.</p>
 
         <h4>Tool Evaluation - Netbeans</h4>
         <p>Netbeans was a useful platform to use, particularly because it had support built in for github which allowed for easy and intuitive committing changes
@@ -113,7 +115,8 @@ Cosc345 Assignment 3 Report 2015: SWAD (Ben Ryan and George Jackson and Mohammed
         <h4>Difficulties</h4>
         <p>As most of our code didn't involve returning a value (and instead involved manipulation of global variables) unit testing was incredibly difficult to do.
             We have some, that can only test for correct month and date values, and correct swiping directions. One of the tests has since been removed, as the function
-            it tested became obsolete. We looked at more advanced methods of testing using QUnit, but couldn't get them to work.</p>
+            it tested became obsolete. We looked at more advanced methods of testing using QUnit involving simulating keyboard/mouse input, but couldn't get them to 
+            work.</p>
         
         <h4>Browser Compatability</h4>
         <p> Firefox, Safari and Google Chrome all work with the files we run in the project, and all tests pass in all those three browsers. This might have something
@@ -126,8 +129,8 @@ Cosc345 Assignment 3 Report 2015: SWAD (Ben Ryan and George Jackson and Mohammed
         <p>It was difficult to clearly split the work to be done into 3 parts for each group member to do. Every part of our estimations seemed
         related in that we had to get one thing done to be able to do the next, such as adding reminder saving functionality and alerts(which didn't even get done).
         Saving reminders had to be done first to have any chance of working out how to get alerts. People who had a clear understanding of what they were
-        doing as far as the coding goes could probably have planned it out but our lack of familiarity with javascript made this difficult. What ended up actually
-        happening with coding was working on the same thing at different times building on each others code and fixing any bugs we found. So we were all involved
+        doing as far as the coding goes could probably have planned it out, but our lack of familiarity with Javascript made this difficult. What ended up actually
+        happening with coding was working on the same thing at different times, building on each others code and fixing any bugs we found. So we were all involved
         in the whole project and had at least some understanding in how every function worked.</p>
         <p>We didn't have very clear organisation in the group. It was difficult with conflicting timetables to ever get the whole group to meet up.
         Each member basically had to use their own initiative when it came to doing work, which was fine for Ben and George throughout the year. Mohammed had great difficulty
@@ -135,6 +138,20 @@ Cosc345 Assignment 3 Report 2015: SWAD (Ben Ryan and George Jackson and Mohammed
         with this as we would have expected him to do. During assignment 2 we tried to give Mohammed a task and show him how to go about it, but in the end nothing was
         really done as when he had more trouble he did not say anything until the last minute. For Assignment 3 we let him stay in the group after serious consideration of
         firing him. This time we knew we had to be proactive in explicitly assigning him tasks, knowing he probably wouldn't take the initiative to think of ideas and
-        discuss them with us, or just do them. </p>
+        discuss them with us, or just do them. He did complete the task we assigned him, eventually. Initially this was done on old code and then had to be redone on the new
+        code after giving yet another very detailed description of how to keep up with the latest code through github, and then doing things like merging branches
+        for him just to get things done faster. It took until a few days ago for him to learn to do a simple commit to github through netbeans after numerous attempts to show 
+        him throughout the year, at which point he changed the clock font size. Not mention the complete lack of intent to help on the report, at this point, 
+        we have given up.</p>
+        <p>What would we do in the future: Never let it go this far (we should have fired him earlier).</p>
+        
+        <h3>Our Coding Process:</h3>
+        <p>The way we did the coding was admittedly not in any way the best. Firstly we should have gained a much greater understanding of Javascript
+        before doing any coding. This might have prevented us from using Javascript altogether (such as using typescript) or at least made our code much more 
+        organised and modular than it turned out. If we had this understanding we could have planned each part properly before proceeding by separating everything
+        into classes or modules. In truth, we probably still could have done that, at least a little. But what we actually did was jump right into the code intending to learn as we went,
+        which in hindsight almost never works. The other issue was the general understanding of what an emulator is. We know they are intended to mimic other devices
+        such as gaming consoles, or smart watches on general computers but we didn't really know how to make one despite trying find out. Our emulator is something
+        that does what is required of it to be a calendar but nothing more, which is what was asked.</p>
     </body>
 </html>
