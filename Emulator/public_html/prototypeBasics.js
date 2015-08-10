@@ -427,6 +427,7 @@ var prototype = (function () {
      * @returns {undefined}
      */
     function monthEventView(theDayOffset, moreThanOnePage, oldJ) {
+        enlargeReset = false;
         var backXOffset = 22;
         var textXOffset = 25;
         //If there are reminders, show an Event View of the day clicked on.
