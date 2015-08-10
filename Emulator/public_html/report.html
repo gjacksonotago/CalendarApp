@@ -69,7 +69,7 @@ Cosc345 Assignment 3 Report 2015: SWAD (Ben Ryan and George Jackson and Mohammed
                 </p>
             </li>
             <li>
-                <p>In the month view you can do a downwards swipe, best to do it all the way from top to bottom of the canvas (to avoid clicking on a day on release). This will bring up a view of all the 
+                <p>In the month view you can do a downwards swipe. This will bring up a view of all the 
                     reminders saved for that month and the days they are on. If the reminders are more than can fit on the screen there will be a next 
                     button which will take you to a new screen with rest of the reminders, this will happen over and over until all reminders have been displayed. 
                     There is still a very well known bug with this where the screen cutoff does not evaluate during printing events for a day, which means that if there
@@ -77,6 +77,36 @@ Cosc345 Assignment 3 Report 2015: SWAD (Ben Ryan and George Jackson and Mohammed
                 </p>
             </li>
         </ul>
-       
+
+        <h3>Structure:</h3>
+        <p>The reminder additions required a separate javascript file (to act as a module) which is accessed by the prototype file only.
+            The emulator are separate for coupling and decoupling reasons - the emulator has one call to the prototype (to initialise it), and the
+            prototype calls the emulator whenever it needs something done to the canvas/html.</p>
+
+        <h3>Tools:</h3>
+        <ul>
+            <li>HTML validation was done through the W3 HTML direct text validator found <a href="https://validator.w3.org/#validate_by_input">here</a></li>
+            <li>CSS Validation was done through the W3 CSS Validator (via direct text) found <a href="https://jigsaw.w3.org/css-validator/">here</a></li>
+            <li>Javascript validation done through the <a href="http://www.jslint.com/">JSLint online option</a> - with the following options ticked 'Assume: a Browser',
+                'Tolerate: for-statement, this, messy whitespace' and 'Global Variables: $' (The emulator had an extra global variable of 'prototype').</li>
+            <li>Netbeans was used for coding and creating and managing the files.</li>
+            <li>Github for our version control.</li>
+        </ul>
+
+        <h4>Tool Evaluation - JSLint</h4>
+        <p>For Javascript validation, we tried creating a closure for the emulator, but that prevented it from being called in the prototype at all, because
+            it was unable to find the emulator variable in the prototype despite being called through jQuery. We gave up, and better allocated our time towards finishing the
+            other functions and the report. So there are a fair few warnings. This could also have used an option to examine multiple files that are linked at once.</p>
+
+        <h4>Tool Evaluation - Netbeans</h4>
+        <p>Netbeans was a useful platform to use, particularly because it had support built in for github which allowed for easy and intuitive committing changes
+            and for resolving conflicts. The biggest problem with netbeans (which you will find reflected in some particularly aggressive commits) is that it committed
+            and conflicted the "private.xml" file that contained the directories of the files used in the project, so it wasn't particularly amenable to multiple users
+            on the same branch (which included users merging branches) or multiple machines being used. It could be resolved, but it was a huge hassle.</p>
+
+        <h4>Tool Evaluation - Github</h4>
+        <p>Took us a fair while to figure out what to do, but once we got there it was alright. Resolving conflicts via command line felt a little clunky, and the whole thing
+            was often just unusually obtuse with it's error messages and how it merged.
+            In the end, it certainly did what we wanted it to do, perhaps we'll use a different kind of version control next time.</p>
     </body>
 </html>
