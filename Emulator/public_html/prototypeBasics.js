@@ -161,13 +161,23 @@ var prototype = (function () {
      */
     pub.getReminderText = function () {
         reminderText = getFormText();
-        if (reminderText !== "") {
-            //This is assuming that the return button is a set
-            // height and in the position from the bottom of the
-            // canvas.
+        if (reminderText === "") {
+            //Do nothing
+        } else if (reminderText.charAt(reminderText.length - 3) === ':') {
+            var rTime = reminderText.substring(reminderText.length - 5, reminderText.length);
+            var rText = reminderText.substring(0, reminderText.length - 5);
+            reminders[currentKey].newReminderWithTime(rText, rTime);
+
             clearThis(15, (cHeight / 4) - 20, cWidth, cHeight - 160);
-            writeSomethingColour(reminderText, 25, cHeight / 4, 18, "#000000");
+            if (rTime !== undefined) {
+                writeSomethingColour(rText + " - at " + rTime, 25, cHeight / 4, 18, "#000000");
+            } else {
+                writeSomethingColour(rText, 25, cHeight / 4, 18, "#000000");
+            }
+        } else {
             reminders[currentKey].newReminder(reminderText);
+            clearThis(15, (cHeight / 4) - 20, cWidth, cHeight - 160);
+            writeSomethingColour(reminderText + " - at 08:00", 25, cHeight / 4, 18, "#000000");
         }
     };
 
