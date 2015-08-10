@@ -35,7 +35,7 @@ var clock;
  */
 function getFormText() {
     var text = document.getElementById("words").value;
-    console.error(text);
+    //console.error(text);
     return text;
 }
 
