@@ -19,7 +19,7 @@ function Reminder(day, month, year) {
     this.day = day;
     this.reminders = [];
     this.times = [];
-    this.defaultTime = "0800";
+    this.defaultTime = "08:00";
     this.text = "";
     this.name = "";
 

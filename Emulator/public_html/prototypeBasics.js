@@ -161,7 +161,6 @@ function saveState(month, startday, savetheyear) {
     savedYear = savetheyear;
 }
 
-
 /**
  * Updates the calendar with the month and start day and the year passed in parameters
  * @param {int} month_passed
@@ -199,15 +198,18 @@ function returnToCalendar(month_passed, startday, savetheyear) {
 function getReminderText() {
     reminderText = getFormText();
     if (reminderText === "") {
-        //console.error("remindertext is empty string");
-    } else {
-        //This is assuming that the return button is a set
-        // height and in the position from the bottom of the
-        // canvas.
-        //clearThis(15, (cHeight/4)-20, cWidth, cHeight-160);
-        writeSomethingColour(reminderText, 25, cHeight / 4, 18, "#000000");
+        //Do nothing
+    } else if (reminderText.charAt(reminderText.length - 3) === ':') {
+        var rTime = reminderText.substring(reminderText.length - 5, reminderText.length);
+        var rText = reminderText.substring(0, reminderText.length - 5);
+        reminders[currentKey].newReminderWithTime(rText, rTime);
+        
+        clearThis(15, (cHeight / 4) - 20, cWidth, cHeight - 160);
+        writeSomethingColour(rText + " - at " + rTime, 25, cHeight / 4, 18, "#000000");
+    }else{
         reminders[currentKey].newReminder(reminderText);
-
+        clearThis(15, (cHeight / 4) - 20, cWidth, cHeight - 160);
+        writeSomethingColour(reminderText + " - at 08:00", 25, cHeight / 4, 18, "#000000");
     }
 }
 
@@ -368,7 +370,8 @@ function drawCalendar(daysInMonth, startDay) {
                     enlargeReset = true;
                     setTimeout(function () {
                         if (enlargeReset) {
-                            protoInitialise();
+                            saveState(month, startDay, year);
+                            returnToCalendar(savedMonth, savedDay, savedYear);
                         }
                     }, 2000);
                 };
@@ -456,8 +459,6 @@ function addReminder(day) {
              * so I've hardcoded them in here, be well aware of this
              * if changing offsets for the text and anything currently
              * left aligned manually.
-             *
-             * @returns {undefined}
              */
             var newEvent = function () {
                 newCanvas(320, 320, canvasreminder, true);
@@ -478,7 +479,7 @@ function addReminder(day) {
             //Show all events on that day.
             var i;
             for (i = 0; i < reminders[key].reminders.length; i++) {
-                var savedReminders = reminders[key].reminders[i] + " - at: " + reminders[key].times[i];
+                var savedReminders = reminders[key].reminders[i] + " - at " + reminders[key].times[i];
                 writeSomethingColour(savedReminders, textXOffset, 60 + (i * 25), "15", "white");
             }
         });
@@ -505,7 +506,7 @@ function monthEventView(theDayOffset, moreThanOnePage, oldJ) {
         writeSomethingColour("Back", backXOffset, cHeight - 20, 12, "black");
         //What month is it?
         writeSomethingColour("Events for " + reminderDate, textXOffset, 35, "20", "black");
-        
+
         var j = 1;
         var savedJ;
         var i = 0;
@@ -544,7 +545,7 @@ function monthEventView(theDayOffset, moreThanOnePage, oldJ) {
                         writeSomethingColour(j + " " + monthToString(month) + ": ", textXOffset, 60 + (offsetNo * 25), "15", "white");
                         //Print each event and time for that day:
                         for (i = 0; i < reminders[key].reminders.length; i++) {
-                            var savedReminders = reminders[key].reminders[i] + " - at: " + reminders[key].times[i];
+                            var savedReminders = reminders[key].reminders[i] + " - at " + reminders[key].times[i];
                             writeSomethingColour(savedReminders, textXOffset + 10, 60 + (((i + 1) + offsetNo) * 25), "15", "white");
                         }
                         offsetNo += ((i + 1));
