@@ -12,8 +12,8 @@ and open the template in the editor.
     </head>
     <body>
         <div>
-            <h1>Assignment 4 Report SWAD - Smart Watches Are Dumb</h1>
-            <h4>Issue 1: What their thing is missing that we needed, but they didn't.</h4>
+            <h1>Assignment 4 Report: SWAD (Smart Watches Are Dumb)</h1>
+            <h4>1: What their thing is missing that we needed, but they didn't.</h4>
             <p>
               The E3 emulator is missing support for drawing basic shapes, like the squares
               we used for the calendar days, or writing text to the canvas, but it does
@@ -36,7 +36,70 @@ and open the template in the editor.
               appplication needs to be able to get the time and date, draw text and shapes to the
               canvas, and also uses multiple mouse functions which are not supported in the emulator.
             </p>
-            
+        </div>
+
+        <div>
+          <h4>2: Interface</h4>
+          <p>
+            They have made a strong assumption that the person trying to run their program is going
+            to have the time/knowledge to install multiple components on their computer before being
+            able to run the application. We tried to follow the instructions to get the game to
+            actually work but were unsuccessful. Either the instructions are not detailed enough,
+            or we are not wise enough in this area--most likely both.
+            Perhaps we could get it going but it might take
+            hours to actually figure out. Time we do not have. Therefore it is hard to check the user
+            interface further but we can make an assumption that is it simply playing the game
+            which is probably fine, and the instructions are reasonably clear about how to play
+            the game. But the first part is obviously not going to work on a smart watch.
+          </p>
+          <p>
+            They have assumed that the people trying to run the application will be able to
+            download and install multiple other programs onto their computer before using the
+            emulator. They may not be connected to the internet, they may not have permissions
+            to install this software if they are not on their home computer. They're interface is
+            entirely built around utilising the game library and so has very little functionality
+            beyond keybound keys. The assumptions that were made were a strong faith in the game
+            library which effectively means there's nothing in the emulators interface capable of
+            taking more than keypresses. This assumption obviously works against any thought of
+            porting our prototype which processes drawing through the emulator and takes swipe
+            functions instead of keypresses, and also listens for mouseclicks which also don't
+            exist in this interface. It's assumption is very limited input through the interface
+            - namely just the keypresses.
+          </p>
+        </div>
+        <div>
+          <h4>3: Buggy!</h4>
+          <p>
+            Well, the obvious answer there is that it appears buggy because we could not get it
+            working. Otherwise, there's no other appearance of bugs between browsers. Given we
+            couldn't get the server working, and thus couldn't run the game, we couldn't get it
+            started and aren't in any position to critique how the game actually runs. We can just
+            say that it doesn't.
+          </p>
+        </div>
+        <div>
+          <h4>4: Documentation.</h4>
+          <p>
+            Aside from the problems installing the required server, the documentation is extensive,
+            it's well formatted, well presented, and overall quite well done. Compared with our
+            documentation, it certainly shows that we could have done a lot lot better. A lot
+            clearer and in a better structured HTML form. The Users/Developers split is excellent,
+            despite not being particularly helpful in installing the server.
+          </p>
+          <p>
+            That's where it falls down. The instructions appear to assume some knowledge of what
+            is going on that we apparently don't have. They're unclear as to what's going on, what
+            we're expected to actually see as a result of failure or success, and where anything is
+            supposed to be. We followed multiple supplied ways of installing said server to run, and
+            were stumped each time.
+          </p>
+          <p>
+            The documentation also is only geared towards developers using the game specific
+            functions.
+          </p>
+          <p>
+            Listing known bugs could've been more detailed.
+          </p>
         </div>
     </body>
 </html>
