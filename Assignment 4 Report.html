@@ -13,9 +13,30 @@ and open the template in the editor.
     <body>
         <div>
             <h1>Assignment 4 Report SWAD - Smart Watches Are Dumb</h1>
+            <h4>Issue 1: What their thing is missing that we needed, but they didn't.</h4>
             <p>
-                
+              The E3 emulator is missing support for drawing basic shapes, like the squares
+              we used for the calendar days, or writing text to the canvas, but it does
+              have a canvas at least.
+              There is no functionality for almost anything
+              that our prototype needs to do. Except for setting a background image and key
+              listeners.
+              We could make use of these functions with a bit of fiddling, but certainly not
+              directly. Essentially to get our prototype to work on this emulator we would
+              be re-writing 90% of our own emulator into this one, unless we could make use
+              of the phasor game engine somehow. That however is not code they wrote and probably
+              shouldn't be used for a calendar.
             </p>
+            <p>
+              There is no general smart watch functionality in the emulator, it simply contains
+              a few functions and objects that work to get a canvas and a game engine up and
+              running. This is expected since we were told to only write as much as we need.
+              But in doing this, porting a completely different application onto this new emulator
+              is simply not going to happen without completely changing it. Our Calendar
+              appplication needs to be able to get the time and date, draw text and shapes to the
+              canvas, and also uses multiple mouse functions which are not supported in the emulator.
+            </p>
+            
         </div>
     </body>
 </html>
