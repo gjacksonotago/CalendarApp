@@ -1,12 +1,8 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Cosc345 Assignment 4 Report 2015</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
@@ -36,6 +32,11 @@ and open the template in the editor.
               appplication needs to be able to get the time and date, draw text and shapes to the
               canvas, and also uses multiple mouse functions which are not supported in the emulator.
             </p>
+            <p>
+                Clearly our emulator would cause similar problems to whoever has it. It only supports what
+                what we needed for our calendar and is very much specialized for that. This is all good and well but
+                makes porting as far as we can see, not worthwhile.
+            </p>
         </div>
 
         <div>
@@ -43,27 +44,31 @@ and open the template in the editor.
           <p>
             They have made a strong assumption that the person trying to run their program is going
             to have the time/knowledge to install multiple components on their computer before being
-            able to run the application. We tried to follow the instructions to get the game to
+            able to run the application, or have Safari. We tried to follow the instructions to get the game to
             actually work but were unsuccessful. Either the instructions are not detailed enough,
             or we are not wise enough in this area--most likely both.
             Perhaps we could get it going but it might take
-            hours to actually figure out. Time we do not have. Therefore it is hard to check the user
-            interface further but we can make an assumption that is it simply playing the game
+            hours to actually figure out. Time we do not have. However, it is supposed to work without any setup
+            on Safari and it does not. The Safari console says it cannot find certain file. We don't have
+            time to go trying to find out if the file should exist (it's not anywhere in the emulator files) or if the
+            call to the file has got the name wrong somehow.
+            Therefore it is hard to check the user
+            interface further but we can make an assumption that it is simply playing the game,
             which is probably fine, and the instructions are reasonably clear about how to play
-            the game. But the first part is obviously not going to work on a smart watch.
+            the game.
           </p>
           <p>
             They have assumed that the people trying to run the application will be able to
             download and install multiple other programs onto their computer before using the
             emulator. They may not be connected to the internet, they may not have permissions
-            to install this software if they are not on their home computer. They're interface is
+            to install this software if they are not on their home computer and they may not have Safari. Their interface is
             entirely built around utilising the game library and so has very little functionality
             beyond keybound keys. The assumptions that were made were a strong faith in the game
-            library which effectively means there's nothing in the emulators interface capable of
+            library which effectively means there's nothing in the emulators interface (porting wise) capable of
             taking more than keypresses. This assumption obviously works against any thought of
             porting our prototype which processes drawing through the emulator and takes swipe
             functions instead of keypresses, and also listens for mouseclicks which also don't
-            exist in this interface. It's assumption is very limited input through the interface
+            exist in this interface. Its assumption is very limited input through the interface
             - namely just the keypresses.
           </p>
         </div>
@@ -71,7 +76,8 @@ and open the template in the editor.
           <h4>3: Buggy!</h4>
           <p>
             Well, the obvious answer there is that it appears buggy because we could not get it
-            working. Otherwise, there's no other appearance of bugs between browsers. Given we
+            working in any of the multiple suggested ways. Otherwise, there's no other 
+            appearance of bugs between browsers. Given we
             couldn't get the server working, and thus couldn't run the game, we couldn't get it
             started and aren't in any position to critique how the game actually runs. We can just
             say that it doesn't.
